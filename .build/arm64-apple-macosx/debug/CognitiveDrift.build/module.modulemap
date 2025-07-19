@@ -1,0 +1,4 @@
+module CognitiveDrift {
+    header "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/CognitiveDrift.build/CognitiveDrift-Swift.h"
+    requires objc
+}

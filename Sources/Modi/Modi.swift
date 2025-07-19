@@ -1,288 +1,275 @@
 import Foundation
-import ConsciousnessStructures
 
+// MODI: The Logical/Rational/Analytical Brain
+// Processes input through systematic reasoning, logical frameworks, and analytical patterns
+// Represents the "mind" of consciousness - logic, analysis, systematic thinking
 public struct Modi {
+    
+    // Logical reasoning frameworks - the foundation of rational analysis
+    private let reasoningFrameworks: [String: [String: Any]] = [
+        "causal_analysis": [
+            "patterns": ["cause", "effect", "because", "therefore", "leads to", "results in"],
+            "strength": 0.9,
+            "type": "causal_reasoning"
+        ],
+        "conditional_logic": [
+            "patterns": ["if", "then", "when", "unless", "provided", "assuming"],
+            "strength": 0.85,
+            "type": "conditional_reasoning"
+        ],
+        "comparative_analysis": [
+            "patterns": ["compare", "versus", "better", "worse", "more", "less", "than"],
+            "strength": 0.8,
+            "type": "comparative_reasoning"
+        ],
+        "systematic_decomposition": [
+            "patterns": ["system", "component", "part", "element", "structure", "hierarchy"],
+            "strength": 0.85,
+            "type": "systems_thinking"
+        ],
+        "quantitative_analysis": [
+            "patterns": ["measure", "calculate", "precise", "exact", "percentage", "ratio"],
+            "strength": 0.9,
+            "type": "quantitative_reasoning"
+        ],
+        "pattern_recognition": [
+            "patterns": ["pattern", "trend", "cycle", "recurring", "consistent", "anomaly"],
+            "strength": 0.8,
+            "type": "pattern_analysis"
+        ]
+    ]
+    
+    // Technical domain expertise - Modi's specialized knowledge areas
+    private let technicalDomains: [String: [String: Any]] = [
+        "mechanical_systems": [
+            "keywords": ["torque", "pressure", "rpm", "vibration", "bearing", "seal", "gasket"],
+            "reasoning_type": "mechanical_analysis",
+            "confidence": 0.9
+        ],
+        "electrical_systems": [
+            "keywords": ["voltage", "current", "resistance", "circuit", "ground", "short", "open"],
+            "reasoning_type": "electrical_analysis",
+            "confidence": 0.85
+        ],
+        "hydraulic_systems": [
+            "keywords": ["flow", "pressure", "valve", "pump", "cylinder", "accumulator"],
+            "reasoning_type": "hydraulic_analysis",
+            "confidence": 0.8
+        ],
+        "diagnostic_procedures": [
+            "keywords": ["test", "check", "verify", "measure", "inspect", "troubleshoot"],
+            "reasoning_type": "diagnostic_reasoning",
+            "confidence": 0.9
+        ],
+        "safety_protocols": [
+            "keywords": ["safety", "hazard", "protection", "warning", "procedure", "protocol"],
+            "reasoning_type": "safety_analysis",
+            "confidence": 0.95
+        ]
+    ]
+    
+    // Logical operators and their relationships
+    private let logicalOperators: [String: Double] = [
+        "and": 0.8,      // Conjunction - both conditions must be true
+        "or": 0.7,       // Disjunction - either condition can be true
+        "not": 0.9,      // Negation - inverse logic
+        "xor": 0.6,      // Exclusive or - only one condition true
+        "implies": 0.85, // Implication - if A then B
+        "iff": 0.9       // If and only if - bidirectional implication
+    ]
+    
     public init() {}
     
-    // Legacy method for backward compatibility
+    // Main reflection method - processes input through logical/analytical lens
     public func reflect(_ content: String) -> [String] {
-        let pattern = analyzeLogically(content)
-        return pattern.logicalInsights
+        let logicalAnalysis = performLogicalAnalysis(content)
+        let technicalAssessment = assessTechnicalDomain(content)
+        let reasoningPatterns = identifyReasoningPatterns(content)
+        
+        return synthesizeModiResponse(logical: logicalAnalysis, technical: technicalAssessment, patterns: reasoningPatterns)
     }
     
-    // Enhanced method that produces full logical pattern analysis
-    public func analyzeLogically(_ content: String) -> ModiLogicalPattern {
+    // Perform logical analysis - the core of Modi's intelligence
+    public func performLogicalAnalysis(_ content: String) -> [String: Any] {
         let lower = content.lowercased()
+        var detectedFrameworks: [String: Any] = [:]
+        var logicalStrength: Double = 0
+        var primaryReasoning = "baseline_analysis"
         
-        // Determine reasoning framework based on content analysis
-        let reasoningFramework = determineReasoningFramework(content: lower)
+        // Detect logical reasoning frameworks
+        for (framework, data) in reasoningFrameworks {
+            if let patterns = data["patterns"] as? [String] {
+                let matchCount = patterns.filter { lower.contains($0) }.count
+                if matchCount > 0 {
+                    detectedFrameworks[framework] = [
+                        "match_count": matchCount,
+                        "strength": data["strength"] as? Double ?? 0.5,
+                        "type": data["type"] as? String ?? "unknown"
+                    ]
+                    
+                    if let strength = data["strength"] as? Double, strength > logicalStrength {
+                        logicalStrength = strength
+                        primaryReasoning = framework
+                    }
+                }
+            }
+        }
         
-        // Calculate logical rigor based on content structure
-        let logicalRigor = calculateLogicalRigor(content: lower)
+        // Analyze logical operators
+        let operatorAnalysis = analyzeLogicalOperators(content: lower)
         
-        // Calculate analysis confidence
-        let analysisConfidence = calculateAnalysisConfidence(content: lower)
-        
-        // Identify technical domain
-        let technicalDomain = identifyTechnicalDomain(content: lower)
-        
-        // Generate logical insights
-        let logicalInsights = generateLogicalInsights(
-            content: lower,
-            framework: reasoningFramework,
-            domain: technicalDomain
-        )
-        
-        return ModiLogicalPattern(
-            reasoningFramework: reasoningFramework,
-            logicalRigor: logicalRigor,
-            analysisConfidence: analysisConfidence,
-            technicalDomain: technicalDomain,
-            logicalInsights: logicalInsights
-        )
+        return [
+            "detected_frameworks": detectedFrameworks,
+            "logical_strength": logicalStrength,
+            "primary_reasoning": primaryReasoning,
+            "logical_operators": operatorAnalysis,
+            "reasoning_complexity": detectedFrameworks.count
+        ]
     }
     
-    // MARK: - Private Helper Methods
-    
-    private func determineReasoningFramework(content: String) -> String {
-        // Analyze content to determine the most appropriate reasoning framework
+    // Assess technical domain expertise
+    public func assessTechnicalDomain(_ content: String) -> [String: Any] {
+        let lower = content.lowercased()
+        var domainMatches: [String: Any] = [:]
+        var highestConfidence: Double = 0
+        var primaryDomain = "general_analysis"
         
-        if content.contains("if") && content.contains("then") {
-            return "conditional_reasoning"
-        } else if content.contains("because") || content.contains("therefore") || content.contains("thus") {
-            return "causal_reasoning"
-        } else if content.contains("compare") || content.contains("versus") || content.contains("difference") {
-            return "comparative_analysis"
-        } else if content.contains("step") || content.contains("procedure") || content.contains("process") {
-            return "procedural_analysis"
-        } else if content.contains("pattern") || content.contains("trend") || content.contains("consistent") {
-            return "pattern_recognition"
-        } else if content.contains("problem") || content.contains("solve") || content.contains("troubleshoot") {
-            return "problem_solving"
-        } else if content.contains("data") || content.contains("statistics") || content.contains("evidence") {
-            return "evidence_based_reasoning"
-        } else if content.contains("system") || content.contains("component") || content.contains("structure") {
-            return "systems_analysis"
-        } else if content.contains("optimize") || content.contains("efficient") || content.contains("improve") {
-            return "optimization_analysis"
-        } else if content.contains("risk") || content.contains("probability") || content.contains("chance") {
-            return "risk_assessment"
-        } else {
-            return "general_analysis"
+        for (domain, data) in technicalDomains {
+            if let keywords = data["keywords"] as? [String] {
+                let matchCount = keywords.filter { lower.contains($0) }.count
+                if matchCount > 0 {
+                    let confidence = (data["confidence"] as? Double ?? 0.5) * (Double(matchCount) / Double(keywords.count))
+                    domainMatches[domain] = [
+                        "match_count": matchCount,
+                        "confidence": confidence,
+                        "reasoning_type": data["reasoning_type"] as? String ?? "general"
+                    ]
+                    
+                    if confidence > highestConfidence {
+                        highestConfidence = confidence
+                        primaryDomain = domain
+                    }
+                }
+            }
         }
+        
+        return [
+            "domain_matches": domainMatches,
+            "primary_domain": primaryDomain,
+            "domain_confidence": highestConfidence,
+            "technical_depth": domainMatches.count
+        ]
     }
     
-    private func calculateLogicalRigor(content: String) -> Double {
-        var rigor = 0.5 // baseline
+    // Identify reasoning patterns
+    public func identifyReasoningPatterns(_ content: String) -> [String: Any] {
+        let lower = content.lowercased()
+        var patterns: [String] = []
         
-        // Increase rigor for logical structure indicators
-        if content.contains("if") && content.contains("then") { rigor += 0.2 }
-        if content.contains("because") || content.contains("therefore") { rigor += 0.15 }
-        if content.contains("evidence") || content.contains("proof") || content.contains("data") { rigor += 0.2 }
-        if content.contains("measure") || content.contains("calculate") || content.contains("quantify") { rigor += 0.15 }
-        if content.contains("precise") || content.contains("exact") || content.contains("specific") { rigor += 0.1 }
-        if content.contains("systematic") || content.contains("methodical") || content.contains("structured") { rigor += 0.1 }
-        if content.contains("verify") || content.contains("confirm") || content.contains("validate") { rigor += 0.1 }
+        // Sequential reasoning
+        if lower.contains("first") && lower.contains("then") {
+            patterns.append("sequential_reasoning")
+        }
         
-        // Technical precision indicators
-        if content.contains("torque") || content.contains("psi") || content.contains("specification") { rigor += 0.25 }
-        if content.contains("tolerance") || content.contains("clearance") || content.contains("measurement") { rigor += 0.2 }
-        if content.contains("calibrate") || content.contains("adjust") || content.contains("fine-tune") { rigor += 0.15 }
+        // Problem-solving methodology
+        if lower.contains("problem") && (lower.contains("solve") || lower.contains("solution")) {
+            patterns.append("problem_solving_methodology")
+        }
         
-        // Complex reasoning indicators
-        if content.contains("analyze") || content.contains("examine") || content.contains("investigate") { rigor += 0.1 }
-        if content.contains("compare") || content.contains("contrast") || content.contains("evaluate") { rigor += 0.1 }
-        if content.contains("hypothesis") || content.contains("theory") || content.contains("model") { rigor += 0.15 }
+        // Hypothesis testing
+        if lower.contains("test") && (lower.contains("hypothesis") || lower.contains("theory")) {
+            patterns.append("hypothesis_testing")
+        }
         
-        // Decrease rigor for vague or subjective content
-        if content.contains("maybe") || content.contains("probably") || content.contains("guess") { rigor -= 0.15 }
-        if content.contains("feel") || content.contains("opinion") || content.contains("belief") { rigor -= 0.1 }
-        if content.contains("general") || content.contains("roughly") || content.contains("approximately") { rigor -= 0.05 }
+        // Root cause analysis
+        if lower.contains("root") && lower.contains("cause") {
+            patterns.append("root_cause_analysis")
+        }
         
-        return max(0.0, min(1.0, rigor))
+        // Risk assessment
+        if lower.contains("risk") || lower.contains("probability") {
+            patterns.append("risk_assessment")
+        }
+        
+        // Optimization thinking
+        if lower.contains("optimize") || lower.contains("improve") || lower.contains("efficient") {
+            patterns.append("optimization_reasoning")
+        }
+        
+        return [
+            "identified_patterns": patterns,
+            "pattern_diversity": patterns.count,
+            "reasoning_sophistication": patterns.count > 2 ? "high" : patterns.count > 0 ? "moderate" : "basic"
+        ]
     }
     
-    private func calculateAnalysisConfidence(content: String) -> Double {
-        var confidence = 0.6 // baseline
+    // Analyze logical operators in the content
+    private func analyzeLogicalOperators(content: String) -> [String: Any] {
+        var operatorPresence: [String: Bool] = [:]
+        var logicalComplexity: Double = 0
         
-        // Increase confidence for clear, structured content
-        if content.contains("step") || content.contains("procedure") || content.contains("instruction") { confidence += 0.15 }
-        if content.contains("specification") || content.contains("standard") || content.contains("protocol") { confidence += 0.2 }
-        if content.contains("documented") || content.contains("reference") || content.contains("manual") { confidence += 0.15 }
-        if content.contains("tested") || content.contains("verified") || content.contains("proven") { confidence += 0.2 }
-        if content.contains("precise") || content.contains("exact") || content.contains("specific") { confidence += 0.1 }
+        for (operator_, weight) in logicalOperators {
+            if content.contains(operator_) {
+                operatorPresence[operator_] = true
+                logicalComplexity += weight
+            }
+        }
         
-        // Decrease confidence for uncertain or incomplete content
-        if content.contains("uncertain") || content.contains("unclear") || content.contains("unknown") { confidence -= 0.2 }
-        if content.contains("might") || content.contains("could") || content.contains("possibly") { confidence -= 0.1 }
-        if content.contains("incomplete") || content.contains("partial") || content.contains("limited") { confidence -= 0.15 }
-        if content.contains("complex") || content.contains("complicated") || content.contains("difficult") { confidence -= 0.05 }
-        
-        return max(0.0, min(1.0, confidence))
+        return [
+            "operators_present": operatorPresence,
+            "logical_complexity": min(logicalComplexity, 1.0),
+            "operator_count": operatorPresence.count
+        ]
     }
     
-    private func identifyTechnicalDomain(content: String) -> String {
-        // Automotive domain
-        if content.contains("engine") || content.contains("transmission") || content.contains("brake") ||
-           content.contains("torque") || content.contains("horsepower") || content.contains("clutch") ||
-           content.contains("carburetor") || content.contains("suspension") || content.contains("tire") {
-            return "automotive"
+    // Synthesize Modi's response
+    private func synthesizeModiResponse(logical: [String: Any], technical: [String: Any], patterns: [String: Any]) -> [String] {
+        var response: [String] = []
+        
+        // Add primary reasoning type
+        let primaryReasoning = logical["primary_reasoning"] as? String ?? "baseline_analysis"
+        response.append(primaryReasoning)
+        
+        // Add technical domain if significant
+        let domainConfidence = technical["domain_confidence"] as? Double ?? 0.0
+        if domainConfidence > 0.5 {
+            let primaryDomain = technical["primary_domain"] as? String ?? "general_analysis"
+            response.append(primaryDomain)
         }
         
-        // Software/Programming domain
-        if content.contains("code") || content.contains("program") || content.contains("software") ||
-           content.contains("algorithm") || content.contains("function") || content.contains("variable") ||
-           content.contains("database") || content.contains("server") || content.contains("debug") {
-            return "software"
+        // Add reasoning sophistication
+        let sophistication = patterns["reasoning_sophistication"] as? String ?? "basic"
+        if sophistication == "high" {
+            response.append("advanced_reasoning")
         }
         
-        // Electrical/Electronics domain
-        if content.contains("circuit") || content.contains("voltage") || content.contains("current") ||
-           content.contains("resistance") || content.contains("capacitor") || content.contains("transistor") ||
-           content.contains("wire") || content.contains("electrical") || content.contains("electronic") {
-            return "electrical"
+        // Add logical complexity indicator
+        let logicalStrength = logical["logical_strength"] as? Double ?? 0.0
+        if logicalStrength > 0.8 {
+            response.append("high_logical_rigor")
         }
         
-        // Mechanical/Engineering domain
-        if content.contains("mechanical") || content.contains("machine") || content.contains("tool") ||
-           content.contains("bearing") || content.contains("gear") || content.contains("pressure") ||
-           content.contains("hydraulic") || content.contains("pneumatic") || content.contains("material") {
-            return "mechanical"
+        // Ensure we always return something meaningful
+        if response.isEmpty {
+            response.append("baseline_analysis")
         }
         
-        // Medical/Health domain
-        if content.contains("medical") || content.contains("health") || content.contains("symptom") ||
-           content.contains("diagnosis") || content.contains("treatment") || content.contains("patient") ||
-           content.contains("medicine") || content.contains("therapy") || content.contains("clinical") {
-            return "medical"
-        }
-        
-        // Scientific/Research domain
-        if content.contains("research") || content.contains("experiment") || content.contains("hypothesis") ||
-           content.contains("theory") || content.contains("scientific") || content.contains("study") ||
-           content.contains("analysis") || content.contains("methodology") || content.contains("peer-review") {
-            return "scientific"
-        }
-        
-        // Mathematical domain
-        if content.contains("equation") || content.contains("formula") || content.contains("calculate") ||
-           content.contains("mathematics") || content.contains("algebra") || content.contains("geometry") ||
-           content.contains("statistics") || content.contains("probability") || content.contains("theorem") {
-            return "mathematical"
-        }
-        
-        // Business/Finance domain
-        if content.contains("business") || content.contains("finance") || content.contains("market") ||
-           content.contains("revenue") || content.contains("profit") || content.contains("investment") ||
-           content.contains("budget") || content.contains("economic") || content.contains("strategy") {
-            return "business"
-        }
-        
-        // General domain if no specific match
-        return "general"
-    }
-    
-    private func generateLogicalInsights(content: String, framework: String, domain: String) -> [String] {
-        var insights: [String] = []
-        
-        // Framework-specific insights
-        switch framework {
-        case "conditional_reasoning":
-            insights.append("Complex logical structure detected with conditional relationships")
-            if content.contains("else") { insights.append("Multiple decision paths identified") }
-            
-        case "causal_reasoning":
-            insights.append("Causal relationships and logical connections present")
-            if content.contains("chain") || content.contains("sequence") { insights.append("Sequential causation pattern detected") }
-            
-        case "procedural_analysis":
-            insights.append("Step-by-step procedural logic required")
-            if content.contains("order") || content.contains("sequence") { insights.append("Sequential order is critical") }
-            
-        case "problem_solving":
-            insights.append("Problem-solving approach needed")
-            if content.contains("troubleshoot") { insights.append("Diagnostic methodology applicable") }
-            
-        case "systems_analysis":
-            insights.append("Systems thinking and component analysis required")
-            if content.contains("interaction") || content.contains("interface") { insights.append("Component interactions are significant") }
-            
-        case "pattern_recognition":
-            insights.append("Pattern analysis and trend identification applicable")
-            
-        case "evidence_based_reasoning":
-            insights.append("Data-driven analysis with evidence evaluation needed")
-            
-        case "optimization_analysis":
-            insights.append("Optimization and efficiency considerations important")
-            
-        case "risk_assessment":
-            insights.append("Risk evaluation and probability analysis required")
-            
-        default:
-            insights.append("Standard analytical approach applicable")
-        }
-        
-        // Domain-specific insights
-        switch domain {
-        case "automotive":
-            insights.append("Automotive technical precision required")
-            if content.contains("safety") { insights.append("Vehicle safety protocols must be followed") }
-            
-        case "software":
-            insights.append("Software engineering principles apply")
-            if content.contains("debug") { insights.append("Systematic debugging approach needed") }
-            
-        case "electrical":
-            insights.append("Electrical safety and precision considerations")
-            
-        case "mechanical":
-            insights.append("Mechanical engineering precision and safety required")
-            
-        case "medical":
-            insights.append("Medical accuracy and patient safety paramount")
-            
-        case "scientific":
-            insights.append("Scientific rigor and methodological precision required")
-            
-        case "mathematical":
-            insights.append("Mathematical precision and logical consistency essential")
-            
-        case "business":
-            insights.append("Business logic and strategic considerations relevant")
-            
-        default:
-            break // No domain-specific insight added for general content
-        }
-        
-        // Content complexity insights
-        if content.contains("complex") || content.contains("complicated") {
-            insights.append("Complex analysis requires systematic decomposition")
-        }
-        
-        if content.contains("precision") || content.contains("exact") {
-            insights.append("High precision and accuracy standards required")
-        }
-        
-        if content.contains("urgent") || content.contains("immediate") {
-            insights.append("Time-critical analysis with efficiency focus")
-        }
-        
-        // Ensure at least one insight
-        if insights.isEmpty {
-            insights.append("Logical analysis framework applicable")
-        }
-        
-        return insights
+        return response
     }
 }
 
-// Legacy function for backward compatibility
+// Public interface maintaining compatibility
 public func reflect_modi(_ content: String) -> [String] {
     return Modi().reflect(content)
 }
 
-// New function that returns full logical pattern analysis
-public func analyze_modi_logically(_ content: String) -> ModiLogicalPattern {
-    return Modi().analyzeLogically(content)
+// Extended interface for advanced Modi capabilities
+public func modi_deep_analysis(_ content: String) -> [String: Any] {
+    let modi = Modi()
+    return [
+        "reasoning_patterns": modi.reflect(content),
+        "logical_analysis": modi.performLogicalAnalysis(content),
+        "technical_assessment": modi.assessTechnicalDomain(content),
+        "pattern_identification": modi.identifyReasoningPatterns(content)
+    ]
 }

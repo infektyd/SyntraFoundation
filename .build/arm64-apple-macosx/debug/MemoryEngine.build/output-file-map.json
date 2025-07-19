@@ -2,13 +2,6 @@
   "": {
     "swift-dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/MemoryEngine.build/master.swiftdeps"
   },
-  "/Users/hansaxelsson/SyntraFoundation/Sources/MemoryEngine/Config.swift": {
-    "dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/MemoryEngine.build/Config.d",
-    "object": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/MemoryEngine.build/Config.swift.o",
-    "swiftmodule": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/MemoryEngine.build/Config~partial.swiftmodule",
-    "swift-dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/MemoryEngine.build/Config.swiftdeps",
-    "diagnostics": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/MemoryEngine.build/Config.dia"
-  },
   "/Users/hansaxelsson/SyntraFoundation/Sources/MemoryEngine/MemoryEngine.swift": {
     "dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/MemoryEngine.build/MemoryEngine.d",
     "object": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/MemoryEngine.build/MemoryEngine.swift.o",

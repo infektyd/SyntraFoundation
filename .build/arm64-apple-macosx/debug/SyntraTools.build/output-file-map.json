@@ -1,0 +1,89 @@
+{
+  "": {
+    "swift-dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/master.swiftdeps"
+  },
+  "/Users/hansaxelsson/SyntraFoundation/Sources/SyntraTools/ConsciousnessTools.swift": {
+    "dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/ConsciousnessTools.d",
+    "object": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/ConsciousnessTools.swift.o",
+    "swiftmodule": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/ConsciousnessTools~partial.swiftmodule",
+    "swift-dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/ConsciousnessTools.swiftdeps",
+    "diagnostics": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/ConsciousnessTools.dia"
+  },
+  "/Users/hansaxelsson/SyntraFoundation/Sources/SyntraTools/ConsciousnessVisualization.swift": {
+    "dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/ConsciousnessVisualization.d",
+    "object": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/ConsciousnessVisualization.swift.o",
+    "swiftmodule": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/ConsciousnessVisualization~partial.swiftmodule",
+    "swift-dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/ConsciousnessVisualization.swiftdeps",
+    "diagnostics": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/ConsciousnessVisualization.dia"
+  },
+  "/Users/hansaxelsson/SyntraFoundation/Sources/SyntraTools/DualStreamMemorySystem.swift": {
+    "dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/DualStreamMemorySystem.d",
+    "object": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/DualStreamMemorySystem.swift.o",
+    "swiftmodule": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/DualStreamMemorySystem~partial.swiftmodule",
+    "swift-dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/DualStreamMemorySystem.swiftdeps",
+    "diagnostics": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/DualStreamMemorySystem.dia"
+  },
+  "/Users/hansaxelsson/SyntraFoundation/Sources/SyntraTools/ElasticWeightConsolidation.swift": {
+    "dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/ElasticWeightConsolidation.d",
+    "object": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/ElasticWeightConsolidation.swift.o",
+    "swiftmodule": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/ElasticWeightConsolidation~partial.swiftmodule",
+    "swift-dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/ElasticWeightConsolidation.swiftdeps",
+    "diagnostics": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/ElasticWeightConsolidation.dia"
+  },
+  "/Users/hansaxelsson/SyntraFoundation/Sources/SyntraTools/MemoryRehearsalSystem.swift": {
+    "dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/MemoryRehearsalSystem.d",
+    "object": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/MemoryRehearsalSystem.swift.o",
+    "swiftmodule": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/MemoryRehearsalSystem~partial.swiftmodule",
+    "swift-dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/MemoryRehearsalSystem.swiftdeps",
+    "diagnostics": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/MemoryRehearsalSystem.dia"
+  },
+  "/Users/hansaxelsson/SyntraFoundation/Sources/SyntraTools/ModernConsciousnessEngine.swift": {
+    "dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/ModernConsciousnessEngine.d",
+    "object": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/ModernConsciousnessEngine.swift.o",
+    "swiftmodule": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/ModernConsciousnessEngine~partial.swiftmodule",
+    "swift-dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/ModernConsciousnessEngine.swiftdeps",
+    "diagnostics": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/ModernConsciousnessEngine.dia"
+  },
+  "/Users/hansaxelsson/SyntraFoundation/Sources/SyntraTools/ModernMemoryVault.swift": {
+    "dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/ModernMemoryVault.d",
+    "object": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/ModernMemoryVault.swift.o",
+    "swiftmodule": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/ModernMemoryVault~partial.swiftmodule",
+    "swift-dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/ModernMemoryVault.swiftdeps",
+    "diagnostics": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/ModernMemoryVault.dia"
+  },
+  "/Users/hansaxelsson/SyntraFoundation/Sources/SyntraTools/PersonaAnchoringSystem.swift": {
+    "dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/PersonaAnchoringSystem.d",
+    "object": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/PersonaAnchoringSystem.swift.o",
+    "swiftmodule": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/PersonaAnchoringSystem~partial.swiftmodule",
+    "swift-dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/PersonaAnchoringSystem.swiftdeps",
+    "diagnostics": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/PersonaAnchoringSystem.dia"
+  },
+  "/Users/hansaxelsson/SyntraFoundation/Sources/SyntraTools/SleepLikeConsolidation.swift": {
+    "dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/SleepLikeConsolidation.d",
+    "object": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/SleepLikeConsolidation.swift.o",
+    "swiftmodule": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/SleepLikeConsolidation~partial.swiftmodule",
+    "swift-dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/SleepLikeConsolidation.swiftdeps",
+    "diagnostics": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/SleepLikeConsolidation.dia"
+  },
+  "/Users/hansaxelsson/SyntraFoundation/Sources/SyntraTools/SyntraTools.swift": {
+    "dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/SyntraTools.d",
+    "object": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/SyntraTools.swift.o",
+    "swiftmodule": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/SyntraTools~partial.swiftmodule",
+    "swift-dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/SyntraTools.swiftdeps",
+    "diagnostics": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/SyntraTools.dia"
+  },
+  "/Users/hansaxelsson/SyntraFoundation/Sources/SyntraTools/ToolCallingService.swift": {
+    "dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/ToolCallingService.d",
+    "object": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/ToolCallingService.swift.o",
+    "swiftmodule": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/ToolCallingService~partial.swiftmodule",
+    "swift-dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/ToolCallingService.swiftdeps",
+    "diagnostics": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/ToolCallingService.dia"
+  },
+  "/Users/hansaxelsson/SyntraFoundation/Sources/SyntraTools/WisdomAccumulationFramework.swift": {
+    "dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/WisdomAccumulationFramework.d",
+    "object": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/WisdomAccumulationFramework.swift.o",
+    "swiftmodule": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/WisdomAccumulationFramework~partial.swiftmodule",
+    "swift-dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/WisdomAccumulationFramework.swiftdeps",
+    "diagnostics": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/WisdomAccumulationFramework.dia"
+  }
+}

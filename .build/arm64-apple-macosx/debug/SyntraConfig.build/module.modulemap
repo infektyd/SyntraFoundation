@@ -1,0 +1,4 @@
+module SyntraConfig {
+    header "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraConfig.build/SyntraConfig-Swift.h"
+    requires objc
+}

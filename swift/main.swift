@@ -87,26 +87,26 @@ struct SyntraSwiftCLI {
         }
         return "\(object)"
     }
-}
 
-#if canImport(FoundationModels)
-@available(macOS 26.0, *)
-func queryFoundationModel(_ input: String) async -> String {
-    do {
-        let model = SystemLanguageModel.default
-        guard model.availability == .available else {
-            return "[foundation model unavailable]"
+    #if canImport(FoundationModels)
+    @available(macOS 26.0, *)
+    static func queryFoundationModel(_ input: String) async -> String {
+        do {
+            let model = SystemLanguageModel.default
+            guard model.availability == .available else {
+                return "[foundation model unavailable]"
+            }
+            
+            let session = try LanguageModelSession(model: model)
+            let response = try await session.respond(to: input)
+            return String(describing: response)
+        } catch {
+            return "[foundation model error: \(error)]"
         }
-        
-        let session = LanguageModelSession(model: model)
-        let response = try await session.respond(to: input)
-        return String(describing: response)
-    } catch {
-        return "[foundation model error: \(error)]"
     }
+    #else
+    static func queryFoundationModel(_ input: String) async -> String {
+        "[foundation model unavailable]"
+    }
+    #endif
 }
-#else
-func queryFoundationModel(_ input: String) async -> String {
-    "[foundation model unavailable]"
-}
-#endif

@@ -4,7 +4,7 @@ import PackageDescription
 let package = Package(
     name: "SyntraSwift",
     platforms: [
-        .macOS(.v15), // Use macOS 26 for FoundationModels Beta 3 APIs
+        .macOS(.v15), // Primary target - falls back to non-FoundationModels types
         .iOS(.v18)
     ],
     products: [
@@ -14,9 +14,13 @@ let package = Package(
         .library(name: "MemoryEngine", targets: ["MemoryEngine"]),
         .library(name: "ConsciousnessStructures", targets: ["ConsciousnessStructures"]),
         .library(name: "BrainEngine", targets: ["BrainEngine"]),
-        .library(name: "ConversationalInterface", targets: ["ConversationalInterface"]),
+        // .library(name: "ConversationalInterface", targets: ["ConversationalInterface"]),
         .library(name: "StructuredConsciousnessService", targets: ["StructuredConsciousnessService"]),
         .library(name: "MoralDriftMonitoring", targets: ["MoralDriftMonitoring"]),
+        .library(name: "SyntraConfig", targets: ["SyntraConfig"]),
+        .library(name: "MoralCore", targets: ["MoralCore"]),
+        // .library(name: "SyntraTools", targets: ["SyntraTools"]),
+        .library(name: "CognitiveDrift", targets: ["CognitiveDrift"]),
         .executable(name: "SyntraSwiftCLI", targets: ["SyntraSwiftCLI"])
     ],
     targets: [
@@ -45,14 +49,14 @@ let package = Package(
         ),
         .target(
             name: "BrainEngine",
-            dependencies: ["Valon", "Modi", "Drift", "ConsciousnessStructures"],
+            dependencies: ["Valon", "Modi", "Drift", "ConsciousnessStructures", "SyntraConfig"],
             path: "Sources/BrainEngine"
         ),
-        .target(
-            name: "ConversationalInterface",
-            dependencies: ["BrainEngine", "MoralDriftMonitoring", "MemoryEngine", "ConsciousnessStructures"],
-            path: "Sources/ConversationalInterface"
-        ),
+        // .target(
+        //     name: "ConversationalInterface",
+        //     dependencies: ["BrainEngine", "MoralDriftMonitoring", "MemoryEngine", "ConsciousnessStructures"],
+        //     path: "Sources/ConversationalInterface"
+        // ),
         .target(
             name: "MoralDriftMonitoring",
             dependencies: ["ConsciousnessStructures"],
@@ -63,10 +67,30 @@ let package = Package(
             dependencies: ["ConsciousnessStructures", "MoralDriftMonitoring"],
             path: "Sources/StructuredConsciousnessService"
         ),
+        .target(
+            name: "SyntraConfig",
+            dependencies: [],
+            path: "Sources/SyntraConfig"
+        ),
+        .target(
+            name: "MoralCore",
+            dependencies: ["ConsciousnessStructures"],
+            path: "Sources/MoralCore"
+        ),
+        // .target(
+        //     name: "SyntraTools",
+        //     dependencies: ["ConsciousnessStructures", "MoralCore"],
+        //     path: "Sources/SyntraTools"
+        // ),
+        .target(
+            name: "CognitiveDrift",
+            dependencies: ["SyntraConfig", "Valon", "Modi", "Drift", "MemoryEngine"],
+            path: "Sources/CognitiveDrift"
+        ),
         .executableTarget(
             name: "SyntraSwiftCLI",
             dependencies: [
-                "Valon", "Modi", "Drift", "MemoryEngine",
+                "Valon", "Modi", "Drift", "MemoryEngine", "BrainEngine",
                 "ConsciousnessStructures", "MoralDriftMonitoring",
                 "StructuredConsciousnessService"
             ],
