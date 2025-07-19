@@ -62,7 +62,17 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>BrainEngine</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>ConsciousnessStructures</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>ConversationalInterface</key>
 		<dict>
 			<key>primary</key>
 			<true/>
