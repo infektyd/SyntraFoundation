@@ -98,7 +98,7 @@ let package = Package(
         ),
         .testTarget(
             name: "SyntraSwiftTests",
-            dependencies: ["Valon", "Modi", "Drift", "MemoryEngine"],
+            dependencies: ["Valon", "Modi", "Drift", "MemoryEngine", "BrainEngine", "SyntraConfig"],
             path: "Tests",
             exclude: ["__pycache__", "test_citation_handler.py", "test_config_toggle.py", "test_io_tools.py"]
         )
