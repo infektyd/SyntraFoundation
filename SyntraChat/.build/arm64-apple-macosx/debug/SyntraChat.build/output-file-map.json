@@ -1,0 +1,33 @@
+{
+  "": {
+    "swift-dependencies": "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraChat.build/master.swiftdeps"
+  },
+  "/Users/hansaxelsson/SyntraFoundation/SyntraChat/ContentView.swift": {
+    "dependencies": "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraChat.build/ContentView.d",
+    "object": "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraChat.build/ContentView.swift.o",
+    "swiftmodule": "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraChat.build/ContentView~partial.swiftmodule",
+    "swift-dependencies": "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraChat.build/ContentView.swiftdeps",
+    "diagnostics": "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraChat.build/ContentView.dia"
+  },
+  "/Users/hansaxelsson/SyntraFoundation/SyntraChat/Message.swift": {
+    "dependencies": "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraChat.build/Message.d",
+    "object": "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraChat.build/Message.swift.o",
+    "swiftmodule": "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraChat.build/Message~partial.swiftmodule",
+    "swift-dependencies": "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraChat.build/Message.swiftdeps",
+    "diagnostics": "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraChat.build/Message.dia"
+  },
+  "/Users/hansaxelsson/SyntraFoundation/SyntraChat/SyntraBrain.swift": {
+    "dependencies": "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraChat.build/SyntraBrain.d",
+    "object": "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraChat.build/SyntraBrain.swift.o",
+    "swiftmodule": "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraChat.build/SyntraBrain~partial.swiftmodule",
+    "swift-dependencies": "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraChat.build/SyntraBrain.swiftdeps",
+    "diagnostics": "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraChat.build/SyntraBrain.dia"
+  },
+  "/Users/hansaxelsson/SyntraFoundation/SyntraChat/SyntraChatApp.swift": {
+    "dependencies": "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraChat.build/SyntraChatApp.d",
+    "object": "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraChat.build/SyntraChatApp.swift.o",
+    "swiftmodule": "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraChat.build/SyntraChatApp~partial.swiftmodule",
+    "swift-dependencies": "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraChat.build/SyntraChatApp.swiftdeps",
+    "diagnostics": "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraChat.build/SyntraChatApp.dia"
+  }
+}

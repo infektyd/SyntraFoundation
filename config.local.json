@@ -1,0 +1,14 @@
+{
+  "openai_api_key": "sk-...",
+  "openai_api_base": "http://localhost:1234/v1",
+  "openai_model": "phi-3-mini-4k-instruct",
+  "elevenlabs_api_key": "elevenlabs-...",
+  "use_mistral_for_valon": true,
+  "preferred_voice": "auto",
+  "drift_ratio": { "valon": 0.7, "modi": 0.3 },
+  "memory_mode": "flat",
+  "telemetry_csv_path": "/Users/hansaxelsson/SyntraFoundation/telemetry/syntra_runtime.csv",
+  "apple_llm_api_base": "http://localhost:8080/v1",
+  "apple_llm_api_key": "apple-...",
+  "use_apple_llm": false
+}
