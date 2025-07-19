@@ -21,6 +21,119 @@
 
   ],
   "swiftCommands" : {
+    "C.BrainEngine-arm64-apple-macosx26.0-debug.module" : {
+      "executable" : "/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/BrainEngine.build/sources",
+      "importPath" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/hansaxelsson/SyntraFoundation/Sources/BrainEngine/BrainEngine.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/swift-version-39B54973F684ADAB.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/Modules/Valon.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/Modules/Modi.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/Modules/Drift.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/Modules/ConsciousnessStructures.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/BrainEngine.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "BrainEngine",
+      "moduleOutputPath" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/Modules/BrainEngine.swiftmodule",
+      "objects" : [
+        "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/BrainEngine.build/BrainEngine.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx15.0",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-index-store-path",
+        "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/index/store",
+        "-Onone",
+        "-enable-testing",
+        "-j10",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-emit-objc-header",
+        "-emit-objc-header-path",
+        "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/BrainEngine.build/BrainEngine-Swift.h",
+        "-swift-version",
+        "6",
+        "-plugin-path",
+        "/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk",
+        "-F",
+        "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-F",
+        "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-I",
+        "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "syntrafoundation"
+      ],
+      "outputFileMapPath" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/BrainEngine.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/BrainEngine.build/BrainEngine.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/Modules/BrainEngine.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/hansaxelsson/SyntraFoundation/Sources/BrainEngine/BrainEngine.swift"
+      ],
+      "tempsPath" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/BrainEngine.build",
+      "wholeModuleOptimization" : false
+    },
     "C.ConsciousnessStructures-arm64-apple-macosx26.0-debug.module" : {
       "executable" : "/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
       "fileList" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/ConsciousnessStructures.build/sources",
@@ -116,6 +229,119 @@
         "/Users/hansaxelsson/SyntraFoundation/Sources/ConsciousnessStructures/ConsciousnessStructures.swift"
       ],
       "tempsPath" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/ConsciousnessStructures.build",
+      "wholeModuleOptimization" : false
+    },
+    "C.ConversationalInterface-arm64-apple-macosx26.0-debug.module" : {
+      "executable" : "/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/ConversationalInterface.build/sources",
+      "importPath" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/hansaxelsson/SyntraFoundation/Sources/ConversationalInterface/ConversationalInterface.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/swift-version-39B54973F684ADAB.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/Modules/BrainEngine.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/Modules/MoralDriftMonitoring.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/Modules/MemoryEngine.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/Modules/ConsciousnessStructures.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/ConversationalInterface.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "ConversationalInterface",
+      "moduleOutputPath" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/Modules/ConversationalInterface.swiftmodule",
+      "objects" : [
+        "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/ConversationalInterface.build/ConversationalInterface.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx15.0",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-index-store-path",
+        "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/index/store",
+        "-Onone",
+        "-enable-testing",
+        "-j10",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-emit-objc-header",
+        "-emit-objc-header-path",
+        "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/ConversationalInterface.build/ConversationalInterface-Swift.h",
+        "-swift-version",
+        "6",
+        "-plugin-path",
+        "/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk",
+        "-F",
+        "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-F",
+        "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-I",
+        "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "syntrafoundation"
+      ],
+      "outputFileMapPath" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/ConversationalInterface.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/ConversationalInterface.build/ConversationalInterface.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/Modules/ConversationalInterface.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/hansaxelsson/SyntraFoundation/Sources/ConversationalInterface/ConversationalInterface.swift"
+      ],
+      "tempsPath" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/ConversationalInterface.build",
       "wholeModuleOptimization" : false
     },
     "C.Drift-arm64-apple-macosx26.0-debug.module" : {
@@ -346,6 +572,10 @@
         {
           "kind" : "file",
           "name" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/swift-version-39B54973F684ADAB.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/Modules/ConsciousnessStructures.swiftmodule"
         },
         {
           "kind" : "file",
@@ -1074,6 +1304,10 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/Modules/ConsciousnessStructures.swiftmodule"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/Valon.build/sources"
         }
       ],
@@ -1161,6 +1395,72 @@
 
   },
   "swiftTargetScanArgs" : {
+    "BrainEngine" : [
+      "/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "BrainEngine",
+      "-package-name",
+      "syntrafoundation",
+      "-c",
+      "/Users/hansaxelsson/SyntraFoundation/Sources/BrainEngine/BrainEngine.swift",
+      "-I",
+      "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx15.0",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-index-store-path",
+      "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/index/store",
+      "-Onone",
+      "-enable-testing",
+      "-j10",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-module-cache-path",
+      "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-emit-objc-header",
+      "-emit-objc-header-path",
+      "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/BrainEngine.build/BrainEngine-Swift.h",
+      "-swift-version",
+      "6",
+      "-plugin-path",
+      "/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk",
+      "-F",
+      "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-F",
+      "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-I",
+      "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "syntrafoundation",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ],
     "ConsciousnessStructures" : [
       "/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
       "-module-name",
@@ -1191,6 +1491,72 @@
       "-emit-objc-header",
       "-emit-objc-header-path",
       "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/ConsciousnessStructures.build/ConsciousnessStructures-Swift.h",
+      "-swift-version",
+      "6",
+      "-plugin-path",
+      "/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk",
+      "-F",
+      "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-F",
+      "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-I",
+      "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "syntrafoundation",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ],
+    "ConversationalInterface" : [
+      "/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "ConversationalInterface",
+      "-package-name",
+      "syntrafoundation",
+      "-c",
+      "/Users/hansaxelsson/SyntraFoundation/Sources/ConversationalInterface/ConversationalInterface.swift",
+      "-I",
+      "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx15.0",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-index-store-path",
+      "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/index/store",
+      "-Onone",
+      "-enable-testing",
+      "-j10",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-module-cache-path",
+      "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-emit-objc-header",
+      "-emit-objc-header-path",
+      "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/ConversationalInterface.build/ConversationalInterface-Swift.h",
       "-swift-version",
       "6",
       "-plugin-path",
@@ -1831,8 +2197,23 @@
     ]
   },
   "targetDependencyMap" : {
+    "BrainEngine" : [
+      "Drift",
+      "Modi",
+      "Valon",
+      "ConsciousnessStructures"
+    ],
     "ConsciousnessStructures" : [
 
+    ],
+    "ConversationalInterface" : [
+      "MemoryEngine",
+      "MoralDriftMonitoring",
+      "BrainEngine",
+      "Drift",
+      "Modi",
+      "Valon",
+      "ConsciousnessStructures"
     ],
     "Drift" : [
 
@@ -1840,10 +2221,11 @@
     "MemoryEngine" : [
       "Drift",
       "Modi",
-      "Valon"
+      "Valon",
+      "ConsciousnessStructures"
     ],
     "Modi" : [
-
+      "ConsciousnessStructures"
     ],
     "MoralDriftMonitoring" : [
       "ConsciousnessStructures"
@@ -1855,35 +2237,35 @@
     "SyntraSwiftCLI" : [
       "StructuredConsciousnessService",
       "MoralDriftMonitoring",
-      "ConsciousnessStructures",
       "MemoryEngine",
       "Drift",
       "Modi",
-      "Valon"
+      "Valon",
+      "ConsciousnessStructures"
     ],
     "SyntraSwiftPackageTests" : [
       "SyntraSwiftTests",
       "SyntraSwiftCLI",
       "StructuredConsciousnessService",
       "MoralDriftMonitoring",
-      "ConsciousnessStructures",
       "MemoryEngine",
       "Drift",
       "Modi",
-      "Valon"
+      "Valon",
+      "ConsciousnessStructures"
     ],
     "SyntraSwiftTests" : [
       "SyntraSwiftCLI",
       "StructuredConsciousnessService",
       "MoralDriftMonitoring",
-      "ConsciousnessStructures",
       "MemoryEngine",
       "Drift",
       "Modi",
-      "Valon"
+      "Valon",
+      "ConsciousnessStructures"
     ],
     "Valon" : [
-
+      "ConsciousnessStructures"
     ]
   },
   "testDiscoveryCommands" : {
@@ -1908,6 +2290,20 @@
     }
   },
   "writeCommands" : {
+    "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/BrainEngine.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/hansaxelsson/SyntraFoundation/Sources/BrainEngine/BrainEngine.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/BrainEngine.build/sources"
+    },
     "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/ConsciousnessStructures.build/sources" : {
       "alwaysOutOfDate" : false,
       "inputs" : [
@@ -1921,6 +2317,20 @@
         }
       ],
       "outputFilePath" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/ConsciousnessStructures.build/sources"
+    },
+    "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/ConversationalInterface.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/hansaxelsson/SyntraFoundation/Sources/ConversationalInterface/ConversationalInterface.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/ConversationalInterface.build/sources"
     },
     "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/Drift.build/sources" : {
       "alwaysOutOfDate" : false,

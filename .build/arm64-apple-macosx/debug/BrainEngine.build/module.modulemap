@@ -1,0 +1,4 @@
+module BrainEngine {
+    header "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/BrainEngine.build/BrainEngine-Swift.h"
+    requires objc
+}

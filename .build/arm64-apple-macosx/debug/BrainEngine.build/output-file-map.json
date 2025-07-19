@@ -1,0 +1,12 @@
+{
+  "": {
+    "swift-dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/BrainEngine.build/master.swiftdeps"
+  },
+  "/Users/hansaxelsson/SyntraFoundation/Sources/BrainEngine/BrainEngine.swift": {
+    "dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/BrainEngine.build/BrainEngine.d",
+    "object": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/BrainEngine.build/BrainEngine.swift.o",
+    "swiftmodule": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/BrainEngine.build/BrainEngine~partial.swiftmodule",
+    "swift-dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/BrainEngine.build/BrainEngine.swiftdeps",
+    "diagnostics": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/BrainEngine.build/BrainEngine.dia"
+  }
+}
