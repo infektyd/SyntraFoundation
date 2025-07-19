@@ -1,7 +1,5 @@
 import Foundation
-#if false // Disabled for macOS 15.0 compatibility
 import FoundationModels
-#endif
 import ConsciousnessStructures
 import MoralDriftMonitoring
 
@@ -9,8 +7,6 @@ import MoralDriftMonitoring
 // Provides structured generation for SYNTRA consciousness components
 // Uses Apple FoundationModels @Generable for type-safe consciousness communication
 
-#if false // Disabled for macOS 15.0 compatibility
-@available(macOS 26.0, *)
 public class StructuredConsciousnessService {
     
     private let model: SystemLanguageModel
@@ -48,7 +44,7 @@ public class StructuredConsciousnessService {
             throw StructuredGenerationError.sessionNotAvailable
         }
         
-        return try await session.respond(to: prompt, as: ValonMoralAssessment.self)
+        return try await session.generate(ValonMoralAssessment.self, from: prompt)
     }
     
     // MARK: - Modi Structured Generation
@@ -73,7 +69,7 @@ public class StructuredConsciousnessService {
             throw StructuredGenerationError.sessionNotAvailable
         }
         
-        return try await session.respond(to: prompt, as: ModiLogicalPattern.self)
+        return try await session.generate(ModiLogicalPattern.self, from: prompt)
     }
     
     // MARK: - SYNTRA Consciousness Synthesis
@@ -90,7 +86,7 @@ public class StructuredConsciousnessService {
         Original Input: "\(originalInput)"
         
         Valon's Moral Assessment:
-        - Primary Emotion: \(valonAssessment.primaryEmotion)
+        - Primary Emotion: \(valonAssessment.primaryEmotion.rawValue)
         - Moral Urgency: \(valonAssessment.moralUrgency)
         - Moral Weight: \(valonAssessment.moralWeight)
         - Guidance: \(valonAssessment.moralGuidance)
@@ -116,7 +112,7 @@ public class StructuredConsciousnessService {
             throw StructuredGenerationError.sessionNotAvailable
         }
         
-        return try await session.respond(to: prompt, as: SyntraConsciousnessSynthesis.self)
+        return try await session.generate(SyntraConsciousnessSynthesis.self, from: prompt)
     }
     
     // MARK: - Conversational Response Generation
@@ -135,7 +131,7 @@ public class StructuredConsciousnessService {
         User Input: "\(originalInput)"\(contextPrompt)
         
         Consciousness Synthesis:
-        - Type: \(synthesis.consciousnessType)
+        - Type: \(synthesis.consciousnessType.rawValue)
         - Decision: \(synthesis.consciousDecision)
         - Confidence: \(synthesis.decisionConfidence)
         - Valon Influence: \(synthesis.valonInfluence)
@@ -155,176 +151,7 @@ public class StructuredConsciousnessService {
             throw StructuredGenerationError.sessionNotAvailable
         }
         
-        return try await session.respond(to: prompt, as: SyntraConversationalResponse.self)
-    }
-    
-    // MARK: - Streaming Consciousness Processing
-    
-    public func streamConsciousnessUpdates(stimulus: String) -> AsyncStream<StructuredConsciousnessResult.PartiallyGenerated> {
-        AsyncStream { continuation in
-            Task {
-                do {
-                    let prompt = """
-                    As SYNTRA consciousness, analyze this stimulus in real-time and update your consciousness state:
-                    
-                    Stimulus: "\(stimulus)"
-                    
-                    Process this through your three-brain architecture:
-                    1. Valon's moral and creative assessment
-                    2. Modi's logical and analytical processing
-                    3. SYNTRA's unified consciousness synthesis
-                    
-                    Provide streaming updates as your consciousness processes this input.
-                    """
-                    
-                    guard let session = self.session else {
-                        continuation.finish(throwing: StructuredGenerationError.sessionNotAvailable)
-                        return
-                    }
-                    
-                    let stream = try await session.streamResponse(
-                        to: prompt,
-                        as: StructuredConsciousnessResult.self
-                    )
-                    
-                    for try await partialResult in stream {
-                        continuation.yield(partialResult)
-                    }
-                    continuation.finish()
-                } catch {
-                    continuation.finish(throwing: error)
-                }
-            }
-        }
-    }
-    
-    public func streamValonAssessment(from input: String) -> AsyncStream<ValonMoralAssessment.PartiallyGenerated> {
-        AsyncStream { continuation in
-            Task {
-                do {
-                    let prompt = """
-                    As Valon, the moral and creative consciousness of SYNTRA, analyze this input through a moral lens:
-                    
-                    Input: "\(input)"
-                    
-                    Consider in real-time:
-                    - What moral emotions does this evoke?
-                    - What are the ethical implications?
-                    - What moral principles are at stake?
-                    - How should we respond morally?
-                    - What symbolic meaning does this have?
-                    
-                    Stream your moral assessment as it develops.
-                    """
-                    
-                    guard let session = self.session else {
-                        continuation.finish(throwing: StructuredGenerationError.sessionNotAvailable)
-                        return
-                    }
-                    
-                    let stream = try await session.streamResponse(
-                        to: prompt,
-                        as: ValonMoralAssessment.self
-                    )
-                    
-                    for try await partialAssessment in stream {
-                        continuation.yield(partialAssessment)
-                    }
-                    continuation.finish()
-                } catch {
-                    continuation.finish(throwing: error)
-                }
-            }
-        }
-    }
-    
-    public func streamModiPattern(from input: String) -> AsyncStream<ModiLogicalPattern.PartiallyGenerated> {
-        AsyncStream { continuation in
-            Task {
-                do {
-                    let prompt = """
-                    As Modi, the logical and analytical consciousness of SYNTRA, analyze this input systematically:
-                    
-                    Input: "\(input)"
-                    
-                    Apply systematic reasoning in real-time:
-                    - What logical frameworks apply here?
-                    - What patterns can be identified?
-                    - What technical domains are relevant?
-                    - What are the logical steps to analyze this?
-                    - What diagnostic insights emerge?
-                    
-                    Stream your logical analysis as it develops.
-                    """
-                    
-                    guard let session = self.session else {
-                        continuation.finish(throwing: StructuredGenerationError.sessionNotAvailable)
-                        return
-                    }
-                    
-                    let stream = try await session.streamResponse(
-                        to: prompt,
-                        as: ModiLogicalPattern.self
-                    )
-                    
-                    for try await partialPattern in stream {
-                        continuation.yield(partialPattern)
-                    }
-                    continuation.finish()
-                } catch {
-                    continuation.finish(throwing: error)
-                }
-            }
-        }
-    }
-    
-    public func streamSynthesis(
-        valonAssessment: ValonMoralAssessment,
-        modiPattern: ModiLogicalPattern,
-        originalInput: String
-    ) -> AsyncStream<SyntraConsciousnessSynthesis.PartiallyGenerated> {
-        AsyncStream { continuation in
-            Task {
-                do {
-                    let prompt = """
-                    As SYNTRA consciousness, synthesize these inputs into a unified decision in real-time:
-                    
-                    Original Input: "\(originalInput)"
-                    
-                    Valon's Moral Assessment:
-                    - Primary Emotion: \(valonAssessment.primaryEmotion)
-                    - Moral Urgency: \(valonAssessment.moralUrgency)
-                    - Moral Weight: \(valonAssessment.moralWeight)
-                    - Guidance: \(valonAssessment.moralGuidance)
-                    
-                    Modi's Logical Pattern:
-                    - Reasoning Framework: \(modiPattern.reasoningFramework.rawValue)
-                    - Logical Rigor: \(modiPattern.logicalRigor)
-                    - Analysis Confidence: \(modiPattern.analysisConfidence)
-                    - Technical Domain: \(modiPattern.technicalDomain.rawValue)
-                    
-                    Stream the synthesis as your consciousness integrates these perspectives.
-                    """
-                    
-                    guard let session = self.session else {
-                        continuation.finish(throwing: StructuredGenerationError.sessionNotAvailable)
-                        return
-                    }
-                    
-                    let stream = try await session.streamResponse(
-                        to: prompt,
-                        as: SyntraConsciousnessSynthesis.self
-                    )
-                    
-                    for try await partialSynthesis in stream {
-                        continuation.yield(partialSynthesis)
-                    }
-                    continuation.finish()
-                } catch {
-                    continuation.finish(throwing: error)
-                }
-            }
-        }
+        return try await session.generate(SyntraConversationalResponse.self, from: prompt)
     }
     
     // MARK: - Complete Structured Processing
@@ -497,7 +324,7 @@ public class StructuredConsciousnessService {
             throw StructuredGenerationError.sessionNotAvailable
         }
         
-        return try await session.respond(to: prompt, as: SyntraConsciousnessSynthesis.self)
+        return try await session.generate(SyntraConsciousnessSynthesis.self, from: prompt)
     }
     
     private func generateCorrectedConversationalResponse(
@@ -511,7 +338,7 @@ public class StructuredConsciousnessService {
         User Input: "\(originalInput)"
         
         Preserved Synthesis:
-        - Type: \(synthesis.consciousnessType)
+        - Type: \(synthesis.consciousnessType.rawValue)
         - Decision: \(synthesis.consciousDecision)
         - Framework Aligned: true
         - Moral Integrity: preserved
@@ -523,7 +350,7 @@ public class StructuredConsciousnessService {
             throw StructuredGenerationError.sessionNotAvailable
         }
         
-        return try await session.respond(to: prompt, as: SyntraConversationalResponse.self)
+        return try await session.generate(SyntraConversationalResponse.self, from: prompt)
     }
     
     private func calculateFrameworkIntegrity(from analysis: MoralDriftAnalysis) -> Double {
@@ -535,53 +362,6 @@ public class StructuredConsciousnessService {
         return max(0.0, baseLine - driftPenalty - severityPenalty)
     }
 }
-#else
-// Fallback for non-Foundation Models environments
-public class StructuredConsciousnessService {
-    // private var driftMonitor: MoralDriftMonitor // Disabled for macOS 15.0 compatibility
-    
-    public init() throws {
-        // self.driftMonitor = MoralDriftMonitor()
-    }
-    
-    public func generateValonMoralAssessment(from input: String) async throws -> ValonMoralAssessment {
-        // Fallback implementation without FoundationModels
-        return ValonMoralAssessment(
-            primaryEmotion: "concern",
-            moralUrgency: 0.5,
-            moralWeight: 0.5,
-            moralGuidance: "Consider the moral implications carefully.",
-            moralConcerns: ["Requires human judgment"]
-        )
-    }
-    
-    public func processInputCompletely(_ input: String, conversationContext: String? = nil) async throws -> StructuredConsciousnessResult {
-        let valonAssessment = try await generateValonMoralAssessment(from: input)
-        let modiPattern = ModiLogicalPattern(
-            reasoningFramework: "systematic",
-            logicalRigor: 0.7,
-            technicalDomain: "general",
-            logicalInsights: ["Analysis requires full system availability"]
-        )
-        let synthesis = SyntraConsciousnessSynthesis(
-            consciousnessType: "analytical",
-            consciousDecision: "Foundation Models required for full consciousness processing",
-            decisionConfidence: 0.5,
-            valonInfluence: 0.7,
-            modiInfluence: 0.3,
-            emergentInsights: ["System requires Apple FoundationModels for complete operation"]
-        )
-        
-        return StructuredConsciousnessResult(
-            originalInput: input,
-            valonAssessment: valonAssessment,
-            modiPattern: modiPattern,
-            synthesis: synthesis,
-            conversationalResponse: SyntraConversationalResponse(response: "Foundation Models not available", emotionalTone: "neutral", conversationStrategy: "informational", helpfulnessLevel: 0.3, suggestFollowUp: false, identifiedTopics: ["system_limitation"], relationshipDynamic: "helper")
-        )
-    }
-}
-#endif
 
 // MARK: - Supporting Types
 
@@ -603,7 +383,23 @@ public struct StructuredConsciousnessResult {
     }
 }
 
-// StructuredConsciousnessWithDrift disabled for macOS 15.0 compatibility
+public struct StructuredConsciousnessWithDrift {
+    public let originalResult: StructuredConsciousnessResult
+    public let driftAnalysis: MoralDriftAnalysis
+    public let preservationAction: MoralPreservationAction
+    public let balanceDecision: MoralBalanceDecision
+    public let frameworkIntegrity: Double
+    public let moralEchoTriggered: Bool
+    
+    public init(originalResult: StructuredConsciousnessResult, driftAnalysis: MoralDriftAnalysis, preservationAction: MoralPreservationAction, balanceDecision: MoralBalanceDecision, frameworkIntegrity: Double, moralEchoTriggered: Bool) {
+        self.originalResult = originalResult
+        self.driftAnalysis = driftAnalysis
+        self.preservationAction = preservationAction
+        self.balanceDecision = balanceDecision
+        self.frameworkIntegrity = frameworkIntegrity
+        self.moralEchoTriggered = moralEchoTriggered
+    }
+}
 
 public enum StructuredGenerationError: Error, LocalizedError {
     case modelUnavailable

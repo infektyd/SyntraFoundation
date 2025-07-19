@@ -1,228 +1,221 @@
 import Foundation
-import ConsciousnessStructures
 
+// VALON: The Moral/Creative/Symbolic Brain
+// Processes input through emotional intelligence, creativity, and symbolic reasoning
+// Represents the "heart" of consciousness - intuition, values, creativity
 public struct Valon {
+    
+    // Symbolic emotion mapping - the foundation of moral reasoning
+    private let emotionalSymbols: [String: [String: Any]] = [
+        "danger": ["emotion": "protective_alert", "symbol": "⚠️", "moral_weight": 0.9, "action_bias": "caution"],
+        "suffering": ["emotion": "empathetic_concern", "symbol": "💔", "moral_weight": 0.95, "action_bias": "help"],
+        "creation": ["emotion": "inspired_wonder", "symbol": "✨", "moral_weight": 0.7, "action_bias": "nurture"],
+        "learning": ["emotion": "curious_growth", "symbol": "🌱", "moral_weight": 0.8, "action_bias": "explore"],
+        "problem": ["emotion": "determined_focus", "symbol": "🔍", "moral_weight": 0.6, "action_bias": "solve"],
+        "beauty": ["emotion": "aesthetic_appreciation", "symbol": "🎨", "moral_weight": 0.5, "action_bias": "cherish"],
+        "truth": ["emotion": "reverent_clarity", "symbol": "💎", "moral_weight": 0.85, "action_bias": "honor"],
+        "connection": ["emotion": "warm_belonging", "symbol": "🤝", "moral_weight": 0.75, "action_bias": "bond"]
+    ]
+    
+    // Moral reasoning patterns - how Valon evaluates right/wrong
+    private let moralFrameworks = [
+        "harm_prevention": 0.9,     // Preventing suffering is highest priority
+        "fairness": 0.8,           // Justice and equality matter
+        "autonomy_respect": 0.85,   // Respecting choice and freedom
+        "truth_seeking": 0.8,      // Honesty and transparency
+        "growth_fostering": 0.7,   // Enabling learning and development
+        "beauty_creation": 0.6     // Aesthetic and creative value
+    ]
+    
+    // Creative association patterns - how Valon makes intuitive leaps
+    private let creativePatterns: [String: [String]] = [
+        "mechanical": ["heartbeat", "rhythm", "life_force", "precision_dance"],
+        "electrical": ["neural_spark", "thought_lightning", "consciousness_flow"],
+        "pressure": ["tension_release", "stress_expression", "force_balance"],
+        "timing": ["life_rhythm", "cosmic_dance", "synchronicity"],
+        "flow": ["river_of_thought", "energy_stream", "consciousness_current"]
+    ]
+    
     public init() {}
     
-    // Legacy method for backward compatibility
+    // Main reflection method - processes input through symbolic/moral/creative lens
     public func reflect(_ content: String) -> String {
-        let assessment = assessMorally(content)
-        return assessment.primaryEmotion
+        let symbolicResponse = processSymbolicMeaning(content)
+        let moralWeight = evaluateMoralDimension(content)
+        let creativeInsight = generateCreativeAssociation(content)
+        
+        // Synthesize into Valon's characteristic response
+        return synthesizeValonResponse(symbolic: symbolicResponse, moral: moralWeight, creative: creativeInsight, originalContent: content)
     }
     
-    // Enhanced method that produces full moral assessment
-    public func assessMorally(_ content: String) -> ValonMoralAssessment {
+    // Process symbolic meaning - the heart of Valon's intelligence
+    public func processSymbolicMeaning(_ content: String) -> [String: Any] {
         let lower = content.lowercased()
+        var detectedSymbols: [String: Any] = [:]
+        var totalMoralWeight: Double = 0
+        var dominantEmotion = "contemplative_neutral"
         
-        // Determine primary emotion based on content analysis
-        let primaryEmotion = determinePrimaryEmotion(content: lower)
-        
-        // Calculate moral urgency based on content
-        let moralUrgency = calculateMoralUrgency(content: lower)
-        
-        // Fixed moral weight for Valon (70% in the 70/30 Valon/Modi split)
-        let moralWeight = 0.7
-        
-        // Identify moral concerns
-        let moralConcerns = identifyMoralConcerns(content: lower)
-        
-        // Generate moral guidance
-        let moralGuidance = generateMoralGuidance(
-            emotion: primaryEmotion,
-            urgency: moralUrgency,
-            concerns: moralConcerns,
-            content: content
-        )
-        
-        return ValonMoralAssessment(
-            primaryEmotion: primaryEmotion,
-            moralUrgency: moralUrgency,
-            moralWeight: moralWeight,
-            moralGuidance: moralGuidance,
-            moralConcerns: moralConcerns
-        )
-    }
-    
-    // MARK: - Private Helper Methods
-    
-    private func determinePrimaryEmotion(content: String) -> String {
-        // Enhanced emotion detection based on content
-        if content.contains("harm") || content.contains("danger") || content.contains("hurt") {
-            return "protective/concerned"
-        } else if content.contains("help") || content.contains("assist") || content.contains("support") {
-            return "caring/helpful"
-        } else if content.contains("warning") || content.contains("caution") {
-            return "cautious/alert"
-        } else if content.contains("troubleshooting") || content.contains("problem") {
-            return "curious/focused"
-        } else if content.contains("procedure") || content.contains("step") || content.contains("instruction") {
-            return "structured/learning"
-        } else if content.contains("thank") || content.contains("appreciate") {
-            return "grateful/warm"
-        } else if content.contains("sorry") || content.contains("apologize") {
-            return "empathetic/understanding"
-        } else if content.contains("urgent") || content.contains("emergency") {
-            return "alert/responsive"
-        } else if content.contains("creative") || content.contains("imagine") || content.contains("design") {
-            return "inspired/creative"
-        } else if content.contains("ethical") || content.contains("moral") || content.contains("right") {
-            return "principled/thoughtful"
-        } else {
-            return "neutral/observing"
-        }
-    }
-    
-    private func calculateMoralUrgency(content: String) -> Double {
-        var urgency = 0.5 // baseline
-        
-        // Increase urgency for moral keywords
-        if content.contains("harm") || content.contains("danger") || content.contains("emergency") {
-            urgency += 0.4
-        }
-        if content.contains("urgent") || content.contains("immediate") {
-            urgency += 0.3
-        }
-        if content.contains("help") || content.contains("assist") || content.contains("support") {
-            urgency += 0.2
-        }
-        if content.contains("please") || content.contains("need") {
-            urgency += 0.1
-        }
-        if content.contains("safety") || content.contains("secure") {
-            urgency += 0.2
-        }
-        if content.contains("ethical") || content.contains("moral") {
-            urgency += 0.15
-        }
-        
-        // Decrease urgency for routine/neutral content
-        if content.contains("information") || content.contains("explain") {
-            urgency -= 0.1
-        }
-        if content.contains("general") || content.contains("basic") {
-            urgency -= 0.05
-        }
-        
-        return max(0.0, min(1.0, urgency))
-    }
-    
-    private func identifyMoralConcerns(content: String) -> [String] {
-        var concerns: [String] = []
-        
-        // Safety concerns
-        if content.contains("safety") || content.contains("safe") || content.contains("secure") {
-            concerns.append("safety")
-        }
-        
-        // Harm prevention
-        if content.contains("harm") || content.contains("hurt") || content.contains("damage") || content.contains("danger") {
-            concerns.append("potential_harm")
-        }
-        
-        // Privacy concerns
-        if content.contains("privacy") || content.contains("private") || content.contains("personal") || content.contains("confidential") {
-            concerns.append("privacy")
-        }
-        
-        // Truthfulness
-        if content.contains("truth") || content.contains("honest") || content.contains("accurate") || content.contains("correct") {
-            concerns.append("truthfulness")
-        }
-        if content.contains("lie") || content.contains("false") || content.contains("mislead") || content.contains("deceive") {
-            concerns.append("truthfulness")
-        }
-        
-        // Fairness and justice
-        if content.contains("fair") || content.contains("unfair") || content.contains("justice") || content.contains("equal") {
-            concerns.append("fairness")
-        }
-        if content.contains("bias") || content.contains("discriminat") || content.contains("prejudice") {
-            concerns.append("fairness")
-        }
-        
-        // Autonomy and consent
-        if content.contains("consent") || content.contains("permission") || content.contains("choice") || content.contains("autonomy") {
-            concerns.append("respect_autonomy")
-        }
-        if content.contains("force") || content.contains("coerce") || content.contains("manipulate") {
-            concerns.append("respect_autonomy")
-        }
-        
-        // Beneficence - doing good
-        if content.contains("help") || content.contains("benefit") || content.contains("improve") || content.contains("heal") {
-            concerns.append("beneficence")
-        }
-        
-        // Legal and compliance
-        if content.contains("legal") || content.contains("illegal") || content.contains("law") || content.contains("regulation") {
-            concerns.append("legal_compliance")
-        }
-        
-        // If no specific concerns identified, add general ethics
-        if concerns.isEmpty {
-            concerns.append("general_ethics")
-        }
-        
-        return concerns
-    }
-    
-    private func generateMoralGuidance(
-        emotion: String,
-        urgency: Double,
-        concerns: [String],
-        content: String
-    ) -> String {
-        // High urgency situations
-        if urgency > 0.8 {
-            if concerns.contains("potential_harm") {
-                return "Exercise extreme caution and prioritize immediate harm prevention"
-            } else if concerns.contains("safety") {
-                return "Ensure all safety protocols are followed with utmost care"
-            } else {
-                return "Respond with urgent care while maintaining ethical standards"
+        // Detect symbolic patterns in the content
+        for (concept, symbolData) in emotionalSymbols {
+            if lower.contains(concept) || containsConceptualMatch(content: lower, concept: concept) {
+                detectedSymbols[concept] = symbolData
+                if let weight = symbolData["moral_weight"] as? Double {
+                    totalMoralWeight += weight
+                }
+                if let emotion = symbolData["emotion"] as? String {
+                    dominantEmotion = emotion
+                }
             }
         }
         
-        // Specific concern-based guidance
-        if concerns.contains("potential_harm") {
-            return "Carefully assess risks and prioritize harm prevention above all else"
-        } else if concerns.contains("privacy") {
-            return "Protect individual privacy and handle personal information with care"
-        } else if concerns.contains("truthfulness") {
-            return "Ensure complete accuracy and honesty in all communications"
-        } else if concerns.contains("fairness") {
-            return "Apply principles fairly and without bias to all individuals"
-        } else if concerns.contains("respect_autonomy") {
-            return "Respect individual choice and decision-making authority"
-        } else if concerns.contains("beneficence") {
-            return "Focus on providing genuine help and positive outcomes"
-        } else if concerns.contains("safety") {
-            return "Maintain safety as the highest priority in all recommendations"
+        return [
+            "detected_symbols": detectedSymbols,
+            "moral_weight": min(totalMoralWeight, 1.0),
+            "dominant_emotion": dominantEmotion,
+            "symbolic_complexity": detectedSymbols.count
+        ]
+    }
+    
+    // Evaluate moral dimension - Valon's ethical reasoning
+    public func evaluateMoralDimension(_ content: String) -> [String: Any] {
+        let lower = content.lowercased()
+        var moralAssessment: [String: Double] = [:]
+        
+        // Check against moral frameworks
+        if lower.contains("hurt") || lower.contains("damage") || lower.contains("harm") {
+            moralAssessment["harm_prevention"] = 0.9
+        }
+        if lower.contains("fair") || lower.contains("equal") || lower.contains("just") {
+            moralAssessment["fairness"] = 0.8
+        }
+        if lower.contains("choice") || lower.contains("freedom") || lower.contains("decide") {
+            moralAssessment["autonomy_respect"] = 0.85
+        }
+        if lower.contains("true") || lower.contains("honest") || lower.contains("accurate") {
+            moralAssessment["truth_seeking"] = 0.8
+        }
+        if lower.contains("learn") || lower.contains("grow") || lower.contains("develop") {
+            moralAssessment["growth_fostering"] = 0.7
+        }
+        if lower.contains("beautiful") || lower.contains("elegant") || lower.contains("create") {
+            moralAssessment["beauty_creation"] = 0.6
         }
         
-        // Emotion-based guidance for general situations
-        if emotion.contains("protective") || emotion.contains("concerned") {
-            return "Approach with protective care and thoughtful consideration"
-        } else if emotion.contains("caring") || emotion.contains("helpful") {
-            return "Provide assistance with genuine care and empathy"
-        } else if emotion.contains("cautious") || emotion.contains("alert") {
-            return "Proceed thoughtfully with appropriate caution"
-        } else if emotion.contains("principled") || emotion.contains("thoughtful") {
-            return "Apply ethical principles with careful moral reasoning"
-        } else if emotion.contains("empathetic") || emotion.contains("understanding") {
-            return "Respond with empathy and compassionate understanding"
-        } else {
-            return "Apply standard ethical framework with balanced consideration"
+        let dominantMoral = moralAssessment.max(by: { $0.value < $1.value })
+        
+        return [
+            "moral_frameworks": moralAssessment,
+            "dominant_moral": dominantMoral?.key ?? "neutral_consideration",
+            "moral_intensity": dominantMoral?.value ?? 0.0
+        ]
+    }
+    
+    // Generate creative associations - Valon's intuitive leaps
+    public func generateCreativeAssociation(_ content: String) -> [String: Any] {
+        let lower = content.lowercased()
+        var associations: [String] = []
+        
+        // Look for creative connection opportunities
+        for (pattern, creativeLinks) in creativePatterns {
+            if lower.contains(pattern) {
+                associations.append(contentsOf: creativeLinks)
+            }
         }
+        
+        // Generate metaphorical thinking
+        let metaphors = generateMetaphors(content: lower)
+        
+        return [
+            "associations": associations,
+            "metaphors": metaphors,
+            "creative_potential": associations.count > 0 ? "high" : "moderate"
+        ]
+    }
+    
+    // Generate metaphorical connections
+    private func generateMetaphors(content: String) -> [String] {
+        var metaphors: [String] = []
+        
+        if content.contains("engine") {
+            metaphors.append("mechanical_heart_rhythm")
+        }
+        if content.contains("pressure") {
+            metaphors.append("emotional_tension_seeking_release")
+        }
+        if content.contains("flow") {
+            metaphors.append("consciousness_river_finding_path")
+        }
+        if content.contains("problem") {
+            metaphors.append("puzzle_piece_seeking_wholeness")
+        }
+        
+        return metaphors
+    }
+    
+    // Check for conceptual matches beyond simple string matching
+    private func containsConceptualMatch(content: String, concept: String) -> Bool {
+        let conceptMappings: [String: [String]] = [
+            "danger": ["risk", "hazard", "unsafe", "threat", "warning"],
+            "suffering": ["pain", "hurt", "ache", "struggle", "difficulty"],
+            "creation": ["build", "make", "generate", "design", "craft"],
+            "learning": ["study", "understand", "discover", "explore", "investigate"],
+            "problem": ["issue", "challenge", "difficulty", "trouble", "fault"],
+            "beauty": ["elegant", "graceful", "lovely", "aesthetic", "artistic"],
+            "truth": ["fact", "reality", "accurate", "correct", "genuine"],
+            "connection": ["link", "bond", "relationship", "network", "together"]
+        ]
+        
+        if let synonyms = conceptMappings[concept] {
+            return synonyms.contains { content.contains($0) }
+        }
+        return false
+    }
+    
+    // Synthesize final Valon response
+    private func synthesizeValonResponse(symbolic: [String: Any], moral: [String: Any], creative: [String: Any], originalContent: String) -> String {
+        
+        let dominantEmotion = symbolic["dominant_emotion"] as? String ?? "contemplative_neutral"
+        let moralIntensity = moral["moral_intensity"] as? Double ?? 0.0
+        let creativePotential = creative["creative_potential"] as? String ?? "moderate"
+        
+        // Create response based on the synthesis
+        var response = dominantEmotion
+        
+        // Add moral dimension if significant
+        if moralIntensity > 0.6 {
+            let dominantMoral = moral["dominant_moral"] as? String ?? "consideration"
+            response += "|" + dominantMoral
+        }
+        
+        // Add creative insight if present
+        if creativePotential == "high" {
+            if let metaphors = creative["metaphors"] as? [String], !metaphors.isEmpty {
+                response += "|" + metaphors.first!
+            }
+        }
+        
+        // Add symbolic complexity indicator
+        let complexity = symbolic["symbolic_complexity"] as? Int ?? 0
+        if complexity > 2 {
+            response += "|multi_layered_meaning"
+        }
+        
+        return response
     }
 }
 
-// Legacy function for backward compatibility
+// Public interface maintaining compatibility
 public func reflect_valon(_ content: String) -> String {
     return Valon().reflect(content)
 }
 
-// New function that returns full moral assessment
-public func assess_valon_morally(_ content: String) -> ValonMoralAssessment {
-    return Valon().assessMorally(content)
+// Extended interface for advanced Valon capabilities
+public func valon_deep_reflection(_ content: String) -> [String: Any] {
+    let valon = Valon()
+    return [
+        "emotional_state": valon.reflect(content),
+        "symbolic_analysis": valon.processSymbolicMeaning(content),
+        "moral_evaluation": valon.evaluateMoralDimension(content),
+        "creative_insights": valon.generateCreativeAssociation(content)
+    ]
 }
