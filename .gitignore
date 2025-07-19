@@ -1,0 +1,69 @@
+# macOS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Xcode files
+*.xcuserstate
+xcuserdata/
+DerivedData/
+*.ipa
+*.dSYM/
+*.dSYM.zip
+
+# SwiftPM build artifacts
+.build/
+.swiftpm/
+
+# Package.swift dependencies
+Package.resolved
+
+# IDE files
+.vscode/
+.idea/
+
+# Build logs
+build.log
+
+# Local configuration files
+config.local.json
+config/config.local.json
+
+# Memory vault temporary files
+memory_vault/temp/
+
+# Log files
+*.log
+logs/
+
+# Test coverage
+coverage/
+*.gcov
+*.gcda
+*.gcno
+
+# Temporary files
+*.tmp
+*.temp
+*~
+
+# Python bytecode (for development tools)
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Virtual environments
+venv/
+env/
+.env
+
+# Node.js (if using any JS tooling)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
