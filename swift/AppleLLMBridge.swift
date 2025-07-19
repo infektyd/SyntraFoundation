@@ -23,7 +23,22 @@ func queryAppleLLM(_ prompt: String) -> String {
     request.httpBody = try? JSONSerialization.data(withJSONObject: body)
 
     let semaphore = DispatchSemaphore(value: 0)
-    final class Holder { var value: String = "" }
+    final class Holder: @unchecked Sendable { 
+        private let lock = NSLock()
+        private var _value: String = ""
+        var value: String {
+            get {
+                lock.lock()
+                defer { lock.unlock() }
+                return _value
+            }
+            set {
+                lock.lock()
+                defer { lock.unlock() }
+                _value = newValue
+            }
+        }
+    }
     let resultHolder = Holder()
     let task = URLSession.shared.dataTask(with: request) { data, _, error in
         let res: String

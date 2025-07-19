@@ -57,19 +57,42 @@ public func queryAppleLLM(_ prompt: String) async -> String {
 
 public func queryAppleLLMSync(_ prompt: String) -> String {
     let semaphore = DispatchSemaphore(value: 0)
-    var result = ""
+    let resultBox = Box("")
     
-    Task {
+    Task { @Sendable in
+        let value: String
         if #available(macOS 26.0, *) {
-            result = await queryAppleLLM(prompt)
+            value = await queryAppleLLM(prompt)
         } else {
-            result = "[Apple LLM requires macOS 26+]"
+            value = "[Apple LLM requires macOS 26+]"
         }
+        resultBox.setValue(value)
         semaphore.signal()
     }
     
     semaphore.wait()
-    return result
+    return resultBox.getValue()
+}
+
+final class Box<T>: @unchecked Sendable {
+    private var value: T
+    private let lock = NSLock()
+    
+    init(_ value: T) {
+        self.value = value
+    }
+    
+    func setValue(_ newValue: T) {
+        lock.lock()
+        defer { lock.unlock() }
+        value = newValue
+    }
+    
+    func getValue() -> T {
+        lock.lock()
+        defer { lock.unlock() }
+        return value
+    }
 }
 
 public enum FoundationModelsError: Error {
