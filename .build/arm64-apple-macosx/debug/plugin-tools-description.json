@@ -82,7 +82,6 @@
         "-emit-objc-header",
         "-emit-objc-header-path",
         "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/BrainEngine.build/BrainEngine-Swift.h",
-        "-color-diagnostics",
         "-swift-version",
         "6",
         "-plugin-path",
@@ -180,7 +179,6 @@
         "-emit-objc-header",
         "-emit-objc-header-path",
         "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/ConsciousnessStructures.build/ConsciousnessStructures-Swift.h",
-        "-color-diagnostics",
         "-swift-version",
         "6",
         "-plugin-path",
@@ -294,7 +292,6 @@
         "-emit-objc-header",
         "-emit-objc-header-path",
         "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/ConversationalInterface.build/ConversationalInterface-Swift.h",
-        "-color-diagnostics",
         "-swift-version",
         "6",
         "-plugin-path",
@@ -392,7 +389,6 @@
         "-emit-objc-header",
         "-emit-objc-header-path",
         "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/Drift.build/Drift-Swift.h",
-        "-color-diagnostics",
         "-swift-version",
         "6",
         "-plugin-path",
@@ -507,7 +503,6 @@
         "-emit-objc-header",
         "-emit-objc-header-path",
         "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/MemoryEngine.build/MemoryEngine-Swift.h",
-        "-color-diagnostics",
         "-swift-version",
         "6",
         "-plugin-path",
@@ -614,7 +609,6 @@
         "-emit-objc-header",
         "-emit-objc-header-path",
         "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/Modi.build/Modi-Swift.h",
-        "-color-diagnostics",
         "-swift-version",
         "6",
         "-plugin-path",
@@ -721,7 +715,6 @@
         "-emit-objc-header",
         "-emit-objc-header-path",
         "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/MoralDriftMonitoring.build/MoralDriftMonitoring-Swift.h",
-        "-color-diagnostics",
         "-swift-version",
         "6",
         "-plugin-path",
@@ -832,7 +825,6 @@
         "-emit-objc-header",
         "-emit-objc-header-path",
         "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/StructuredConsciousnessService.build/StructuredConsciousnessService-Swift.h",
-        "-color-diagnostics",
         "-swift-version",
         "6",
         "-plugin-path",
@@ -892,34 +884,6 @@
       "inputs" : [
         {
           "kind" : "file",
-          "name" : "/Users/hansaxelsson/SyntraFoundation/swift/AppleLLMBridge.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/hansaxelsson/SyntraFoundation/swift/BrainEngine.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/hansaxelsson/SyntraFoundation/swift/Config.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/hansaxelsson/SyntraFoundation/swift/FoundationModelsBridge.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/hansaxelsson/SyntraFoundation/swift/MemoryEngine.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/hansaxelsson/SyntraFoundation/swift/SyntraBridge.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/hansaxelsson/SyntraFoundation/swift/SyntraSymbolicState.swift"
-        },
-        {
-          "kind" : "file",
           "name" : "/Users/hansaxelsson/SyntraFoundation/swift/main.swift"
         },
         {
@@ -963,13 +927,6 @@
       "moduleName" : "SyntraSwiftCLI",
       "moduleOutputPath" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/Modules/SyntraSwiftCLI.swiftmodule",
       "objects" : [
-        "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/AppleLLMBridge.swift.o",
-        "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/BrainEngine.swift.o",
-        "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/Config.swift.o",
-        "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/FoundationModelsBridge.swift.o",
-        "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/MemoryEngine.swift.o",
-        "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/SyntraBridge.swift.o",
-        "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/SyntraSymbolicState.swift.o",
         "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/main.swift.o"
       ],
       "otherArguments" : [
@@ -993,7 +950,7 @@
         "-entry-point-function-name",
         "-Xfrontend",
         "SyntraSwiftCLI_main",
-        "-color-diagnostics",
+        "-parse-as-library",
         "-swift-version",
         "6",
         "-plugin-path",
@@ -1032,34 +989,6 @@
       "outputs" : [
         {
           "kind" : "file",
-          "name" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/AppleLLMBridge.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/BrainEngine.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/Config.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/FoundationModelsBridge.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/MemoryEngine.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/SyntraBridge.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/SyntraSymbolicState.swift.o"
-        },
-        {
-          "kind" : "file",
           "name" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/main.swift.o"
         },
         {
@@ -1069,13 +998,6 @@
       ],
       "prepareForIndexing" : false,
       "sources" : [
-        "/Users/hansaxelsson/SyntraFoundation/swift/AppleLLMBridge.swift",
-        "/Users/hansaxelsson/SyntraFoundation/swift/BrainEngine.swift",
-        "/Users/hansaxelsson/SyntraFoundation/swift/Config.swift",
-        "/Users/hansaxelsson/SyntraFoundation/swift/FoundationModelsBridge.swift",
-        "/Users/hansaxelsson/SyntraFoundation/swift/MemoryEngine.swift",
-        "/Users/hansaxelsson/SyntraFoundation/swift/SyntraBridge.swift",
-        "/Users/hansaxelsson/SyntraFoundation/swift/SyntraSymbolicState.swift",
         "/Users/hansaxelsson/SyntraFoundation/swift/main.swift"
       ],
       "tempsPath" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build",
@@ -1132,7 +1054,6 @@
         "-emit-objc-header",
         "-emit-objc-header-path",
         "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftPackageTests.build/SyntraSwiftPackageTests-Swift.h",
-        "-color-diagnostics",
         "-plugin-path",
         "/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
         "-sdk",
@@ -1243,7 +1164,6 @@
         "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/ModuleCache",
         "-parseable-output",
         "-parse-as-library",
-        "-color-diagnostics",
         "-swift-version",
         "6",
         "-plugin-path",
@@ -1345,7 +1265,6 @@
         "-emit-objc-header",
         "-emit-objc-header-path",
         "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/Valon.build/Valon-Swift.h",
-        "-color-diagnostics",
         "-swift-version",
         "6",
         "-plugin-path",
@@ -1433,7 +1352,6 @@
       "-emit-objc-header",
       "-emit-objc-header-path",
       "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/BrainEngine.build/BrainEngine-Swift.h",
-      "-color-diagnostics",
       "-swift-version",
       "6",
       "-plugin-path",
@@ -1500,7 +1418,6 @@
       "-emit-objc-header",
       "-emit-objc-header-path",
       "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/ConsciousnessStructures.build/ConsciousnessStructures-Swift.h",
-      "-color-diagnostics",
       "-swift-version",
       "6",
       "-plugin-path",
@@ -1567,7 +1484,6 @@
       "-emit-objc-header",
       "-emit-objc-header-path",
       "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/ConversationalInterface.build/ConversationalInterface-Swift.h",
-      "-color-diagnostics",
       "-swift-version",
       "6",
       "-plugin-path",
@@ -1634,7 +1550,6 @@
       "-emit-objc-header",
       "-emit-objc-header-path",
       "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/Drift.build/Drift-Swift.h",
-      "-color-diagnostics",
       "-swift-version",
       "6",
       "-plugin-path",
@@ -1702,7 +1617,6 @@
       "-emit-objc-header",
       "-emit-objc-header-path",
       "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/MemoryEngine.build/MemoryEngine-Swift.h",
-      "-color-diagnostics",
       "-swift-version",
       "6",
       "-plugin-path",
@@ -1769,7 +1683,6 @@
       "-emit-objc-header",
       "-emit-objc-header-path",
       "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/Modi.build/Modi-Swift.h",
-      "-color-diagnostics",
       "-swift-version",
       "6",
       "-plugin-path",
@@ -1837,7 +1750,6 @@
       "-emit-objc-header",
       "-emit-objc-header-path",
       "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/MoralDriftMonitoring.build/MoralDriftMonitoring-Swift.h",
-      "-color-diagnostics",
       "-swift-version",
       "6",
       "-plugin-path",
@@ -1904,7 +1816,6 @@
       "-emit-objc-header",
       "-emit-objc-header-path",
       "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/StructuredConsciousnessService.build/StructuredConsciousnessService-Swift.h",
-      "-color-diagnostics",
       "-swift-version",
       "6",
       "-plugin-path",
@@ -1948,13 +1859,6 @@
       "-package-name",
       "syntrafoundation",
       "-c",
-      "/Users/hansaxelsson/SyntraFoundation/swift/AppleLLMBridge.swift",
-      "/Users/hansaxelsson/SyntraFoundation/swift/BrainEngine.swift",
-      "/Users/hansaxelsson/SyntraFoundation/swift/Config.swift",
-      "/Users/hansaxelsson/SyntraFoundation/swift/FoundationModelsBridge.swift",
-      "/Users/hansaxelsson/SyntraFoundation/swift/MemoryEngine.swift",
-      "/Users/hansaxelsson/SyntraFoundation/swift/SyntraBridge.swift",
-      "/Users/hansaxelsson/SyntraFoundation/swift/SyntraSymbolicState.swift",
       "/Users/hansaxelsson/SyntraFoundation/swift/main.swift",
       "-I",
       "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/Modules",
@@ -1978,7 +1882,7 @@
       "-entry-point-function-name",
       "-Xfrontend",
       "SyntraSwiftCLI_main",
-      "-color-diagnostics",
+      "-parse-as-library",
       "-swift-version",
       "6",
       "-plugin-path",
@@ -2047,7 +1951,6 @@
       "-emit-objc-header",
       "-emit-objc-header-path",
       "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftPackageTests.build/SyntraSwiftPackageTests-Swift.h",
-      "-color-diagnostics",
       "-plugin-path",
       "/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
       "-sdk",
@@ -2111,7 +2014,6 @@
       "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/ModuleCache",
       "-parseable-output",
       "-parse-as-library",
-      "-color-diagnostics",
       "-swift-version",
       "6",
       "-plugin-path",
@@ -2178,7 +2080,6 @@
       "-emit-objc-header",
       "-emit-objc-header-path",
       "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/Valon.build/Valon-Swift.h",
-      "-color-diagnostics",
       "-swift-version",
       "6",
       "-plugin-path",
@@ -2447,34 +2348,6 @@
         },
         {
           "kind" : "file",
-          "name" : "/Users/hansaxelsson/SyntraFoundation/swift/AppleLLMBridge.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/hansaxelsson/SyntraFoundation/swift/BrainEngine.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/hansaxelsson/SyntraFoundation/swift/Config.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/hansaxelsson/SyntraFoundation/swift/FoundationModelsBridge.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/hansaxelsson/SyntraFoundation/swift/MemoryEngine.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/hansaxelsson/SyntraFoundation/swift/SyntraBridge.swift"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/hansaxelsson/SyntraFoundation/swift/SyntraSymbolicState.swift"
-        },
-        {
-          "kind" : "file",
           "name" : "/Users/hansaxelsson/SyntraFoundation/swift/main.swift"
         }
       ],
@@ -2518,34 +2391,6 @@
         {
           "kind" : "file",
           "name" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/StructuredConsciousnessService.build/StructuredConsciousnessService.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/AppleLLMBridge.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/BrainEngine.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/Config.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/FoundationModelsBridge.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/MemoryEngine.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/SyntraBridge.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/SyntraSymbolicState.swift.o"
         },
         {
           "kind" : "file",

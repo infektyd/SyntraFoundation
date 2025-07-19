@@ -1,0 +1,34 @@
+diff --git a/swift/main.swift b/swift/main.swift
+index abcdef0..1234567 100644
+--- a/swift/main.swift
++++ b/swift/main.swift
+@@ -1,10 +1,6 @@
+-import Foundation
+-import Valon
+-import Modi
+-import Drift
+-import MemoryEngine
+-
+-// REMOVE any top-level code here (no free functions or prints outside @main)
+ #if canImport(FoundationModels)
+ import FoundationModels
+ #endif
+@@ -90,33 +86,6 @@ struct SyntraSwiftCLI {
+             }
+         }
+     }
+-}
+-
+-// DELETE these standalone functions at bottom of file:
+-// func reflect_valon...
+-// func reflect_modi...
+-// func drift_average...
+-// func processThroughBrains...
+-// func jsonString...
+-// @available(macOS 26.0, *) func queryFoundationModel...
+-
+-// END OF FILE
++
++// All logic now lives inside SyntraSwiftCLI or its static methods.
++// No top-level declarations below this line.
+

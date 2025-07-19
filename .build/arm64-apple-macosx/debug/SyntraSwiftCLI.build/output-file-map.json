@@ -2,55 +2,6 @@
   "": {
     "swift-dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/master.swiftdeps"
   },
-  "/Users/hansaxelsson/SyntraFoundation/swift/AppleLLMBridge.swift": {
-    "dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/AppleLLMBridge.d",
-    "object": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/AppleLLMBridge.swift.o",
-    "swiftmodule": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/AppleLLMBridge~partial.swiftmodule",
-    "swift-dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/AppleLLMBridge.swiftdeps",
-    "diagnostics": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/AppleLLMBridge.dia"
-  },
-  "/Users/hansaxelsson/SyntraFoundation/swift/BrainEngine.swift": {
-    "dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/BrainEngine.d",
-    "object": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/BrainEngine.swift.o",
-    "swiftmodule": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/BrainEngine~partial.swiftmodule",
-    "swift-dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/BrainEngine.swiftdeps",
-    "diagnostics": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/BrainEngine.dia"
-  },
-  "/Users/hansaxelsson/SyntraFoundation/swift/Config.swift": {
-    "dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/Config.d",
-    "object": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/Config.swift.o",
-    "swiftmodule": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/Config~partial.swiftmodule",
-    "swift-dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/Config.swiftdeps",
-    "diagnostics": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/Config.dia"
-  },
-  "/Users/hansaxelsson/SyntraFoundation/swift/FoundationModelsBridge.swift": {
-    "dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/FoundationModelsBridge.d",
-    "object": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/FoundationModelsBridge.swift.o",
-    "swiftmodule": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/FoundationModelsBridge~partial.swiftmodule",
-    "swift-dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/FoundationModelsBridge.swiftdeps",
-    "diagnostics": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/FoundationModelsBridge.dia"
-  },
-  "/Users/hansaxelsson/SyntraFoundation/swift/MemoryEngine.swift": {
-    "dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/MemoryEngine.d",
-    "object": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/MemoryEngine.swift.o",
-    "swiftmodule": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/MemoryEngine~partial.swiftmodule",
-    "swift-dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/MemoryEngine.swiftdeps",
-    "diagnostics": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/MemoryEngine.dia"
-  },
-  "/Users/hansaxelsson/SyntraFoundation/swift/SyntraBridge.swift": {
-    "dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/SyntraBridge.d",
-    "object": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/SyntraBridge.swift.o",
-    "swiftmodule": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/SyntraBridge~partial.swiftmodule",
-    "swift-dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/SyntraBridge.swiftdeps",
-    "diagnostics": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/SyntraBridge.dia"
-  },
-  "/Users/hansaxelsson/SyntraFoundation/swift/SyntraSymbolicState.swift": {
-    "dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/SyntraSymbolicState.d",
-    "object": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/SyntraSymbolicState.swift.o",
-    "swiftmodule": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/SyntraSymbolicState~partial.swiftmodule",
-    "swift-dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/SyntraSymbolicState.swiftdeps",
-    "diagnostics": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/SyntraSymbolicState.dia"
-  },
   "/Users/hansaxelsson/SyntraFoundation/swift/main.swift": {
     "dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/main.d",
     "object": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftCLI.build/main.swift.o",
