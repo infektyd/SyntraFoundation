@@ -1,7 +1,7 @@
 import Foundation
 
 /// Launches the `run_SYNTRA_loop.py` script and streams its output.
-final class SyntraBridge {
+final class SyntraBridge: @unchecked Sendable {
     private var process: Process?
     private var stdinPipe: Pipe?
     private var stdoutPipe: Pipe?
@@ -35,14 +35,14 @@ final class SyntraBridge {
         proc.standardOutput = outPipe
         proc.standardError = errPipe
 
-        outPipe.fileHandleForReading.readabilityHandler = { [weak self] handle in
+        outPipe.fileHandleForReading.readabilityHandler = { @Sendable [weak self] handle in
             let data = handle.availableData
             if !data.isEmpty, let text = String(data: data, encoding: .utf8) {
                 self?.onOutput?(text)
             }
         }
 
-        errPipe.fileHandleForReading.readabilityHandler = { [weak self] handle in
+        errPipe.fileHandleForReading.readabilityHandler = { @Sendable [weak self] handle in
             let data = handle.availableData
             if !data.isEmpty, let text = String(data: data, encoding: .utf8) {
                 self?.onError?(text)
