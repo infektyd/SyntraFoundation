@@ -60,17 +60,19 @@ func processThroughBrains(_ input: String) -> [String: Any] {
        flag == "1" {
         if #available(macOS 15.0, *) {
             let sem = DispatchSemaphore(value: 0)
-            var fmResult = ""
-            Task {
+            let resultBox = Box("")
+            Task { @Sendable in
+                let value: String
                 if #available(macOS 26.0, *) {
-                    fmResult = (try? await queryFoundationModel(input)) ?? "[foundation model error]"
+                    value = (try? await queryFoundationModel(input)) ?? "[foundation model error]"
                 } else {
-                    fmResult = "[foundation model requires macOS 26+]"
+                    value = "[foundation model requires macOS 26+]"
                 }
+                resultBox.setValue(value)
                 sem.signal()
             }
             _ = sem.wait(timeout: .now() + 15)
-            result["foundationModel"] = fmResult
+            result["foundationModel"] = resultBox.getValue()
         } else {
             result["foundationModel"] = "[foundation model unavailable]"
         }
