@@ -61,10 +61,10 @@ func processThroughBrains(_ input: String) -> [String: Any] {
         if #available(macOS 15.0, *) {
             let sem = DispatchSemaphore(value: 0)
             let resultBox = Box("")
-            Task { @Sendable in
+            Task {
                 let value: String
                 if #available(macOS 26.0, *) {
-                    value = (try? await queryFoundationModel(input)) ?? "[foundation model error]"
+                    value = await queryFoundationModel(input)
                 } else {
                     value = "[foundation model requires macOS 26+]"
                 }
