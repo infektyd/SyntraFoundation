@@ -1,6 +1,30 @@
 [
   {
-    "timestamp" : "2025-07-19T14:02:12Z",
-    "output" : "neutral\/observing"
+    "output" : "neutral\/observing",
+    "timestamp" : "2025-07-19T14:02:12Z"
+  },
+  {
+    "timestamp" : "2025-07-19T18:10:17Z",
+    "output" : "contemplative_neutral"
+  },
+  {
+    "timestamp" : "2025-07-19T18:10:17Z",
+    "output" : "contemplative_neutral"
+  },
+  {
+    "timestamp" : "2025-07-19T18:10:56Z",
+    "output" : "contemplative_neutral"
+  },
+  {
+    "output" : "contemplative_neutral",
+    "timestamp" : "2025-07-19T18:10:56Z"
+  },
+  {
+    "output" : "contemplative_neutral",
+    "timestamp" : "2025-07-19T18:16:19Z"
+  },
+  {
+    "output" : "contemplative_neutral",
+    "timestamp" : "2025-07-19T18:16:19Z"
   }
 ]
