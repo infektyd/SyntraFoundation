@@ -1,0 +1,7 @@
+openai
+tiktoken
+python-dotenv
+numpy
+fuzzywuzzy
+nltk
+requests
