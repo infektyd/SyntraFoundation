@@ -1,4 +1,4 @@
-```markdown
+'''markdown
 # SYNTRA AGENTS.md — Clean Reference (July 2025)
 
 This document guides contributing agents (AI or otherwise) on SyntraFoundation’s core architecture, reasoning principles, integration standards, and development philosophy.
@@ -129,5 +129,5 @@ _This AGENTS.md supersedes all conflicting previous agent documentation and shou
 July 2025  
 (SyntraFoundation Project Maintainers)
 ```
-[^1]: https://github.com/infektyd/SyntraFoundation
+
 
