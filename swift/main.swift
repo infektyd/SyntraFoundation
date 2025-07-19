@@ -27,21 +27,21 @@ struct SyntraSwiftCLI {
 
         case "reflect_modi":
             let modi = Modi()
-            print(jsonString(modi.reflect(input)))
+            print(MemoryEngine.jsonString(modi.reflect(input)))
 
         case "drift_average":
             if args.count >= 4,
                let modiData = args[3].data(using: .utf8),
                let modiArr = try? JSONSerialization.jsonObject(with: modiData) as? [String] {
                 let drift = Drift()
-                print(jsonString(drift.average(valon: input, modi: modiArr)))
+                print(MemoryEngine.jsonString(drift.average(valon: input, modi: modiArr)))
             } else {
                 print("Error: Need valid JSON array for modi data")
             }
 
         case "processThroughBrains":
-            let result = await processAllBrains(input)
-            print(jsonString(result))
+            let result = MemoryEngine.processThroughBrains(input)
+            print(MemoryEngine.jsonString(result))
 
         case "foundation_model":
             #if canImport(FoundationModels)
@@ -63,30 +63,7 @@ struct SyntraSwiftCLI {
         }
     }
 
-    static func processAllBrains(_ input: String) async -> [String: Any] {
-        let valon = Valon()
-        let modi = Modi()
-        let drift = Drift()
-        
-        let valonResult = valon.reflect(input)
-        let modiResult = modi.reflect(input)
-        let driftResult = drift.average(valon: valonResult, modi: modiResult)
-        
-        return [
-            "valon": valonResult,
-            "modi": modiResult,
-            "drift": driftResult,
-            "input": input
-        ]
-    }
-
-    static func jsonString<T>(_ object: T) -> String {
-        if let data = try? JSONSerialization.data(withJSONObject: object, options: .prettyPrinted),
-           let str = String(data: data, encoding: .utf8) {
-            return str
-        }
-        return "\(object)"
-    }
+    // Removed processAllBrains and jsonString - now using MemoryEngine static methods
 
     #if canImport(FoundationModels)
     @available(macOS 26.0, *)
@@ -97,7 +74,7 @@ struct SyntraSwiftCLI {
                 return "[foundation model unavailable]"
             }
             
-            let session = try LanguageModelSession(model: model)
+            let session = LanguageModelSession(model: model)
             let response = try await session.respond(to: input)
             return String(describing: response)
         } catch {

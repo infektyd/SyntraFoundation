@@ -1,12 +1,54 @@
 [
   {
+    "timestamp" : "2025-07-19T14:02:12Z",
     "output" : {
       "emotion" : "neutral\/observing",
-      "converged_state" : "neutral\/observing + baseline_analysis",
       "logic" : [
         "baseline_analysis"
-      ]
-    },
-    "timestamp" : "2025-07-19T14:02:12Z"
+      ],
+      "converged_state" : "neutral\/observing + baseline_analysis"
+    }
+  },
+  {
+    "timestamp" : "2025-07-19T22:41:03Z",
+    "output" : {
+      "conflict_assessment" : {
+        "conflict_type" : "intuition_vs_data",
+        "intensity_difference" : 0.10000000000000003,
+        "conflict_level" : "low",
+        "requires_synthesis" : false
+      },
+      "decision_confidence" : 0.31499999999999995,
+      "valon_input" : {
+        "emotional_state" : "contemplative_neutral",
+        "symbolic_complexity" : "basic",
+        "moral_framework" : null,
+        "raw_response" : "contemplative_neutral",
+        "moral_weight" : 0.29999999999999999,
+        "creative_insight" : null
+      },
+      "logic" : [
+        "baseline_analysis"
+      ],
+      "resolution_strategy" : {
+        "priority" : "context_dependent",
+        "weight_adjustment" : 0.59999999999999998,
+        "synthesis" : "informed_intuition"
+      },
+      "converged_state" : "baseline_analysis→[logical_primacy]→tempered_by_contemplative_neutral",
+      "consciousness_state" : "integrated_consciousness",
+      "modi_input" : {
+        "raw_response" : [
+          "baseline_analysis"
+        ],
+        "logical_rigor" : "moderate",
+        "reasoning_complexity" : 1,
+        "logical_confidence" : 0.40000000000000002,
+        "primary_reasoning" : "baseline_analysis",
+        "technical_domain" : null
+      },
+      "syntra_decision" : "baseline_analysis→[logical_primacy]→tempered_by_contemplative_neutral",
+      "emotion" : "contemplative_neutral"
+    }
   }
 ]
