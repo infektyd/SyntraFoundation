@@ -68,7 +68,13 @@ let package = Package(
                 "ConsciousnessStructures", "MoralDriftMonitoring", 
                 "StructuredConsciousnessService"
             ],
-            path: "swift"
+            path: "swift",
+            exclude: [
+                            // Exclude Python tests that live under swift/
+                            "test_citation_handler.py",
+                            "test_io_tools.py",
+                            "__pycache__"
+                        ]
         ),
         .testTarget(
             name: "SyntraSwiftTests",
