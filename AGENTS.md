@@ -1,10 +1,3 @@
-<img src="https://r2cdn.perplexity.ai/pplx-full-logo-primary-dark%402x.png" class="logo" width="120"/>
-
-# check out "infektyd/SyntraFoundation" agents.md and give me an updated one thats free of learned conflicts and doesnt have ambigous or conflicting information
-
-Here is a revised, streamlined, and **de-conflicted AGENTS.md** for your SyntraFoundation project.
-The goal is to keep it unambiguous, clean, and free of contradictory practices—aimed at any AI or person collaborating on the project.
-
 ```markdown
 # SYNTRA AGENTS.md — Clean Reference (July 2025)
 
@@ -136,10 +129,5 @@ _This AGENTS.md supersedes all conflicting previous agent documentation and shou
 July 2025  
 (SyntraFoundation Project Maintainers)
 ```
-
-This version removes redundancy, resolves previous ambiguities, and clearly communicates how agents and humans should work on Syntra going forward. Let me know if you want to add, clarify, or further lock down anything!
-
-<div style="text-align: center">⁂</div>
-
 [^1]: https://github.com/infektyd/SyntraFoundation
 
