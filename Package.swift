@@ -94,7 +94,8 @@ let package = Package(
                 "ConsciousnessStructures", "MoralDriftMonitoring",
                 "StructuredConsciousnessService"
             ],
-            path: "swift"
+            path: "swift",
+            sources: ["main.swift"]
         ),
         .testTarget(
             name: "SyntraSwiftTests",
