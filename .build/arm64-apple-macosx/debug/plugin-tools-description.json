@@ -1335,6 +1335,14 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/Modules/BrainEngine.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/Modules/SyntraConfig.swiftmodule"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftTests.build/sources"
         }
       ],
@@ -2505,6 +2513,8 @@
     ],
     "SyntraSwiftPackageTests" : [
       "SyntraSwiftTests",
+      "BrainEngine",
+      "SyntraConfig",
       "MemoryEngine",
       "Drift",
       "Modi",
@@ -2512,6 +2522,8 @@
       "ConsciousnessStructures"
     ],
     "SyntraSwiftTests" : [
+      "BrainEngine",
+      "SyntraConfig",
       "MemoryEngine",
       "Drift",
       "Modi",
@@ -2793,6 +2805,10 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/BrainEngine.build/BrainEngine.swift.o"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/ConsciousnessStructures.build/ConsciousnessStructures.swift.o"
         },
         {
@@ -2806,6 +2822,10 @@
         {
           "kind" : "file",
           "name" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/Modi.build/Modi.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraConfig.build/SyntraConfig.swift.o"
         },
         {
           "kind" : "file",
