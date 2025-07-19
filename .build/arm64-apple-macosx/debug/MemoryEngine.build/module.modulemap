@@ -1,0 +1,4 @@
+module MemoryEngine {
+    header "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/MemoryEngine.build/MemoryEngine-Swift.h"
+    requires objc
+}

@@ -1,0 +1,4 @@
+module Modi {
+    header "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/Modi.build/Modi-Swift.h"
+    requires objc
+}

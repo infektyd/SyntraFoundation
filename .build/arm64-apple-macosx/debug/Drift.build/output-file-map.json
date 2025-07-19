@@ -1,0 +1,12 @@
+{
+  "": {
+    "swift-dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/Drift.build/master.swiftdeps"
+  },
+  "/Users/hansaxelsson/SyntraFoundation/Sources/Drift/Drift.swift": {
+    "dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/Drift.build/Drift.d",
+    "object": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/Drift.build/Drift.swift.o",
+    "swiftmodule": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/Drift.build/Drift~partial.swiftmodule",
+    "swift-dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/Drift.build/Drift.swiftdeps",
+    "diagnostics": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/Drift.build/Drift.dia"
+  }
+}

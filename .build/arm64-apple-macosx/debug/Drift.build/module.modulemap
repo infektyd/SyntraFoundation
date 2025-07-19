@@ -1,0 +1,4 @@
+module Drift {
+    header "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/Drift.build/Drift-Swift.h"
+    requires objc
+}

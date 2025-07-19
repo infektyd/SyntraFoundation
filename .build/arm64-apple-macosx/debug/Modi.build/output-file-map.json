@@ -1,0 +1,12 @@
+{
+  "": {
+    "swift-dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/Modi.build/master.swiftdeps"
+  },
+  "/Users/hansaxelsson/SyntraFoundation/Sources/Modi/Modi.swift": {
+    "dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/Modi.build/Modi.d",
+    "object": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/Modi.build/Modi.swift.o",
+    "swiftmodule": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/Modi.build/Modi~partial.swiftmodule",
+    "swift-dependencies": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/Modi.build/Modi.swiftdeps",
+    "diagnostics": "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/Modi.build/Modi.dia"
+  }
+}
