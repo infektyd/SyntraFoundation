@@ -223,11 +223,11 @@ public actor SleepLikeConsolidationEngine {
         switch replayType {
         case .forwardReplay:
             // Select temporally related memories
-            return allMemories.sorted { $0.creationTimestamp < $1.creationTimestamp }.prefix(50).map { $0 }
+            return Array(allMemories.sorted(by: { $0.creationTimestamp < $1.creationTimestamp }).prefix(50))
             
         case .reverseReplay:
             // Reverse temporal order for pattern discovery
-            return allMemories.sorted { $0.creationTimestamp > $1.creationTimestamp }.prefix(50).map { $0 }
+            return Array(allMemories.sorted(by: { $0.creationTimestamp > $1.creationTimestamp }).prefix(50))
             
         case .shuffledReplay:
             // Random selection for creative integration
@@ -459,7 +459,7 @@ public actor SleepLikeConsolidationEngine {
     private func analyzeTemporalPatterns(memories: [MemoryTrace]) -> [String] {
         var patterns: [String] = []
         
-        let sortedMemories = memories.sorted { $0.creationTimestamp < $1.creationTimestamp }
+        let sortedMemories = memories.sorted(by: { $0.creationTimestamp < $1.creationTimestamp })
         let timeSpan = sortedMemories.last?.creationTimestamp.timeIntervalSince(sortedMemories.first?.creationTimestamp ?? Date()) ?? 0
         
         if timeSpan < 3600 { // Within 1 hour

@@ -30,7 +30,7 @@ public class SyntraToolCallingService {
         ]
         
         // Create session with tools and consciousness instructions
-        self.session = try LanguageModelSession(
+        self.session = LanguageModelSession(
             model: model,
             tools: consciousnessTools,
             instructions: Self.consciousnessInstructions

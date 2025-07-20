@@ -14,12 +14,12 @@ let package = Package(
         .library(name: "MemoryEngine", targets: ["MemoryEngine"]),
         .library(name: "ConsciousnessStructures", targets: ["ConsciousnessStructures"]),
         .library(name: "BrainEngine", targets: ["BrainEngine"]),
-        // .library(name: "ConversationalInterface", targets: ["ConversationalInterface"]),
+        .library(name: "ConversationalInterface", targets: ["ConversationalInterface"]),
         .library(name: "StructuredConsciousnessService", targets: ["StructuredConsciousnessService"]),
         .library(name: "MoralDriftMonitoring", targets: ["MoralDriftMonitoring"]),
         .library(name: "SyntraConfig", targets: ["SyntraConfig"]),
         .library(name: "MoralCore", targets: ["MoralCore"]),
-        // .library(name: "SyntraTools", targets: ["SyntraTools"]),
+        .library(name: "SyntraTools", targets: ["SyntraTools"]),
         .library(name: "CognitiveDrift", targets: ["CognitiveDrift"]),
         .executable(name: "SyntraSwiftCLI", targets: ["SyntraSwiftCLI"])
     ],
@@ -79,7 +79,7 @@ let package = Package(
         ),
         .target(
             name: "SyntraTools",
-            dependencies: ["ConsciousnessStructures", "MoralCore"],
+            dependencies: ["ConsciousnessStructures", "MoralCore", "StructuredConsciousnessService", "MoralDriftMonitoring"],
             path: "swift/SyntraTools"
         ),
         .target(
@@ -92,15 +92,15 @@ let package = Package(
             dependencies: [
                 "Valon", "Modi", "Drift", "MemoryEngine", "BrainEngine",
                 "ConsciousnessStructures", "MoralDriftMonitoring",
-                "StructuredConsciousnessService"
+                "StructuredConsciousnessService", "SyntraConfig", "MoralCore"
             ],
             path: "swift",
             sources: ["Main/main.swift"]
         ),
         .testTarget(
             name: "SyntraSwiftTests",
-            dependencies: ["Valon", "Modi", "Drift", "MemoryEngine", "BrainEngine", "SyntraConfig"],
-            path: "Tests",
+            dependencies: ["Valon", "Modi", "Drift", "MemoryEngine", "BrainEngine", "SyntraConfig", "StructuredConsciousnessService"],
+            path: "tests",
             exclude: ["__pycache__", "test_citation_handler.py", "test_config_toggle.py", "test_io_tools.py"]
         )
     ]

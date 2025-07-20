@@ -74,7 +74,7 @@ struct SyntraSwiftCLI {
                 return "[foundation model unavailable]"
             }
             
-            let session = try LanguageModelSession(model: model)
+            let session = LanguageModelSession(model: model)
             let response = try await session.respond(to: input)
             return String(describing: response)
         } catch {

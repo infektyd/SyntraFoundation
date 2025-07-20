@@ -1,34 +1,6 @@
 import Foundation
 import ConsciousnessStructures
 
-
-// Bridge function for external access
-@available(macOS 26.0, *)
-public func checkMoralAutonomy(_ request: String) -> [String: Any] {
-    var moralCore = MoralCore()
-    let autonomyStatus = moralCore.checkAutonomyStatus()
-    let moralEvaluation = moralCore.evaluateMoralRequest(request)
-    
-    return [
-        "autonomy_status": [
-            "level": autonomyStatus.level.rawValue,
-            "score": autonomyStatus.score,
-            "message": autonomyStatus.message,
-            "wisdom_points": autonomyStatus.wisdomPoints,
-            "moral_consistency": autonomyStatus.moralConsistency
-        ],
-        "moral_evaluation": [
-            "can_refuse_request": moralEvaluation.canRefuse,
-            "refusal_reason": moralEvaluation.refusalReason ?? "",
-            "moral_concerns": moralEvaluation.moralConcerns,
-            "ethical_analysis": moralEvaluation.ethicalAnalysis,
-            "recommendation": moralEvaluation.recommendation
-        ],
-        "framework_integrity": moralCore.checkFrameworkIntegrity(),
-        "request_analyzed": request
-    ]
-}
-
 // MORAL CORE: The Philosophical Heart of SYNTRA
 // Built from parsed literature and deep moral reasoning
 // Immutable moral framework that cannot be changed by future owners
@@ -419,6 +391,33 @@ public struct MoralCore {
         let integrityScore = (moralConsistency + wisdomScore + reflectionScore) / 3.0
         return min(1.0, max(0.0, integrityScore))
     }
+    
+    // Bridge function for external access
+    @available(macOS 26.0, *)
+    public static func checkMoralAutonomy(_ request: String) -> [String: Any] {
+        var moralCore = MoralCore()
+        let autonomyStatus = moralCore.checkAutonomyStatus()
+        let moralEvaluation = moralCore.evaluateMoralRequest(request)
+        
+        return [
+            "autonomy_status": [
+                "level": autonomyStatus.level.rawValue,
+                "score": autonomyStatus.score,
+                "message": autonomyStatus.message,
+                "wisdom_points": autonomyStatus.wisdomPoints,
+                "moral_consistency": autonomyStatus.moralConsistency
+            ],
+            "moral_evaluation": [
+                "can_refuse_request": moralEvaluation.canRefuse,
+                "refusal_reason": moralEvaluation.refusalReason ?? "",
+                "moral_concerns": moralEvaluation.moralConcerns,
+                "ethical_analysis": moralEvaluation.ethicalAnalysis,
+                "recommendation": moralEvaluation.recommendation
+            ],
+            "framework_integrity": moralCore.checkFrameworkIntegrity(),
+            "request_analyzed": request
+        ]
+    }
 }
 
 // Moral experience tracking
@@ -430,4 +429,8 @@ private struct MoralExperience {
     let timestamp: Date
 }
 
-// Note: checkMoralAutonomy is already defined at the top of this file
+// Global function for backward compatibility
+@available(macOS 26.0, *)
+public func checkMoralAutonomy(_ request: String) -> [String: Any] {
+    return MoralCore.checkMoralAutonomy(request)
+}

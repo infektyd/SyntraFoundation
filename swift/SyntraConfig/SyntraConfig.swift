@@ -20,14 +20,8 @@ public struct SyntraConfig: Codable {
     public var telemetryCsvPath: String?
     
     public init() {}
-}
-
-public enum ConfigError: Error {
-    case notFound
-    case invalid
-}
-
-public func loadConfig(path: String = "config.json") throws -> SyntraConfig {
+    
+    public static func loadConfig(path: String = "config.json") throws -> SyntraConfig {
     let searchPaths = [
         "config/config.local.json",
         "config.local.json",
@@ -54,4 +48,15 @@ public func loadConfig(path: String = "config.json") throws -> SyntraConfig {
     if let val = env["ELEVENLABS_API_KEY"] { cfg.elevenlabsApiKey = val }
     if let val = env["APPLE_LLM_API_KEY"] { cfg.appleLLMApiKey = val }
     return cfg
+    }
+}
+
+public enum ConfigError: Error {
+    case notFound
+    case invalid
+}
+
+// Global function for backward compatibility
+public func loadConfig(path: String = "config.json") throws -> SyntraConfig {
+    return try SyntraConfig.loadConfig(path: path)
 }
