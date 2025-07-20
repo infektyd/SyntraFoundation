@@ -4,8 +4,8 @@ import PackageDescription
 let package = Package(
     name: "SyntraSwift",
     platforms: [
-        .macOS(.v26), // Required for FoundationModels
-        .iOS(.v18)
+        .macOS ("26.0"), // Required for FoundationModels
+        .iOS ("18.0")
     ],
     products: [
         .library(name: "Valon", targets: ["Valon"]),

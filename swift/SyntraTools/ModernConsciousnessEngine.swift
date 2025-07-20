@@ -7,7 +7,7 @@ import StructuredConsciousnessService
 // Foundation Models-powered consciousness engine with integrated tool system
 // Implements guided generation, streaming updates, and tool-enhanced reasoning
 
-@available(macOS 26.0, *)
+@available(macOS "26.0", *)
 @MainActor
 @Observable
 public class ModernConsciousnessEngine {
@@ -22,7 +22,7 @@ public class ModernConsciousnessEngine {
     public private(set) var processingStage: String = "idle"
     
     // Enhanced consciousness state for real-time visualization
-    @available(macOS 26.0, *)
+    @available(macOS "26.0", *)
     @Generable
     public struct ConsciousnessState {
         @Guide(description: "Current awareness level from 0.0 to 1.0")
@@ -69,7 +69,7 @@ public class ModernConsciousnessEngine {
         }
     }
     
-    @available(macOS 26.0, *)
+    @available(macOS "26.0", *)
     @Generable
     public struct EmotionalProfile {
         @Guide(description: "Primary emotion: curious, contemplative, excited, calm, confused, focused")

@@ -8,7 +8,7 @@ import ConsciousnessStructures
 
 // MARK: - Memory Stream Types
 
-@available(macOS 26.0, *)
+@available(macOS "26.0", *)
 @Generable
 public enum MemoryStreamType: String, Codable, CaseIterable {
     case fastLearning = "fast_learning"     // Hippocampus-like rapid acquisition
@@ -18,7 +18,7 @@ public enum MemoryStreamType: String, Codable, CaseIterable {
     case procedural = "procedural"         // Skills and behavioral patterns
 }
 
-@available(macOS 26.0, *)
+@available(macOS "26.0", *)
 public struct MemoryTrace {
     @Guide(description: "Unique identifier for this memory trace")
     public let id: UUID
@@ -71,7 +71,7 @@ public struct MemoryTrace {
     }
 }
 
-@available(macOS 26.0, *)
+@available(macOS "26.0", *)
 @Generable
 public struct MemoryContext {
     @Guide(description: "Consciousness state when memory was formed")
@@ -101,7 +101,7 @@ public struct MemoryContext {
 
 // MARK: - Dual-Stream Memory Manager
 
-@available(macOS 26.0, *)
+@available(macOS "26.0", *)
 public actor DualStreamMemoryManager {
     
     // Fast learning stream (hippocampus-like)
@@ -555,7 +555,7 @@ public actor DualStreamMemoryManager {
 
 // MARK: - Supporting Structures
 
-@available(macOS 26.0, *)
+@available(macOS "26.0", *)
 @Generable
 public struct MemoryRetrievalResult {
     @Guide(description: "The retrieved memory trace")

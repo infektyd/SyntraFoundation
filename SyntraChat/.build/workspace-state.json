@@ -4,7 +4,20 @@
 
     ],
     "dependencies" : [
-
+      {
+        "basedOn" : null,
+        "packageRef" : {
+          "identity" : "syntraconfig",
+          "kind" : "fileSystem",
+          "location" : "/Users/hansaxelsson/SyntraFoundation/swift/SyntraConfig",
+          "name" : "SyntraConfig"
+        },
+        "state" : {
+          "name" : "fileSystem",
+          "path" : "/Users/hansaxelsson/SyntraFoundation/swift/SyntraConfig"
+        },
+        "subpath" : "syntraconfig"
+      }
     ],
     "prebuilts" : [
 

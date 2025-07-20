@@ -10,16 +10,48 @@ import FoundationModels
 @Generable
 public struct ValonModiBridge {
     /// Raw Valon output (structured or free-form)
+    @Guide(description: "Valon's moral and creative reasoning output")
     public let valon: String
+    
     /// Raw Modi output (structured or free-form)
+    @Guide(description: "Modi's logical and analytical reasoning output")
     public let modi: String
-    /// Analytical drift/conflict data between Valon and Modi
-    public let driftAnalysis: [String: Any]
-
-    public init(valon: String, modi: String, driftAnalysis: [String: Any]) {
+    
+    /// Analysis of conflicts and drift between Valon and Modi
+    @Guide(description: "Analysis of conflicts and cognitive drift between Valon and Modi")
+    public let driftAnalysis: DriftAnalysis
+    
+    public init(valon: String, modi: String, driftAnalysis: DriftAnalysis) {
         self.valon = valon
         self.modi = modi
         self.driftAnalysis = driftAnalysis
+    }
+}
+
+@available(macOS 26.0, *)
+@Generable
+public struct DriftAnalysis {
+    @Guide(description: "Type of conflict detected between Valon and Modi")
+    public let conflictType: String
+    
+    @Guide(description: "Magnitude of the conflict from 0.0 to 1.0")
+    public let conflictMagnitude: Double
+    
+    @Guide(description: "Description of the conflict")
+    public let conflictDescription: String
+    
+    @Guide(description: "Resolution strategy applied")
+    public let resolutionStrategy: String
+    
+    @Guide(description: "Whether the conflict was resolved")
+    public let isResolved: Bool
+    
+    public init(conflictType: String, conflictMagnitude: Double, conflictDescription: String, resolutionStrategy: String, isResolved: Bool) {
+        self.conflictType = conflictType
+        self.conflictMagnitude = conflictMagnitude
+        self.conflictDescription = conflictDescription
+        self.resolutionStrategy = resolutionStrategy
+        self.isResolved = isResolved
     }
 }
 
@@ -399,16 +431,16 @@ public enum AutonomyLevel: String, Codable, CaseIterable {
 @available(macOS 26.0, *)
 @Generable
 public struct MoralAssessment {
-    @Guide(description: "Moral urgency level from 0.0 to 1.0")
+    @Guide(description: "Moral urgency level 0.0-1.0")
     public let moralUrgency: Double
     
-    @Guide(description: "Ethical complexity level from 0.0 to 1.0")
+    @Guide(description: "Ethical complexity assessment 0.0-1.0")
     public let ethicalComplexity: Double
     
-    @Guide(description: "Whether this situation requires autonomous moral reasoning")
+    @Guide(description: "Whether autonomous reasoning is required")
     public let autonomyRequired: Bool
     
-    @Guide(description: "Structured assessment data")
+    @Guide(description: "Detailed moral assessment data")
     public let assessmentData: MoralAssessmentData
     
     public init(moralUrgency: Double, ethicalComplexity: Double, autonomyRequired: Bool, assessmentData: MoralAssessmentData) {
@@ -416,26 +448,6 @@ public struct MoralAssessment {
         self.ethicalComplexity = ethicalComplexity
         self.autonomyRequired = autonomyRequired
         self.assessmentData = assessmentData
-    }
-    
-    // Legacy compatibility property
-    public var assessment: [String: Any] {
-        // Convert structured data back to dictionary format
-        var foundationDict: [String: Double] = [:]
-        for alignment in assessmentData.foundationAlignment {
-            foundationDict[alignment.principle] = alignment.alignmentScore
-        }
-        
-        return [
-            "foundation_alignment": foundationDict,
-            "harm_indicators": assessmentData.harmIndicators,
-            "request_analysis": [
-                "type": assessmentData.requestType,
-                "risk_level": assessmentData.riskLevel,
-                "needs_autonomy": assessmentData.needsAutonomy,
-                "complexity": assessmentData.complexity
-            ]
-        ]
     }
 }
 
@@ -572,25 +584,6 @@ public struct MoralAssessment {
         self.ethicalComplexity = ethicalComplexity
         self.autonomyRequired = autonomyRequired
         self.assessmentData = assessmentData
-    }
-    
-    // Legacy compatibility property
-    public var assessment: [String: Any] {
-        var foundationDict: [String: Double] = [:]
-        for alignment in assessmentData.foundationAlignment {
-            foundationDict[alignment.principle] = alignment.alignmentScore
-        }
-        
-        return [
-            "foundation_alignment": foundationDict,
-            "harm_indicators": assessmentData.harmIndicators,
-            "request_analysis": [
-                "type": assessmentData.requestType,
-                "risk_level": assessmentData.riskLevel,
-                "needs_autonomy": assessmentData.needsAutonomy,
-                "complexity": assessmentData.complexity
-            ]
-        ]
     }
 }
 

@@ -22,8 +22,32 @@ public struct SyntraConfig: Codable {
     public var memoryMode: String?
     public var interpreterOutput: Bool?
     public var telemetryCsvPath: String?
+    public var enableTwoPassLoop: Bool?
     
     public init() {}
+    
+    enum CodingKeys: String, CodingKey {
+        case openaiApiKey = "openai_api_key"
+        case openaiApiBase = "openai_api_base"
+        case openaiModel = "openai_model"
+        case elevenlabsApiKey = "elevenlabs_api_key"
+        case appleLLMApiKey = "apple_llm_api_key"
+        case appleLLMApiBase = "apple_llm_api_base"
+        case useAppleLLM = "use_apple_llm"
+        case useMistralForValon = "use_mistral_for_valon"
+        case preferredVoice = "preferred_voice"
+        case driftRatio = "drift_ratio"
+        case useAdaptiveFusion = "use_adaptive_fusion"
+        case useAdaptiveWeighting = "use_adaptive_weighting"
+        case enableValonOutput = "enable_valon_output"
+        case enableModiOutput = "enable_modi_output"
+        case enableDriftOutput = "enable_drift_output"
+        case logSymbolicDrift = "log_symbolic_drift"
+        case memoryMode = "memory_mode"
+        case interpreterOutput = "interpreter_output"
+        case telemetryCsvPath = "telemetry_csv_path"
+        case enableTwoPassLoop = "enable_two_pass_loop"
+    }
     
     public static func loadConfig(path: String = "config.json") throws -> SyntraConfig {
     let searchPaths = [

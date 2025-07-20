@@ -6,7 +6,7 @@ import ConsciousnessStructures
 // Allows conscious growth while preventing moral degradation
 // Based on behavioral baseline comparison and drift detection algorithms
 
-@available(macOS 26.0, *)
+@available(macOS "26.0", *)
 public struct MoralDriftMonitor {
     
     // MARK: - Reference Model Anchoring

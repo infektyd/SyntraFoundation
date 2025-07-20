@@ -32,6 +32,10 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/hansaxelsson/SyntraFoundation/SyntraChat/SettingsPanel.swift"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/hansaxelsson/SyntraFoundation/SyntraChat/SyntraBrain.swift"
         },
         {
@@ -44,6 +48,10 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/Modules/SyntraConfig.swiftmodule"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraChat.build/sources"
         }
       ],
@@ -53,12 +61,13 @@
       "objects" : [
         "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraChat.build/ContentView.swift.o",
         "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraChat.build/Message.swift.o",
+        "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraChat.build/SettingsPanel.swift.o",
         "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraChat.build/SyntraBrain.swift.o",
         "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraChat.build/SyntraChatApp.swift.o"
       ],
       "otherArguments" : [
         "-target",
-        "arm64-apple-macosx15.0",
+        "arm64-apple-macosx26.0",
         "-incremental",
         "-enable-batch-mode",
         "-serialize-diagnostics",
@@ -77,6 +86,7 @@
         "-entry-point-function-name",
         "-Xfrontend",
         "SyntraChat_main",
+        "-color-diagnostics",
         "-swift-version",
         "6",
         "-plugin-path",
@@ -123,6 +133,10 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraChat.build/SettingsPanel.swift.o"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraChat.build/SyntraBrain.swift.o"
         },
         {
@@ -138,10 +152,109 @@
       "sources" : [
         "/Users/hansaxelsson/SyntraFoundation/SyntraChat/ContentView.swift",
         "/Users/hansaxelsson/SyntraFoundation/SyntraChat/Message.swift",
+        "/Users/hansaxelsson/SyntraFoundation/SyntraChat/SettingsPanel.swift",
         "/Users/hansaxelsson/SyntraFoundation/SyntraChat/SyntraBrain.swift",
         "/Users/hansaxelsson/SyntraFoundation/SyntraChat/SyntraChatApp.swift"
       ],
       "tempsPath" : "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraChat.build",
+      "wholeModuleOptimization" : false
+    },
+    "C.SyntraConfig-arm64-apple-macosx26.0-debug.module" : {
+      "executable" : "/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraConfig.build/sources",
+      "importPath" : "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/hansaxelsson/SyntraFoundation/swift/SyntraConfig/SyntraConfig.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/swift-version-39B54973F684ADAB.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraConfig.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "SyntraConfig",
+      "moduleOutputPath" : "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/Modules/SyntraConfig.swiftmodule",
+      "objects" : [
+        "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraConfig.build/SyntraConfig.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx26.0",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-index-store-path",
+        "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/index/store",
+        "-Onone",
+        "-enable-testing",
+        "-j10",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-emit-objc-header",
+        "-emit-objc-header-path",
+        "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraConfig.build/SyntraConfig-Swift.h",
+        "-color-diagnostics",
+        "-swift-version",
+        "6",
+        "-plugin-path",
+        "/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk",
+        "-F",
+        "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-F",
+        "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-I",
+        "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "syntraconfig"
+      ],
+      "outputFileMapPath" : "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraConfig.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraConfig.build/SyntraConfig.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/Modules/SyntraConfig.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/hansaxelsson/SyntraFoundation/swift/SyntraConfig/SyntraConfig.swift"
+      ],
+      "tempsPath" : "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraConfig.build",
       "wholeModuleOptimization" : false
     }
   },
@@ -158,12 +271,13 @@
       "-c",
       "/Users/hansaxelsson/SyntraFoundation/SyntraChat/ContentView.swift",
       "/Users/hansaxelsson/SyntraFoundation/SyntraChat/Message.swift",
+      "/Users/hansaxelsson/SyntraFoundation/SyntraChat/SettingsPanel.swift",
       "/Users/hansaxelsson/SyntraFoundation/SyntraChat/SyntraBrain.swift",
       "/Users/hansaxelsson/SyntraFoundation/SyntraChat/SyntraChatApp.swift",
       "-I",
       "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/Modules",
       "-target",
-      "arm64-apple-macosx15.0",
+      "arm64-apple-macosx26.0",
       "-incremental",
       "-enable-batch-mode",
       "-serialize-diagnostics",
@@ -182,6 +296,7 @@
       "-entry-point-function-name",
       "-Xfrontend",
       "SyntraChat_main",
+      "-color-diagnostics",
       "-swift-version",
       "6",
       "-plugin-path",
@@ -217,10 +332,80 @@
       "syntrachat",
       "-driver-use-frontend-path",
       "/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ],
+    "SyntraConfig" : [
+      "/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "SyntraConfig",
+      "-package-name",
+      "syntraconfig",
+      "-c",
+      "/Users/hansaxelsson/SyntraFoundation/swift/SyntraConfig/SyntraConfig.swift",
+      "-I",
+      "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx26.0",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-index-store-path",
+      "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/index/store",
+      "-Onone",
+      "-enable-testing",
+      "-j10",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-module-cache-path",
+      "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-emit-objc-header",
+      "-emit-objc-header-path",
+      "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraConfig.build/SyntraConfig-Swift.h",
+      "-color-diagnostics",
+      "-swift-version",
+      "6",
+      "-plugin-path",
+      "/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk",
+      "-F",
+      "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-F",
+      "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-I",
+      "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "syntraconfig",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
     ]
   },
   "targetDependencyMap" : {
     "SyntraChat" : [
+      "SyntraConfig"
+    ],
+    "SyntraConfig" : [
 
     ]
   },
@@ -267,6 +452,10 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/hansaxelsson/SyntraFoundation/SyntraChat/SettingsPanel.swift"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/hansaxelsson/SyntraFoundation/SyntraChat/SyntraBrain.swift"
         },
         {
@@ -293,14 +482,36 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraChat.build/SettingsPanel.swift.o"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraChat.build/SyntraBrain.swift.o"
         },
         {
           "kind" : "file",
           "name" : "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraChat.build/SyntraChatApp.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraConfig.build/SyntraConfig.swift.o"
         }
       ],
       "outputFilePath" : "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraChat.product/Objects.LinkFileList"
+    },
+    "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraConfig.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/hansaxelsson/SyntraFoundation/swift/SyntraConfig/SyntraConfig.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraConfig.build/sources"
     },
     "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/swift-version-39B54973F684ADAB.txt" : {
       "alwaysOutOfDate" : true,

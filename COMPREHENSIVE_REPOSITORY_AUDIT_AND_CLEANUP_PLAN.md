@@ -43,14 +43,14 @@ The SyntraFoundation repository has significant structural duplication issues wi
 
 #### Root Package.swift (Currently Active)
 ```swift
-platforms: [.macOS(.v15), .iOS(.v18)]
+platforms: [.macOS("26.0"), .iOS("18.0")]
 .executableTarget(name: "SyntraSwiftCLI", path: "swift")
 // Targets MINIMAL Sources/ directory
 ```
 
 #### Nested Package.swift (Has Better Code)
 ```swift
-platforms: [.macOS("26.0")]  
+platforms: [.macOS(""26.0"")]  
 // Targets RICH Sources/ directory with full implementations
 ```
 
@@ -117,8 +117,8 @@ mv SyntraSwift/SyntraSwift/TOOL_CALLING_IMPLEMENTATION.md .
 ```swift
 // Update platform requirements and targets
 platforms: [
-    .macOS(.v15),  // Keep compatible with FoundationModels
-    .iOS(.v18)
+    .macOS("26.0"),  // Keep compatible with FoundationModels
+    .iOS("18.0")
 ],
 
 // Add missing targets

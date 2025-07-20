@@ -8,12 +8,12 @@ import ConsciousnessStructures
 
 // MARK: - Memory Retrieval Tool
 
-@available(macOS 26.0, *)
+@available(macOS "26.0", *)
 public struct MemoryRetrievalTool: Tool {
     public let name = "retrieve_memory"
     public let description = "Retrieves relevant memories based on content, emotional context, or temporal relationships"
     
-    @available(macOS 26.0, *)
+    @available(macOS "26.0", *)
     @Generable
     public struct Arguments {
         @Guide(description: "Search query for memory content")
@@ -36,7 +36,7 @@ public struct MemoryRetrievalTool: Tool {
         }
     }
     
-    @available(macOS 26.0, *)
+    @available(macOS "26.0", *)
     @Generable
     public struct MemoryResult {
         @Guide(description: "Retrieved memory content")
@@ -107,12 +107,12 @@ public struct MemoryRetrievalTool: Tool {
 
 // MARK: - Pattern Recognition Tool
 
-@available(macOS 26.0, *)
+@available(macOS "26.0", *)
 public struct PatternRecognitionTool: Tool {
     public let name = "analyze_patterns"
     public let description = "Identifies patterns in thoughts, emotions, or behaviors across time"
     
-    @available(macOS 26.0, *)
+    @available(macOS "26.0", *)
     @Generable
     public struct Arguments {
         @Guide(description: "Type of pattern to analyze: thought, emotion, behavior, memory")
@@ -135,7 +135,7 @@ public struct PatternRecognitionTool: Tool {
         }
     }
     
-    @available(macOS 26.0, *)
+    @available(macOS "26.0", *)
     @Generable
     public struct PatternAnalysis {
         @Guide(description: "Identified patterns and their descriptions")
@@ -200,12 +200,12 @@ public struct PatternRecognitionTool: Tool {
 
 // MARK: - Emotional Analysis Tool
 
-@available(macOS 26.0, *)
+@available(macOS "26.0", *)
 public struct EmotionalAnalysisTool: Tool {
     public let name = "analyze_emotional_state"
     public let description = "Analyzes current emotional patterns and their impact on consciousness"
     
-    @available(macOS 26.0, *)
+    @available(macOS "26.0", *)
     @Generable
     public struct Arguments {
         @Guide(description: "Current stimulus or context triggering emotional response")
@@ -224,7 +224,7 @@ public struct EmotionalAnalysisTool: Tool {
         }
     }
     
-    @available(macOS 26.0, *)
+    @available(macOS "26.0", *)
     @Generable
     public struct EmotionalAnalysis {
         @Guide(description: "Identified primary emotions")
@@ -289,12 +289,12 @@ public struct EmotionalAnalysisTool: Tool {
 
 // MARK: - Consciousness State Tool
 
-@available(macOS 26.0, *)
+@available(macOS "26.0", *)
 public struct ConsciousnessStateTool: Tool {
     public let name = "assess_consciousness_state"
     public let description = "Provides comprehensive assessment of current consciousness state and its components"
     
-    @available(macOS 26.0, *)
+    @available(macOS "26.0", *)
     @Generable
     public struct Arguments {
         @Guide(description: "Aspect to focus assessment on: awareness, integration, coherence, all")
@@ -309,7 +309,7 @@ public struct ConsciousnessStateTool: Tool {
         }
     }
     
-    @available(macOS 26.0, *)
+    @available(macOS "26.0", *)
     @Generable
     public struct ConsciousnessAssessment {
         @Guide(description: "Current awareness level from 0.0 to 1.0")
@@ -369,7 +369,7 @@ public struct ConsciousnessStateTool: Tool {
 
 // MARK: - Tool Collection
 
-@available(macOS 26.0, *)
+@available(macOS "26.0", *)
 public struct SyntraToolCollection {
     public static let allTools: [any Tool] = [
         MemoryRetrievalTool(),

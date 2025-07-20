@@ -8,7 +8,7 @@ import ConsciousnessStructures
 
 // MARK: - EWC Core Structures
 
-@available(macOS 26.0, *)
+@available(macOS "26.0", *)
 public struct ImportanceWeight {
     public let weightId: UUID
     public let knowledgeDomain: String
@@ -34,7 +34,7 @@ public struct ImportanceWeight {
     }
 }
 
-@available(macOS 26.0, *)
+@available(macOS "26.0", *)
 public enum KnowledgeType: String, Codable, CaseIterable {
     case foundationalPrinciple = "foundational_principle"
     case coreSkill = "core_skill"
@@ -46,7 +46,7 @@ public enum KnowledgeType: String, Codable, CaseIterable {
     case semanticKnowledge = "semantic_knowledge"
 }
 
-@available(macOS 26.0, *)
+@available(macOS "26.0", *)
 public enum ImportanceCalculationMethod: String, Codable, CaseIterable {
     case frequencyBased = "frequency_based"           // Based on usage frequency
     case emotionalWeight = "emotional_weight"         // Based on emotional significance
@@ -56,7 +56,7 @@ public enum ImportanceCalculationMethod: String, Codable, CaseIterable {
     case moralSignificance = "moral_significance"     // Ethically important
 }
 
-@available(macOS 26.0, *)
+@available(macOS "26.0", *)
 public struct ConsolidationEvent {
     public let eventId: UUID
     public let consolidationType: ConsolidationType
@@ -81,7 +81,7 @@ public struct ConsolidationEvent {
     }
 }
 
-@available(macOS 26.0, *)
+@available(macOS "26.0", *)
 public enum ConsolidationType: String, Codable, CaseIterable {
     case preventiveConsolidation = "preventive_consolidation"     // Before new learning
     case reactiveConsolidation = "reactive_consolidation"         // After forgetting detected
@@ -92,7 +92,7 @@ public enum ConsolidationType: String, Codable, CaseIterable {
 
 // MARK: - Elastic Weight Consolidation Engine
 
-@available(macOS 26.0, *)
+@available(macOS "26.0", *)
 public actor ElasticWeightConsolidationEngine {
     
     private var importanceWeights: [UUID: ImportanceWeight] = [:]
@@ -800,7 +800,7 @@ public struct ConsolidationResults {
     public let protectedDomains: [String]
 }
 
-@available(macOS 26.0, *)
+@available(macOS "26.0", *)
 public struct ForgettingAlert {
     public let alertId: UUID
     public let severity: ForgettingSeverity
@@ -818,7 +818,7 @@ public struct ForgettingAlert {
     }
 }
 
-@available(macOS 26.0, *)
+@available(macOS "26.0", *)
 public enum ForgettingSeverity: String, Codable, CaseIterable {
     case minimal = "minimal"
     case moderate = "moderate" 

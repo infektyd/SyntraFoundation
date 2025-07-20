@@ -9,5 +9,9 @@ struct SyntraChatApp: App {
                 .frame(minWidth: 600, minHeight: 400)
         }
         .windowResizability(.contentSize)
+
+        Settings {
+            SettingsPanel(settings: ConfigViewModel())
+        }
     }
 }

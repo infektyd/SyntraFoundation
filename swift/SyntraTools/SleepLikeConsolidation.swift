@@ -8,7 +8,7 @@ import ConsciousnessStructures
 
 // MARK: - Sleep Phase Types
 
-@available(macOS 26.0, *)
+@available(macOS "26.0", *)
 public enum SleepPhase: String, Codable, CaseIterable {
     case awakening = "awakening"           // Active consciousness processing
     case lightSleep = "light_sleep"        // Initial memory processing
@@ -17,7 +17,7 @@ public enum SleepPhase: String, Codable, CaseIterable {
     case microSleep = "micro_sleep"        // Brief consolidation during active periods
 }
 
-@available(macOS 26.0, *)
+@available(macOS "26.0", *)
 public struct SleepCycle {
     public let currentPhase: SleepPhase
     public let phaseDuration: Double
@@ -37,7 +37,7 @@ public struct SleepCycle {
 
 // MARK: - Memory Replay Events
 
-@available(macOS 26.0, *)
+@available(macOS "26.0", *)
 public struct MemoryReplayEvent {
     public let id: UUID
     public let replayType: ReplayType
@@ -60,7 +60,7 @@ public struct MemoryReplayEvent {
     }
 }
 
-@available(macOS 26.0, *)
+@available(macOS "26.0", *)
 public enum ReplayType: String, Codable, CaseIterable {
     case forwardReplay = "forward_replay"         // Sequential memory reinforcement
     case reverseReplay = "reverse_replay"         // Pattern discovery through reverse processing
@@ -71,7 +71,7 @@ public enum ReplayType: String, Codable, CaseIterable {
 
 // MARK: - Sleep-Like Consolidation Engine
 
-@available(macOS 26.0, *)
+@available(macOS "26.0", *)
 public actor SleepLikeConsolidationEngine {
     
     private let memoryManager: DualStreamMemoryManager

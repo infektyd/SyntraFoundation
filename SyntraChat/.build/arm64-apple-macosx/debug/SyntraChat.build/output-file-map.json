@@ -16,6 +16,13 @@
     "swift-dependencies": "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraChat.build/Message.swiftdeps",
     "diagnostics": "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraChat.build/Message.dia"
   },
+  "/Users/hansaxelsson/SyntraFoundation/SyntraChat/SettingsPanel.swift": {
+    "dependencies": "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraChat.build/SettingsPanel.d",
+    "object": "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraChat.build/SettingsPanel.swift.o",
+    "swiftmodule": "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraChat.build/SettingsPanel~partial.swiftmodule",
+    "swift-dependencies": "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraChat.build/SettingsPanel.swiftdeps",
+    "diagnostics": "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraChat.build/SettingsPanel.dia"
+  },
   "/Users/hansaxelsson/SyntraFoundation/SyntraChat/SyntraBrain.swift": {
     "dependencies": "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraChat.build/SyntraBrain.d",
     "object": "/Users/hansaxelsson/SyntraFoundation/SyntraChat/.build/arm64-apple-macosx/debug/SyntraChat.build/SyntraBrain.swift.o",

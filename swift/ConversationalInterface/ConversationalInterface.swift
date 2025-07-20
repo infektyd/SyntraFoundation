@@ -34,7 +34,7 @@ public struct StructuredConsciousnessService {
 // Note: Main chatWithSyntra function is defined below with global engine
 
 // Enhanced chat function using structured consciousness
-@available(macOS 26.0, *)
+@available(macOS "26.0", *)
 @MainActor
 public func chatWithSyntraEnhanced(_ userMessage: String) async -> String {
     // Try structured generation first
@@ -112,7 +112,7 @@ public struct ConversationMessage {
     }
 }
 
-@available(macOS 26.0, *)
+@available(macOS "26.0", *)
 @MainActor
 public class SyntraConversationEngine {
     
@@ -417,26 +417,26 @@ public class SyntraConversationEngine {
 }
 
 // Global conversation engine - using MainActor for concurrency safety
-@available(macOS 26.0, *)
+@available(macOS "26.0", *)
 @MainActor
 private var globalConversationEngine = SyntraConversationEngine()
 
 // Main chat function for external use
-@available(macOS 26.0, *)
+@available(macOS "26.0", *)
 @MainActor
 public func chatWithSyntra(_ userMessage: String) async -> String {
     return await globalConversationEngine.chat(userMessage)
 }
 
 // Get conversation history
-@available(macOS 26.0, *)
+@available(macOS "26.0", *)
 @MainActor
 public func getSyntraConversationHistory() -> [[String: Any]] {
     return globalConversationEngine.getConversationHistory()
 }
 
 // Clear conversation
-@available(macOS 26.0, *)
+@available(macOS "26.0", *)
 @MainActor
 public func clearSyntraConversation() {
     globalConversationEngine.clearContext()
