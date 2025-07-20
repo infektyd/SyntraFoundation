@@ -5,7 +5,7 @@ import Modi
 import Drift
 import SyntraConfig
 import ConsciousnessStructures
-// import StructuredConsciousnessService // Disabled for macOS 15.0 compatibility
+// import StructuredConsciousnessService // Disabled for macOS 26.0 compatibility
 
 /// BrainEngine for SYNTRA consciousness architecture
 /// Refactored July 2025 to eliminate top-level functions and ensure SwiftPM compliance
@@ -85,7 +85,7 @@ public struct BrainEngine {
         // Legacy compatibility
         result["drift"] = consciousness
         
-        // Apple LLM integration for enhanced reasoning (disabled for macOS 15.0 compatibility)
+        // Apple LLM integration for enhanced reasoning (disabled for macOS 26.0 compatibility)
         if let cfg = try? Self.loadConfigLocal(), cfg.useAppleLLM == true {
             let syntraDecision = consciousness["syntra_decision"] as? String ?? "processing"
             let enhancedPrompt = "SYNTRA consciousness state: \(syntraDecision). Original input: \(input). Provide enhanced reasoning."

@@ -19,6 +19,10 @@ def run_language_cycle(
     print(f"\n🧠 SYNTRA Observing: “{input_text}”")
 
     config = load_config()
+    # Optionally enable a two-pass feedback loop (Valon sees Modi summary and vice versa)
+    if config.get("enable_two_pass_loop", False):
+        # TODO: implement two-pass micro-feedback between Valon and Modi before final drift
+        pass
     if show_valon is None:
         show_valon = config.get("enable_valon_output", True)
     if show_modi is None:

@@ -1,7 +1,27 @@
 import Foundation
 #if canImport(FoundationModels)
 import FoundationModels
+
 #endif
+
+// MARK: - Shared Bridge for Valon/Modi Fusion
+
+@available(macOS 26.0, *)
+@Generable
+public struct ValonModiBridge {
+    /// Raw Valon output (structured or free-form)
+    public let valon: String
+    /// Raw Modi output (structured or free-form)
+    public let modi: String
+    /// Analytical drift/conflict data between Valon and Modi
+    public let driftAnalysis: [String: Any]
+
+    public init(valon: String, modi: String, driftAnalysis: [String: Any]) {
+        self.valon = valon
+        self.modi = modi
+        self.driftAnalysis = driftAnalysis
+    }
+}
 
 // CONSCIOUSNESS STRUCTURED GENERATION
 // @Generable structs for type-safe consciousness communication

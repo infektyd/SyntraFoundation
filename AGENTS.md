@@ -25,8 +25,8 @@ This document guides contributing agents (AI or otherwise) on SyntraFoundationâ€
 
 ## Required System & Toolchain
 
-- **macOS 15+ (Sequoia)** with Apple Silicon recommended for on-device LLM.
-- **Xcode 16 Beta 3** and **Swift 6.x** tools.
+- **macOS 26 (tahoe)** with Apple Silicon recommended for on-device LLM.
+- **Xcode 26 Beta 3** and **Swift 6.x** tools.
 - **Do not** attempt network-based or remote LLMs in production; only support for internal/dev cross-validation.
 
 ---

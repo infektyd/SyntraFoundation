@@ -9,6 +9,7 @@
     "valon": 0.7,
     "modi": 0.3
   },
+  "use_adaptive_fusion": false,
   "enable_valon_output": true,
   "enable_modi_output": true,
   "enable_drift_output": true,

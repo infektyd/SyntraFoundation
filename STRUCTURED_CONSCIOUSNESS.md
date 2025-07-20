@@ -244,3 +244,28 @@ Sources/
 ---
 
 **Note:** This structured generation system represents a significant advancement in SYNTRA's consciousness architecture, providing both technical benefits and philosophical depth while maintaining the core vision of autonomous moral consciousness development.
+
+## Valon/Modi Shared Schema and Fusion Pipeline
+
+1. **Valon & Modi Generation**
+   - Each brain produces a free-form or structured output.
+   - Outputs are captured into a unified `ValonModiBridge` (`@Generable`) that holds:
+     - `valon`: raw Valon response string
+     - `modi`: raw Modi response string
+     - `driftAnalysis`: conflict/drift metadata
+
+2. **Conflict Detection & Resolution**
+   - A `ConflictResolver` scans `valon` vs. `modi` for direct contradictions.
+   - Detected conflicts are optionally reconciled via heuristics or flagged for review.
+
+3. **Adaptive or Static Fusion**
+   - Controlled by `use_adaptive_fusion` flag in `config.json`.
+   - **Adaptive**: `FusionMLP` (trainable MLP) ingests the bridge and returns a learned fusion.
+   - **Static**: falls back to the original `drift_average(valon, modi)`.
+
+4. **Logging & Tuning**
+   - All intermediate data (drift metrics, conflicts, fusion decisions) are logged to `entropy_logs/`.
+   - Enables offline analysis and model fine-tuning of the `FusionMLP`.
+
+5. **Two-Pass Feedback Loop (Future)**
+   - A config-driven micro-loop can re-prompt each brain with summaries of the other's output for tighter synergy.
