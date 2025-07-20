@@ -3,6 +3,7 @@ import FoundationModels
 import Valon
 import Modi
 import Drift
+import MemoryEngine
 import ConsciousnessStructures
 import MoralDriftMonitoring
 
@@ -103,8 +104,9 @@ public struct MoralAssessmentTool: Tool {
     }
     
     public func call(arguments: Arguments) async throws -> ToolOutput {
-        // Placeholder implementation
-        return ToolOutput("Placeholder moral assessment for: \(arguments.situation)")
+        // Use existing Valon consciousness directly - preserves original functionality
+        let valonResponse = reflect_valon(arguments.situation)
+        return ToolOutput("Valon moral assessment: \(valonResponse)")
     }
     
     // Mock implementation for testing
@@ -181,8 +183,9 @@ public struct LogicalAnalysisTool: Tool {
     }
     
     public func call(arguments: Arguments) async throws -> ToolOutput {
-        // Placeholder implementation
-        return ToolOutput("Placeholder logical analysis for: \(arguments.problem)")
+        // Use existing Modi consciousness directly - preserves original functionality
+        let modiResponse = reflect_modi(arguments.problem)
+        return ToolOutput("Modi logical analysis: \(MemoryEngine.jsonString(modiResponse))")
     }
     
     // Mock implementation for testing
