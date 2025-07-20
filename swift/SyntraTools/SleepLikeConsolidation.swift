@@ -223,15 +223,15 @@ public actor SleepLikeConsolidationEngine {
         switch replayType {
         case .forwardReplay:
             // Select temporally related memories
-            return Array(allMemories.sorted(by: { $0.creationTimestamp < $1.creationTimestamp }).prefix(50))
+            return Array(allMemories.sorted(by: { $0.memory.creationTimestamp < $1.memory.creationTimestamp }).prefix(50).map { $0.memory })
             
         case .reverseReplay:
             // Reverse temporal order for pattern discovery
-            return Array(allMemories.sorted(by: { $0.creationTimestamp > $1.creationTimestamp }).prefix(50))
+            return Array(allMemories.sorted(by: { $0.memory.creationTimestamp > $1.memory.creationTimestamp }).prefix(50).map { $0.memory })
             
         case .shuffledReplay:
             // Random selection for creative integration
-            return Array(allMemories.shuffled().prefix(30))
+            return Array(allMemories.shuffled().prefix(30).map { $0.memory })
             
         case .semanticReplay:
             // Semantically related memories
@@ -239,7 +239,7 @@ public actor SleepLikeConsolidationEngine {
             
         case .emotionalReplay:
             // High emotional valence memories
-            return allMemories.filter { abs($0.emotionalValence) > 0.5 }.prefix(25).map { $0 }
+            return allMemories.filter { abs($0.memory.emotionalValence) > 0.5 }.prefix(25).map { $0.memory }
         }
     }
     
