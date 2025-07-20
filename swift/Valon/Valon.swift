@@ -202,20 +202,29 @@ public struct Valon {
         
         return response
     }
+    
+    // Public interface maintaining compatibility
+    public static func reflect_valon(_ content: String) -> String {
+        return Valon().reflect(content)
+    }
+
+    // Extended interface for advanced Valon capabilities
+    public static func valon_deep_reflection(_ content: String) -> [String: Any] {
+        let valon = Valon()
+        return [
+            "emotional_state": valon.reflect(content),
+            "symbolic_analysis": valon.processSymbolicMeaning(content),
+            "moral_evaluation": valon.evaluateMoralDimension(content),
+            "creative_insights": valon.generateCreativeAssociation(content)
+        ]
+    }
 }
 
-// Public interface maintaining compatibility
+// Global functions for backward compatibility
 public func reflect_valon(_ content: String) -> String {
-    return Valon().reflect(content)
+    return Valon.reflect_valon(content)
 }
 
-// Extended interface for advanced Valon capabilities
 public func valon_deep_reflection(_ content: String) -> [String: Any] {
-    let valon = Valon()
-    return [
-        "emotional_state": valon.reflect(content),
-        "symbolic_analysis": valon.processSymbolicMeaning(content),
-        "moral_evaluation": valon.evaluateMoralDimension(content),
-        "creative_insights": valon.generateCreativeAssociation(content)
-    ]
+    return Valon.valon_deep_reflection(content)
 }

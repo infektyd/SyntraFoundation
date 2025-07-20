@@ -256,20 +256,29 @@ public struct Modi {
         
         return response
     }
+    
+    // Public interface maintaining compatibility
+    public static func reflect_modi(_ content: String) -> [String] {
+        return Modi().reflect(content)
+    }
+
+    // Extended interface for advanced Modi capabilities
+    public static func modi_deep_analysis(_ content: String) -> [String: Any] {
+        let modi = Modi()
+        return [
+            "reasoning_patterns": modi.reflect(content),
+            "logical_analysis": modi.performLogicalAnalysis(content),
+            "technical_assessment": modi.assessTechnicalDomain(content),
+            "pattern_identification": modi.identifyReasoningPatterns(content)
+        ]
+    }
 }
 
-// Public interface maintaining compatibility
+// Global functions for backward compatibility
 public func reflect_modi(_ content: String) -> [String] {
-    return Modi().reflect(content)
+    return Modi.reflect_modi(content)
 }
 
-// Extended interface for advanced Modi capabilities
 public func modi_deep_analysis(_ content: String) -> [String: Any] {
-    let modi = Modi()
-    return [
-        "reasoning_patterns": modi.reflect(content),
-        "logical_analysis": modi.performLogicalAnalysis(content),
-        "technical_assessment": modi.assessTechnicalDomain(content),
-        "pattern_identification": modi.identifyReasoningPatterns(content)
-    ]
+    return Modi.modi_deep_analysis(content)
 }

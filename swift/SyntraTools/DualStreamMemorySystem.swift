@@ -19,7 +19,6 @@ public enum MemoryStreamType: String, Codable, CaseIterable {
 }
 
 @available(macOS 26.0, *)
-@Generable
 public struct MemoryTrace {
     @Guide(description: "Unique identifier for this memory trace")
     public let id: UUID
@@ -495,7 +494,7 @@ public actor DualStreamMemoryManager {
     
     private func recordMemoryAccess(memoryId: UUID) async {
         // Update access count and timestamp for both streams
-        if var memory = fastLearningMemories[memoryId] {
+        if let memory = fastLearningMemories[memoryId] {
             let updatedMemory = MemoryTrace(
                 id: memory.id,
                 streamType: memory.streamType,
@@ -512,7 +511,7 @@ public actor DualStreamMemoryManager {
             fastLearningMemories[memoryId] = updatedMemory
         }
         
-        if var memory = slowLearningMemories[memoryId] {
+        if let memory = slowLearningMemories[memoryId] {
             let updatedMemory = MemoryTrace(
                 id: memory.id,
                 streamType: memory.streamType,

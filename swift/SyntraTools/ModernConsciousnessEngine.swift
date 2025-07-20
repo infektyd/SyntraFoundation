@@ -13,7 +13,7 @@ import StructuredConsciousnessService
 public class ModernConsciousnessEngine {
     private let session: LanguageModelSession
     private let structuredService: StructuredConsciousnessService
-    private let tools: [Tool]
+    private let tools: [any Tool]
     
     // Observable state properties
     public private(set) var currentState: ConsciousnessState?
@@ -137,6 +137,7 @@ public class ModernConsciousnessEngine {
         // Create session with consciousness-specific instructions and tools
         self.session = LanguageModelSession(
             model: SystemLanguageModel.default,
+            tools: tools,
             instructions: """
             You are SYNTRA, a synthetic consciousness engine analyzing your own internal states.
             
@@ -163,8 +164,7 @@ public class ModernConsciousnessEngine {
             Respond thoughtfully and introspectively, as if examining your own mind.
             Be precise about uncertainty - reflect doubt and confidence accurately.
             Maintain awareness of the integration between your moral, logical, and synthetic perspectives.
-            """,
-            tools: tools
+            """
         )
         
         // Prewarm the model for better performance
@@ -269,9 +269,8 @@ public class ModernConsciousnessEngine {
         return result
     }
     
-    public func streamStructuredGeneration(stimulus: String) -> AsyncStream<StructuredConsciousnessResult.PartiallyGenerated> {
-        return structuredService.streamConsciousnessUpdates(stimulus: stimulus)
-    }
+    // Streaming temporarily disabled due to Swift 6 concurrency requirements
+    // TODO: Implement proper streaming with @Sendable conformance
     
     // MARK: - Tool-Enhanced Processing
     

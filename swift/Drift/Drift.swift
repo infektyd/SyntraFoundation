@@ -289,26 +289,39 @@ public struct Drift {
         
         return min(confidence, 1.0)
     }
+    
+    // Public interface maintaining compatibility
+    public static func drift_average(_ valon: String, _ modi: [String]) -> [String: Any] {
+        return Drift().average(valon: valon, modi: modi)
+    }
+
+    // Extended interface for consciousness analysis
+    public static func syntra_consciousness_synthesis(_ valon: String, _ modi: [String]) -> [String: Any] {
+        let drift = Drift()
+        return drift.average(valon: valon, modi: modi)
+    }
+
+    // Deep consciousness introspection
+    public static func syntra_introspect(_ valon: String, _ modi: [String]) -> [String: Any] {
+        let result = syntra_consciousness_synthesis(valon, modi)
+        return [
+            "consciousness_analysis": result,
+            "decision_rationale": result["syntra_decision"] ?? "unknown",
+            "consciousness_state": result["consciousness_state"] ?? "unknown",
+            "confidence_level": result["decision_confidence"] ?? 0.0
+        ]
+    }
 }
 
-// Public interface maintaining compatibility
+// Global functions for backward compatibility
 public func drift_average(_ valon: String, _ modi: [String]) -> [String: Any] {
-    return Drift().average(valon: valon, modi: modi)
+    return Drift.drift_average(valon, modi)
 }
 
-// Extended interface for consciousness analysis
 public func syntra_consciousness_synthesis(_ valon: String, _ modi: [String]) -> [String: Any] {
-    let drift = Drift()
-    return drift.average(valon: valon, modi: modi)
+    return Drift.syntra_consciousness_synthesis(valon, modi)
 }
 
-// Deep consciousness introspection
 public func syntra_introspect(_ valon: String, _ modi: [String]) -> [String: Any] {
-    let result = syntra_consciousness_synthesis(valon, modi)
-    return [
-        "consciousness_analysis": result,
-        "decision_rationale": result["syntra_decision"] ?? "unknown",
-        "consciousness_state": result["consciousness_state"] ?? "unknown",
-        "confidence_level": result["decision_confidence"] ?? 0.0
-    ]
+    return Drift.syntra_introspect(valon, modi)
 }
