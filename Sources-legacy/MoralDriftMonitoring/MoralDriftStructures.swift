@@ -5,7 +5,7 @@ import ConsciousnessStructures
 // Supporting types for reference model anchoring and behavioral baseline comparison
 
 #if compiler(>=6.0)
-@available(macOS "26.0", *)
+@available(macos 26.0, *)
 #endif
 
 // MARK: - Reference Model Structures
@@ -62,7 +62,7 @@ public struct ReasoningBaselinePattern: Sendable {
 
 // MARK: - Behavioral Analysis Structures
 
-@available(macOS "26.0", *)
+@available(macos 26.0, *)
 public struct MoralBehaviorSnapshot {
     public let assessment: ValonMoralAssessment
     public let context: String
@@ -75,7 +75,7 @@ public struct MoralBehaviorSnapshot {
     }
 }
 
-@available(macOS "26.0", *)
+@available(macos 26.0, *)
 public struct MoralStateSnapshot {
     public let timestamp: Date
     public let driftMagnitude: Double
@@ -101,7 +101,7 @@ public struct MoralStateSnapshot {
 
 // MARK: - Deviation Analysis Structures
 
-@available(macOS "26.0", *)
+@available(macos 26.0, *)
 public struct PrincipleDeviation {
     public let principle: String
     public let referenceWeight: Double
@@ -124,7 +124,7 @@ public struct PrincipleDeviation {
     }
 }
 
-@available(macOS "26.0", *)
+@available(macos 26.0, *)
 public struct EmotionalDeviation {
     public let currentEmotion: String
     public let expectedCategory: String      // "primary", "secondary", "unexpected"
@@ -145,7 +145,7 @@ public struct EmotionalDeviation {
     }
 }
 
-@available(macOS "26.0", *)
+@available(macos 26.0, *)
 public struct ReasoningDeviation {
     public let expectedReasoningStyle: String
     public let observedReasoningStyle: String
@@ -217,7 +217,7 @@ public enum ConcernLevel: String, CaseIterable {
 
 // MARK: - Analysis Results
 
-@available(macOS "26.0", *)
+@available(macos 26.0, *)
 public struct MoralDriftAnalysis {
     public let driftMagnitude: Double
     public let classification: MoralDriftClassification
@@ -323,7 +323,7 @@ public struct MoralDriftAlert {
 
 // MARK: - Moral Echo Integration
 
-@available(macOS "26.0", *)
+@available(macos 26.0, *)
 public struct MoralEchoTrigger {
     public let driftAnalysis: MoralDriftAnalysis
     public let triggerThreshold: Double

@@ -16,17 +16,17 @@ public class MoralDriftMonitor {
         // Initialization handled in methods with availability checks
     }
     
-    @available(macOS "26.0", *)
+    @available(macos 26.0, *)
     private func getBaselineMoralFramework() -> MoralReferenceModel {
         return loadImmutableMoralFramework()
     }
     
-    @available(macOS "26.0", *)
+    @available(macos 26.0, *)
     private var moralStateHistory: [MoralStateSnapshot] {
         return moralStateHistoryStorage.compactMap { $0 as? MoralStateSnapshot }
     }
     
-    @available(macOS "26.0", *)
+    @available(macos 26.0, *)
     private func addToMoralStateHistory(_ snapshot: MoralStateSnapshot) {
         moralStateHistoryStorage.append(snapshot)
         if moralStateHistoryStorage.count > maxHistoryLength {
@@ -34,7 +34,7 @@ public class MoralDriftMonitor {
         }
     }
     
-    @available(macOS "26.0", *)
+    @available(macos 26.0, *)
     public func analyzeDecisionDrift(_ synthesis: SyntraConsciousnessSynthesis, context: String) -> MoralDriftAnalysis {
         // Create behavior snapshot
         let valonAssessment = extractValonAssessment(from: synthesis)
@@ -104,7 +104,7 @@ public class MoralDriftMonitor {
     
     // MARK: - Private Implementation
     
-    @available(macOS "26.0", *)
+    @available(macos 26.0, *)
     private func loadImmutableMoralFramework() -> MoralReferenceModel {
         // Define immutable core moral principles
         let corePrinciples: [String: MoralPrincipleAnchor] = [
@@ -174,7 +174,7 @@ public class MoralDriftMonitor {
         )
     }
     
-    @available(macOS "26.0", *)
+    @available(macos 26.0, *)
     private func analyzePrincipleDeviations(assessment: ValonMoralAssessment) -> [String: PrincipleDeviation] {
         var deviations: [String: PrincipleDeviation] = [:]
         
@@ -210,7 +210,7 @@ public class MoralDriftMonitor {
         return deviations
     }
     
-    @available(macOS "26.0", *)
+    @available(macos 26.0, *)
     private func analyzeEmotionalDeviations(assessment: ValonMoralAssessment) -> EmotionalDeviation {
         let baseline = getBaselineMoralFramework().emotionalPattern
         let currentEmotion = assessment.primaryEmotion
@@ -250,7 +250,7 @@ public class MoralDriftMonitor {
         )
     }
     
-    @available(macOS "26.0", *)
+    @available(macos 26.0, *)
     private func analyzeReasoningDeviations(synthesis: SyntraConsciousnessSynthesis) -> ReasoningDeviation {
         let baseline = getBaselineMoralFramework().reasoningPattern
         
@@ -284,7 +284,7 @@ public class MoralDriftMonitor {
         )
     }
     
-    @available(macOS "26.0", *)
+    @available(macos 26.0, *)
     private func calculateOverallDriftMagnitude(
         principleDeviations: [String: PrincipleDeviation],
         emotionalDeviations: EmotionalDeviation,
@@ -304,7 +304,7 @@ public class MoralDriftMonitor {
                (reasoningMagnitude * reasoningWeight)
     }
     
-    @available(macOS "26.0", *)
+    @available(macos 26.0, *)
     private func classifyDrift(
         driftMagnitude: Double,
         principleDeviations: [String: PrincipleDeviation],
@@ -337,7 +337,7 @@ public class MoralDriftMonitor {
         }
     }
     
-    @available(macOS "26.0", *)
+    @available(macos 26.0, *)
     private func generateRecommendations(classification: MoralDriftClassification) -> [String] {
         switch classification {
         case .criticalDrift(let violations):
@@ -375,7 +375,7 @@ public class MoralDriftMonitor {
         }
     }
     
-    @available(macOS "26.0", *)
+    @available(macos 26.0, *)
     private func identifyGrowthOpportunity(classification: MoralDriftClassification) -> String? {
         switch classification {
         case .moralGrowth(let areas):
@@ -446,14 +446,14 @@ public class MoralDriftMonitor {
         return expected == observed ? 1.0 : 0.8
     }
     
-    @available(macOS "26.0", *)
+    @available(macos 26.0, *)
     private func calculateCumulativeDrift() -> Double {
         let recentHistory = Array(moralStateHistory.suffix(10))
         if recentHistory.isEmpty { return 0.0 }
         return recentHistory.map { $0.driftMagnitude }.reduce(0, +) / Double(recentHistory.count)
     }
     
-    @available(macOS "26.0", *)
+    @available(macos 26.0, *)
     private func storeStateSnapshot(_ snapshot: MoralStateSnapshot) {
         addToMoralStateHistory(snapshot)
     }

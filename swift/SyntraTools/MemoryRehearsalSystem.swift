@@ -8,7 +8,7 @@ import ConsciousnessStructures
 
 // MARK: - Rehearsal Strategy Types
 
-@available(macOS "26.0", *)
+@available(macOS 26.0, *)
 @Generable
 public enum RehearsalStrategy: String, Codable, CaseIterable {
     case distributedPractice = "distributed_practice"     // Spaced repetition over time
@@ -21,7 +21,7 @@ public enum RehearsalStrategy: String, Codable, CaseIterable {
     case contrastiveReplay = "contrastive_replay"         // Highlighting differences
 }
 
-@available(macOS "26.0", *)
+@available(macOS 26.0, *)
 @Generable
 public struct RehearsalSession {
     @Guide(description: "Unique identifier for this rehearsal session")
@@ -62,7 +62,7 @@ public struct RehearsalSession {
     }
 }
 
-@available(macOS "26.0", *)
+@available(macOS 26.0, *)
 @Generable
 public struct RehearsalContext {
     @Guide(description: "Consciousness state during rehearsal")
@@ -87,7 +87,7 @@ public struct RehearsalContext {
 
 // MARK: - Memory Replay Patterns
 
-@available(macOS "26.0", *)
+@available(macOS 26.0, *)
 @Generable
 public struct ReplayPattern {
     @Guide(description: "Unique identifier for this replay pattern")
@@ -119,7 +119,7 @@ public struct ReplayPattern {
     }
 }
 
-@available(macOS "26.0", *)
+@available(macOS 26.0, *)
 @Generable
 public enum ReplayPatternType: String, Codable, CaseIterable {
     case sequentialForward = "sequential_forward"         // A->B->C progression
@@ -132,7 +132,7 @@ public enum ReplayPatternType: String, Codable, CaseIterable {
     case errorCorrection = "error_correction"             // Learning from mistakes
 }
 
-@available(macOS "26.0", *)
+@available(macOS 26.0, *)
 @Generable
 public struct TemporalDynamics {
     @Guide(description: "Speed of replay (memories per minute)")
@@ -155,7 +155,7 @@ public struct TemporalDynamics {
     }
 }
 
-@available(macOS "26.0", *)
+@available(macOS 26.0, *)
 @Generable
 public enum SpeedModulation: String, Codable, CaseIterable {
     case constant = "constant"
@@ -164,7 +164,7 @@ public enum SpeedModulation: String, Codable, CaseIterable {
     case variable = "variable"
 }
 
-@available(macOS "26.0", *)
+@available(macOS 26.0, *)
 @Generable
 public enum ReplayFrequency: String, Codable, CaseIterable {
     case continuous = "continuous"        // Ongoing replay
@@ -178,7 +178,7 @@ public enum ReplayFrequency: String, Codable, CaseIterable {
 
 // MARK: - Memory Rehearsal Engine
 
-@available(macOS "26.0", *)
+@available(macOS 26.0, *)
 public actor MemoryRehearsalEngine {
     
     private let memoryManager: DualStreamMemoryManager
@@ -219,7 +219,12 @@ public actor MemoryRehearsalEngine {
         let startTime = Date()
         
         // Select memories for rehearsal
-        let memoriesToRehearse = targetMemories ?? await selectMemoriesForRehearsal(strategy: strategy)
+        let memoriesToRehearse: [UUID]
+        if let target = targetMemories {
+            memoriesToRehearse = target
+        } else {
+            memoriesToRehearse = await selectMemoriesForRehearsal(strategy: strategy)
+        }
         
         // Create rehearsal context
         let context = RehearsalContext(
@@ -769,7 +774,9 @@ public actor MemoryRehearsalEngine {
         }
         
         // Remove completed rehearsals
-        scheduledRehearsals.removeAll { dueRehearsals.contains($0) }
+        scheduledRehearsals.removeAll { rehearsal in
+            dueRehearsals.contains(rehearsal)
+        }
     }
     
     public func scheduleRehearsal(

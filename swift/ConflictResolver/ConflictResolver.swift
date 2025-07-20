@@ -1,7 +1,7 @@
 import Foundation
 
 /// Detects and resolves direct conflicts between Valon and Modi outputs.
-@available(macOS "26.0", *)
+@available(macOS 26.0, *)
 public struct ConflictResolver {
     public init() {}
 

@@ -6,12 +6,12 @@ import ConsciousnessStructures
 // Swift actor-based memory system replacing Python memory_vault
 // Thread-safe, high-performance memory storage and retrieval
 
-@available(macOS "26.0", *)
+@available(macOS 26.0, *)
 public actor ModernMemoryVault {
     
     // MARK: - Memory Data Structures
     
-    @available(macOS "26.0", *)
+    @available(macOS 26.0, *)
     public struct MemoryItem {
         public let id: UUID
         public let content: String
@@ -38,7 +38,7 @@ public actor ModernMemoryVault {
         }
     }
     
-    @available(macOS "26.0", *)
+    @available(macOS 26.0, *)
     public enum MemoryType: String, CaseIterable {
         case experience = "experience"
         case learning = "learning"
@@ -50,7 +50,7 @@ public actor ModernMemoryVault {
         case reflection = "reflection"
     }
     
-    @available(macOS "26.0", *)
+    @available(macOS 26.0, *)
     public struct ConsciousnessContext {
         public let awarenessLevel: Double
         public let emotionalState: String
@@ -65,7 +65,7 @@ public actor ModernMemoryVault {
         }
     }
     
-    @available(macOS "26.0", *)
+    @available(macOS 26.0, *)
     public struct MemorySearchResult {
         public let memory: MemoryItem
         public let relevanceScore: Double
@@ -470,7 +470,7 @@ public actor ModernMemoryVault {
 
 // MARK: - Supporting Types
 
-@available(macOS "26.0", *)
+@available(macOS 26.0, *)
 public struct MemoryStatistics {
     public let totalMemories: Int
     public let averageEmotionalWeight: Double
@@ -491,7 +491,7 @@ public struct MemoryStatistics {
 
 // MARK: - Memory Vault Manager
 
-@available(macOS "26.0", *)
+@available(macOS 26.0, *)
 @MainActor
 @Observable
 public class MemoryVaultManager {

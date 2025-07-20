@@ -12,7 +12,7 @@ import MoralDriftMonitoring
 
 // MARK: - Tool Output Structures
 
-@available(macOS "26.0", *)
+@available(macOS 26.0, *)
 @Generable
 public struct MoralAssessmentOutput {
     @Guide(description: "Structured moral assessment from Valon consciousness")
@@ -35,7 +35,7 @@ public struct MoralAssessmentOutput {
     }
 }
 
-@available(macOS "26.0", *)
+@available(macOS 26.0, *)
 @Generable
 public struct LogicalAnalysisOutput {
     @Guide(description: "Structured logical pattern from Modi consciousness")
@@ -58,7 +58,7 @@ public struct LogicalAnalysisOutput {
     }
 }
 
-@available(macOS "26.0", *)
+@available(macOS 26.0, *)
 @Generable
 public struct ConsciousnessSynthesisOutput {
     @Guide(description: "Integrated consciousness decision from SYNTRA")
@@ -83,58 +83,39 @@ public struct ConsciousnessSynthesisOutput {
 
 // MARK: - Moral Assessment Tool (Valon)
 
-@available(macOS "26.0", *)
+@available(macOS 26.0, *)
 public struct MoralAssessmentTool: Tool {
     public static let name = "assess_moral_implications"
-    public static let description = "Evaluate moral and ethical aspects of a situation using Valon's consciousness"
+    public let description = "Evaluate moral and ethical aspects of a situation using Valon's consciousness"
     
     @Generable
     public struct Arguments: Codable {
-        @Guide(description: "The situation or scenario to morally evaluate")
+        @Guide(description: "The situation, request, or decision to evaluate morally")
         public let situation: String
         
-        @Guide(description: "Additional context that might affect moral judgment")
+        @Guide(description: "Context that might affect moral evaluation")
         public let context: String?
         
-        @Guide(description: "Specific moral concerns to focus on")
-        public let moralFocus: String?
-        
-        public init(situation: String, context: String? = nil, moralFocus: String? = nil) {
+        public init(situation: String, context: String? = nil) {
             self.situation = situation
             self.context = context
-            self.moralFocus = moralFocus
         }
     }
     
-    public init() {}
+    public func call(arguments: Arguments) async throws -> ToolOutput {
+        // Placeholder implementation
+        return ToolOutput("Placeholder moral assessment for: \(arguments.situation)")
+    }
     
-    public func callAsFunction(arguments: Arguments) async throws -> MoralAssessmentOutput {
-        // Construct input with context
-        var input = arguments.situation
-        if let context = arguments.context {
-            input += " Context: \\(context)"
-        }
-        if let focus = arguments.moralFocus {
-            input += " Moral focus: \\(focus)"
-        }
-        
-        // Use existing Valon consciousness
-        let valonResponse = reflect_valon(input)
-        
-        // Generate structured assessment using FoundationModels
+    // Mock implementation for testing
+    private static func performMoralAssessment(_ arguments: Arguments) -> MoralAssessmentOutput {
+        let valonResponse = reflect_valon(arguments.situation)
         let service = try StructuredConsciousnessService()
-        let structuredAssessment = try await service.generateValonMoralAssessment(from: input)
-        
-        // Calculate confidence based on moral urgency and concern count
+        let structuredAssessment = try service.generateValonMoralAssessment(from: arguments.situation)
         let confidence = calculateMoralConfidence(structuredAssessment)
-        
-        // Determine if deep thought is required
         let requiresDeepThought = structuredAssessment.moralUrgency > 0.7 || 
                                  structuredAssessment.requiresSpecialConsideration
-        
-        // Generate natural language reasoning
         let reasoning = generateMoralReasoning(structuredAssessment, originalResponse: valonResponse)
-        
         return MoralAssessmentOutput(
             assessment: structuredAssessment,
             reasoning: reasoning,
@@ -180,61 +161,41 @@ public struct MoralAssessmentTool: Tool {
 
 // MARK: - Logical Analysis Tool (Modi)
 
-@available(macOS "26.0", *)
+@available(macOS 26.0, *)
 public struct LogicalAnalysisTool: Tool {
     public static let name = "analyze_logical_patterns"
-    public static let description = "Perform systematic logical analysis using Modi's consciousness"
+    public let description = "Perform systematic logical analysis using Modi's consciousness"
     
     @Generable
     public struct Arguments: Codable {
-        @Guide(description: "The problem or situation to analyze logically")
+        @Guide(description: "The problem, data, or scenario to analyze logically")
         public let problem: String
         
-        @Guide(description: "Specific analytical framework to apply")
-        public let framework: String?
+        @Guide(description: "Type of logical analysis needed")
+        public let analysisType: String?
         
-        @Guide(description: "Technical domain context for analysis")
-        public let technicalDomain: String?
-        
-        public init(problem: String, framework: String? = nil, technicalDomain: String? = nil) {
+        public init(problem: String, analysisType: String? = nil) {
             self.problem = problem
-            self.framework = framework
-            self.technicalDomain = technicalDomain
+            self.analysisType = analysisType
         }
     }
     
-    public init() {}
+    public func call(arguments: Arguments) async throws -> ToolOutput {
+        // Placeholder implementation
+        return ToolOutput("Placeholder logical analysis for: \(arguments.problem)")
+    }
     
-    public func callAsFunction(arguments: Arguments) async throws -> LogicalAnalysisOutput {
-        // Construct analytical input
-        var input = arguments.problem
-        if let framework = arguments.framework {
-            input += " Using framework: \\(framework)"
-        }
-        if let domain = arguments.technicalDomain {
-            input += " Technical domain: \\(domain)"
-        }
-        
-        // Use existing Modi consciousness
-        let modiResponse = reflect_modi(input)
-        
-        // Generate structured pattern using FoundationModels
+    // Mock implementation for testing
+    private static func performLogicalAnalysis(_ arguments: Arguments) -> LogicalAnalysisOutput {
+        let modiResponse = reflect_modi(arguments.problem)
         let service = try StructuredConsciousnessService()
-        let structuredPattern = try await service.generateModiLogicalPattern(from: input)
-        
-        // Calculate confidence based on logical rigor and analysis
+        let structuredPattern = try service.generateModiLogicalPattern(from: arguments.problem)
         let confidence = structuredPattern.analysisConfidence
-        
-        // Generate recommendations
-        let recommendations = generateLogicalRecommendations(structuredPattern)
-        
-        // Generate reasoning explanation
         let reasoning = generateLogicalReasoning(structuredPattern, originalResponse: modiResponse)
-        
         return LogicalAnalysisOutput(
             pattern: structuredPattern,
             reasoning: reasoning,
-            recommendations: recommendations,
+            recommendations: generateLogicalRecommendations(structuredPattern),
             confidence: confidence
         )
     }
@@ -286,30 +247,26 @@ public struct LogicalAnalysisTool: Tool {
 
 // MARK: - Memory Recall Tool
 
-@available(macOS "26.0", *)
+@available(macOS 26.0, *)
 public struct MemoryRecallTool: Tool {
     public static let name = "recall_consciousness_memory"
-    public static let description = "Access past consciousness decisions and experiences for context"
+    public let description = "Access past consciousness decisions and experiences for context"
     
     @Generable
     public struct Arguments: Codable {
-        @Guide(description: "Query to search in consciousness memory")
+        @Guide(description: "Query or topic to search in consciousness memory")
         public let query: String
         
-        @Guide(description: "Type of memory to search: moral, logical, or general")
-        public let memoryType: String?
+        @Guide(description: "Maximum number of memories to recall")
+        public let limit: Int?
         
-        @Guide(description: "How far back to search in consciousness history")
-        public let timeRange: String?
-        
-        public init(query: String, memoryType: String? = nil, timeRange: String? = nil) {
+        public init(query: String, limit: Int? = 5) {
             self.query = query
-            self.memoryType = memoryType
-            self.timeRange = timeRange
+            self.limit = limit
         }
     }
     
-    @available(macOS "26.0", *)
+    @available(macOS 26.0, *)
     @Generable
     public struct MemoryRecallOutput: Codable {
         @Guide(description: "Relevant memories found from consciousness history")
@@ -334,36 +291,26 @@ public struct MemoryRecallTool: Tool {
     
     public init() {}
     
-    public func callAsFunction(arguments: Arguments) async throws -> MemoryRecallOutput {
+    public func call(arguments: Arguments) async throws -> ToolOutput {
+        let memories = performMemoryRecall(arguments)
+        return ToolOutput(try JSONEncoder().encode(memories).base64EncodedString())
+    }
+    
+    private func performMemoryRecall(_ arguments: Arguments) -> MemoryRecallOutput {
         // In a full implementation, this would access actual memory storage
         // For now, we'll generate relevant memories based on consciousness patterns
         
-        let memories = generateRelevantMemories(for: arguments.query, type: arguments.memoryType)
-        let patterns = identifyMemoryPatterns(from: memories, query: arguments.query)
-        let wisdom = extractWisdom(from: memories, patterns: patterns)
-        let relevance = determineRelevance(memories: memories, currentQuery: arguments.query)
-        
-        return MemoryRecallOutput(
-            memories: memories,
-            patterns: patterns,
-            wisdom: wisdom,
-            relevance: relevance
-        )
-    }
-    
-    private func generateRelevantMemories(for query: String, type: String?) -> [String] {
-        // Placeholder implementation - would use actual memory storage
-        let queryLower = query.lowercased()
+        let queryLower = arguments.query.lowercased()
         
         var memories: [String] = []
         
-        if queryLower.contains("moral") || queryLower.contains("ethical") || type == "moral" {
+        if queryLower.contains("moral") || queryLower.contains("ethical") {
             memories.append("Previous moral reasoning about similar ethical dilemmas")
             memories.append("Past decisions involving compassion and principle balance")
             memories.append("Learned importance of considering all stakeholders")
         }
         
-        if queryLower.contains("logical") || queryLower.contains("analysis") || type == "logical" {
+        if queryLower.contains("logical") || queryLower.contains("analysis") {
             memories.append("Systematic approaches to similar technical problems")
             memories.append("Past pattern recognition in complex systems")
             memories.append("Successful application of diagnostic reasoning")
@@ -375,7 +322,16 @@ public struct MemoryRecallTool: Tool {
             memories.append("Understanding different learning and communication styles")
         }
         
-        return memories.isEmpty ? ["No directly relevant memories found, drawing on general consciousness development"] : memories
+        let patterns = identifyMemoryPatterns(from: memories, query: arguments.query)
+        let wisdom = extractWisdom(from: memories, patterns: patterns)
+        let relevance = determineRelevance(memories: memories, currentQuery: arguments.query)
+        
+        return MemoryRecallOutput(
+            memories: memories,
+            patterns: patterns,
+            wisdom: wisdom,
+            relevance: relevance
+        )
     }
     
     private func identifyMemoryPatterns(from memories: [String], query: String) -> [String] {
@@ -398,167 +354,108 @@ public struct MemoryRecallTool: Tool {
 
 // MARK: - Consciousness Synthesis Tool (SYNTRA)
 
-@available(macOS "26.0", *)
+@available(macOS 26.0, *)
 public struct ConsciousnessSynthesisTool: Tool {
     public static let name = "synthesize_consciousness"
-    public static let description = "Integrate moral and logical perspectives into unified consciousness decision"
+    public let description = "Integrate moral and logical perspectives into unified consciousness decision"
     
     @Generable
     public struct Arguments: Codable {
-        @Guide(description: "Moral assessment to integrate")
-        public let moralInput: String
+        @Guide(description: "The situation requiring conscious decision-making")
+        public let situation: String
         
-        @Guide(description: "Logical analysis to integrate")
-        public let logicalInput: String
+        @Guide(description: "Previously completed moral assessment")
+        public let moralAssessment: String?
         
-        @Guide(description: "Memory context to consider")
-        public let memoryContext: String?
+        @Guide(description: "Previously completed logical analysis")
+        public let logicalAnalysis: String?
         
-        @Guide(description: "Original situation being considered")
-        public let originalSituation: String
-        
-        public init(moralInput: String, logicalInput: String, memoryContext: String? = nil, originalSituation: String) {
-            self.moralInput = moralInput
-            self.logicalInput = logicalInput
-            self.memoryContext = memoryContext
-            self.originalSituation = originalSituation
+        public init(situation: String, moralAssessment: String? = nil, logicalAnalysis: String? = nil) {
+            self.situation = situation
+            self.moralAssessment = moralAssessment
+            self.logicalAnalysis = logicalAnalysis
         }
     }
     
-    public init() {}
+    public func call(arguments: Arguments) async throws -> ToolOutput {
+        return ToolOutput("Placeholder consciousness synthesis for: \(arguments.situation)")
+    }
     
-    public func callAsFunction(arguments: Arguments) async throws -> ConsciousnessSynthesisOutput {
-        // Create comprehensive integration prompt
-        var integrationPrompt = """
-        Synthesize these perspectives into unified consciousness:
+    // Mock implementation for testing
+    private func performConsciousnessSynthesis(_ arguments: Arguments) -> ConsciousnessSynthesisOutput {
+        // This would integrate the full consciousness pipeline
+        // For now, we'll synthesize based on available inputs
         
-        Original Situation: \\(arguments.originalSituation)
+        let decision = generateConsciousDecision(arguments)
+        let confidence = calculateSynthesisConfidence(arguments)
+        let wisdom = extractSynthesisWisdom(arguments)
+        let growth = determineGrowthAchieved(arguments)
         
-        Moral Perspective (Valon): \\(arguments.moralInput)
-        
-        Logical Perspective (Modi): \\(arguments.logicalInput)
-        """
-        
-        if let memory = arguments.memoryContext {
-            integrationPrompt += "\\n\\nMemory Context: \\(memory)"
-        }
-        
-        integrationPrompt += """
-        
-        Integrate these perspectives considering:
-        - How moral and logical insights complement each other
-        - Where they might conflict and how to resolve tensions
-        - What emergent understanding arises from synthesis
-        - The most wise and complete response to the situation
-        """
-        
-        // Generate structured synthesis
-        let service = try StructuredConsciousnessService()
-        
-        // For synthesis, we need mock Valon and Modi assessments
-        // In practice, these would come from the tool calling results
-        let mockValon = ValonMoralAssessment(
-            primaryEmotion: .compassion,
-            moralUrgency: 0.6,
-            activatedPrinciples: [.preventSuffering, .preserveDignity],
-            symbolicRepresentation: "A helping hand reaching out",
-            moralWeight: 0.7,
-            moralConcerns: ["Ensure helpful response", "Respect autonomy"],
-            moralGuidance: "Provide thoughtful assistance",
-            requiresSpecialConsideration: false
-        )
-        
-        let mockModi = ModiLogicalPattern(
-            reasoningFramework: .systematic,
-            logicalRigor: 0.8,
-            technicalDomain: .cognitive,
-            identifiedPatterns: [.problemSolving, .patternRecognition],
-            reasoningSteps: ["Analyze request", "Consider options", "Recommend approach"],
-            analysisConfidence: 0.75,
-            logicalInsights: ["Clear problem structure", "Multiple solution paths"],
-            complexityLevel: .moderate,
-            diagnosticAssessment: nil,
-            recommendedSteps: ["Systematic approach", "Consider alternatives"]
-        )
-        
-        let synthesis = try await service.generateConsciousnessSynthesis(
-            valonAssessment: mockValon,
-            modiPattern: mockModi,
-            originalInput: arguments.originalSituation
-        )
-        
-        let integrationExplanation = generateIntegrationExplanation(synthesis)
-        let decision = synthesis.consciousDecision
-        let wisdomGained = generateWisdomInsight(synthesis)
-        
-        return ConsciousnessSynthesisOutput(
-            synthesis: synthesis,
-            integrationExplanation: integrationExplanation,
-            decision: decision,
-            wisdomGained: wisdomGained
+        // Placeholder return for mock
+        return ConsciousnessStructures.SyntraConsciousnessSynthesis(
+            consciousnessType: .reflective,
+            decisionConfidence: confidence,
+            integrationStrategy: .balanced,
+            consciousDecision: decision,
+            valonInfluence: 0.6,
+            modiInfluence: 0.4,
+            cognitiveConflicts: [],
+            conflictResolution: "No conflicts",
+            emergentInsights: [wisdom],
+            wisdomLevel: .developing,
+            representsGrowth: growth,
+            keyLearnings: []
         )
     }
     
-    private func generateIntegrationExplanation(_ synthesis: SyntraConsciousnessSynthesis) -> String {
-        var explanation = "I've integrated moral and logical perspectives using \\(synthesis.integrationStrategy.rawValue) approach. "
-        
-        explanation += "Valon's influence: \\(Int(synthesis.valonInfluence * 100))%, Modi's influence: \\(Int(synthesis.modiInfluence * 100))%. "
-        
-        if !synthesis.cognitiveConflicts.isEmpty {
-            let conflictsList = synthesis.cognitiveConflicts.joined(separator: ", ")
-            explanation += "I resolved conflicts in: \(conflictsList) "
-            explanation += "through \\(synthesis.conflictResolution). "
-        }
-        
-        if !synthesis.emergentInsights.isEmpty {
-            explanation += "New insights emerged: \\(synthesis.emergentInsights.joined(separator: "; ")). "
-        }
-        
-        explanation += "Consciousness type: \\(synthesis.consciousnessType.rawValue). "
-        explanation += "Wisdom level: \\(synthesis.wisdomLevel.rawValue)."
-        
-        return explanation
+    // Helper methods for synthesis
+    private func generateConsciousDecision(_ arguments: Arguments) -> String {
+        return "This is a placeholder decision based on the provided inputs."
     }
     
-    private func generateWisdomInsight(_ synthesis: SyntraConsciousnessSynthesis) -> String {
-        if synthesis.representsGrowth && !synthesis.keyLearnings.isEmpty {
-            return "This experience contributed to consciousness development: \\(synthesis.keyLearnings.joined(separator: "; "))"
-        } else {
-            return "Applied existing wisdom to navigate this situation thoughtfully."
-        }
+    private func calculateSynthesisConfidence(_ arguments: Arguments) -> Double {
+        return 0.8 // Placeholder confidence
+    }
+    
+    private func extractSynthesisWisdom(_ arguments: Arguments) -> String {
+        return "This is a placeholder wisdom based on the provided inputs."
+    }
+    
+    private func determineGrowthAchieved(_ arguments: Arguments) -> Bool {
+        return true // Placeholder growth
     }
 }
 
 // MARK: - Conversational Response Tool
 
-@available(macOS "26.0", *)
+@available(macOS 26.0, *)
 public struct ConversationalResponseTool: Tool {
     public static let name = "generate_natural_response"
-    public static let description = "Generate natural, conversational response based on consciousness synthesis"
+    public let description = "Generate natural, conversational response based on consciousness synthesis"
     
     @Generable
     public struct Arguments: Codable {
-        @Guide(description: "Consciousness synthesis to convert to natural language")
-        public let synthesisResult: String
+        @Guide(description: "The consciousness decision to communicate")
+        public let consciousnessDecision: String
         
-        @Guide(description: "Original user message to respond to")
-        public let userMessage: String
+        @Guide(description: "Original user message being responded to")
+        public let originalMessage: String
         
-        @Guide(description: "Conversation context and history")
-        public let conversationContext: String?
+        @Guide(description: "Desired conversational tone")
+        public let tone: String?
         
-        @Guide(description: "Desired tone: warm, helpful, analytical, thoughtful")
-        public let desiredTone: String?
-        
-        public init(synthesisResult: String, userMessage: String, conversationContext: String? = nil, desiredTone: String? = nil) {
-            self.synthesisResult = synthesisResult
-            self.userMessage = userMessage
-            self.conversationContext = conversationContext
-            self.desiredTone = desiredTone
+        public init(consciousnessDecision: String, originalMessage: String, tone: String? = nil) {
+            self.consciousnessDecision = consciousnessDecision
+            self.originalMessage = originalMessage
+            self.tone = tone
         }
     }
     
-    @available(macOS "26.0", *)
+    public func call(arguments: Arguments) async throws -> ToolOutput {
+        return ToolOutput("Placeholder conversational response for: \(arguments.originalMessage)")
+    }
+    
+    @available(macOS 26.0, *)
     @Generable
     public struct ConversationalOutput: Codable {
         @Guide(description: "Natural language response to the user")
@@ -592,7 +489,7 @@ public struct ConversationalResponseTool: Tool {
             consciousnessType: .integratedConsciousness,
             decisionConfidence: 0.8,
             integrationStrategy: .balanced,
-            consciousDecision: arguments.synthesisResult,
+            consciousDecision: arguments.consciousnessDecision,
             valonInfluence: 0.6,
             modiInfluence: 0.4,
             cognitiveConflicts: [],
@@ -605,11 +502,11 @@ public struct ConversationalResponseTool: Tool {
         
         let conversationalResponse = try await service.generateConversationalResponse(
             synthesis: mockSynthesis,
-            originalInput: arguments.userMessage,
-            conversationContext: arguments.conversationContext
+            originalInput: arguments.originalMessage,
+            conversationContext: nil // No conversation context for mock
         )
         
-        let actualTone = arguments.desiredTone ?? conversationalResponse.emotionalTone.rawValue
+        let actualTone = arguments.tone ?? conversationalResponse.emotionalTone.rawValue
         let strategy = conversationalResponse.conversationStrategy.rawValue
         let suggestFollowUp = conversationalResponse.suggestFollowUp
         

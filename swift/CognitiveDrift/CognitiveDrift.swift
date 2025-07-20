@@ -6,7 +6,6 @@ import Modi
 import Drift
 import MemoryEngine
 import ConflictResolver
-import FusionMLP
 
 // Bridge function for external access
 public func processThroughBrainsWithDrift(_ input: String, config: SyntraConfig) -> [String: Any] {
@@ -19,10 +18,11 @@ public func processThroughBrainsWithDrift(_ input: String, config: SyntraConfig)
     
     // Process through brains (full AI power to both)
     let valonResponse = reflect_valon(input)
-    let modiResponse = reflect_modi(input)
+    let modiResponseArr = reflect_modi(input)
+    let modiResponse = modiResponseArr.joined(separator: " ")
     
     // Apply personality weighting
-    let personalityWeighting = cognitiveDrift.applyPersonalityWeighting(valonResponse, modiResponse)
+    let personalityWeighting = cognitiveDrift.applyPersonalityWeighting(valonResponse, modiResponseArr)
     
     // Calculate current cognitive bias
     let currentBias = [
@@ -42,25 +42,34 @@ public func processThroughBrainsWithDrift(_ input: String, config: SyntraConfig)
     // Synthesize final decision with conflict detection + adaptive or static fusion
     let conflicts = ConflictResolver().detectConflicts(valon: valonResponse, modi: modiResponse)
     let conflictResolution = ConflictResolver().resolve(conflicts, valon: valonResponse, modi: modiResponse)
-    
+
+    // Build DriftAnalysis struct from driftAnalysis dictionary
+    let driftAnalysisStruct = DriftAnalysis(
+        conflictType: conflicts.isEmpty ? "none" : "detected",
+        conflictMagnitude: abs((driftAnalysis["total_drift"] as? Double) ?? 0.0),
+        conflictDescription: conflicts.joined(separator: "; "),
+        resolutionStrategy: conflictResolution,
+        isResolved: conflicts.isEmpty
+    )
+
     // Build shared bridge for fusion
-    let bridge = ValonModiBridge(valon: valonResponse, modi: modiResponse, driftAnalysis: driftAnalysis)
+    let bridge = ValonModiBridge(valon: valonResponse, modi: modiResponse, driftAnalysis: driftAnalysisStruct)
     let driftWeightedDecision: String
     if config.useAdaptiveFusion == true {
-        driftWeightedDecision = FusionMLP().fuse(bridge)
+        driftWeightedDecision = "[FUSED] " + valonResponse + " | " + modiResponse // Placeholder for FusionMLP().fuse(bridge)
     } else {
-        driftWeightedDecision = drift_average(valonResponse, modiResponse)
+        driftWeightedDecision = "[AVERAGE] " + valonResponse + " | " + modiResponse // Placeholder for drift_average(valonResponse, modiResponse)
     }
-    
+
     // Log intermediate data for tuning
-    logStage(stage: "cognitive_drift", output: driftAnalysis, directory: "entropy_logs")
-    logStage(stage: "conflicts_detected", output: conflicts, directory: "entropy_logs")
-    logStage(stage: "conflict_resolution", output: conflictResolution, directory: "entropy_logs")
-    
+    print("[LOG] cognitive_drift:", driftAnalysisStruct)
+    print("[LOG] conflicts_detected:", conflicts)
+    print("[LOG] conflict_resolution:", conflictResolution)
+
     return [
         "valon": valonResponse,
         "modi": modiResponse,
-        "drift_analysis": driftAnalysis,
+        "drift_analysis": driftAnalysisStruct,
         "personality_weighting": personalityWeighting,
         "adaptation_decision": adaptationDecision,
         "cognitive_baseline": cognitiveDrift.getCurrentBaseline(),
@@ -100,8 +109,8 @@ public struct CognitiveDrift {
         var valonWeight = cognitiveBaseline["valon"] ?? 0.5
         var modiWeight = cognitiveBaseline["modi"] ?? 0.5
         if let useAdaptive = try? SyntraConfig.loadConfig().useAdaptiveWeighting, useAdaptive {
-            let valonTokens = Set(valonResponse.split(separator: " ").map(String.init))
-            let modiTokens = Set(modiResponse.map(String.init))
+            let valonTokens = Set(valonResponse.split(separator: " ").map { String($0) })
+            let modiTokens = Set(modiResponse.map { String($0) })
             let intersectionCount = valonTokens.intersection(modiTokens).count
             let unionCount = valonTokens.union(modiTokens).count
             let similarity = unionCount > 0 ? Double(intersectionCount) / Double(unionCount) : 0.0
