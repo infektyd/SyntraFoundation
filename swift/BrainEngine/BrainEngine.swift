@@ -89,12 +89,12 @@ public struct BrainEngine {
         if let cfg = try? Self.loadConfigLocal(), cfg.useAppleLLM == true {
             let syntraDecision = consciousness["syntra_decision"] as? String ?? "processing"
             let enhancedPrompt = "SYNTRA consciousness state: \(syntraDecision). Original input: \(input). Provide enhanced reasoning."
-            if #available(macOS "26.0", *) {
+            if #available(macOS 26.0, *) {
                 let apple = await Self.queryAppleLLMSync(enhancedPrompt)
                 result["appleLLM"] = apple
                 Self.logStage(stage: "apple_enhanced_reasoning", output: apple, directory: "entropy_logs")
             } else {
-                result["appleLLM"] = "Apple LLM requires macOS "26.0"+"
+                result["appleLLM"] = "Apple LLM requires macOS 26.0+"
             }
         }
         
@@ -187,7 +187,7 @@ public struct BrainEngine {
         return min(confidence, 1.0)
     }
 
-    @available(macOS "26.0", *)
+    @available(macOS 26.0, *)
     public static func queryAppleLLM(_ prompt: String) async -> String {
         do {
             let model = SystemLanguageModel.default
@@ -211,7 +211,7 @@ public struct BrainEngine {
         }
     }
 
-    @available(macOS "26.0", *)
+    @available(macOS 26.0, *)
     public static func queryAppleLLMSync(_ prompt: String) async -> String {
         // Use Task.detached for Sendable closure
         let result = await Task<String, Never>.detached(priority: .userInitiated) {

@@ -45,7 +45,7 @@ struct SyntraSwiftCLI {
 
         case "foundation_model":
             #if canImport(FoundationModels)
-            if #available(macOS "26.0", *) {
+            if #available(macOS 26.0, *) {
                 let response = await queryFoundationModel(input)
                 print(response)
             } else {
@@ -66,7 +66,7 @@ struct SyntraSwiftCLI {
     // Removed processAllBrains and jsonString - now using MemoryEngine static methods
 
     #if canImport(FoundationModels)
-    @available(macOS "26.0", *)
+    @available(macOS 26.0, *)
     static func queryFoundationModel(_ input: String) async -> String {
         do {
             let model = SystemLanguageModel.default

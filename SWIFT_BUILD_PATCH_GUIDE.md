@@ -92,7 +92,7 @@ struct SyntraSwiftCLI {
 }
 
 #if canImport(FoundationModels)
-@available(macOS "26.0", *)
+@available(macos 26.0, *)
 func queryFoundationModel(_ input: String) async -> String {
     // async FoundationModels LLM call goes here (used from inside main struct)
 }
@@ -110,7 +110,7 @@ func queryFoundationModel(_ input: String) async -> String {
 ### Correct API Usage:
 ```swift
 #if canImport(FoundationModels)
-@available(macOS "26.0", *)
+@available(macos 26.0, *)
 func queryFoundationModel(_ input: String) async -> String {
     do {
         let model = SystemLanguageModel.default

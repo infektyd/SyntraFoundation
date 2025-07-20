@@ -7,7 +7,7 @@ import MoralDriftMonitoring
 // Integrates Apple FoundationModels Tool Calling with consciousness components
 // Enables natural tool activation and sophisticated reasoning workflows
 
-@available(macOS "26.0", *)
+@available(macOS 26.0, *)
 public class SyntraToolCallingService {
     
     private let model: SystemLanguageModel

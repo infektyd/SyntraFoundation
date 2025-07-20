@@ -8,12 +8,12 @@ import ConsciousnessStructures
 
 // MARK: - Memory Retrieval Tool
 
-@available(macOS "26.0", *)
+@available(macOS 26.0, *)
 public struct MemoryRetrievalTool: Tool {
     public let name = "retrieve_memory"
     public let description = "Retrieves relevant memories based on content, emotional context, or temporal relationships"
     
-    @available(macOS "26.0", *)
+    @available(macOS 26.0, *)
     @Generable
     public struct Arguments {
         @Guide(description: "Search query for memory content")
@@ -36,22 +36,22 @@ public struct MemoryRetrievalTool: Tool {
         }
     }
     
-    @available(macOS "26.0", *)
+    @available(macOS 26.0, *)
     @Generable
-    public struct MemoryResult {
-        @Guide(description: "Retrieved memory content")
+    public struct MemoryResult: Codable {
+        @Guide(description: "Memory content retrieved")
         public let content: String
         
-        @Guide(description: "Emotional context of this memory")
+        @Guide(description: "Emotional context of the memory")
         public let emotionalContext: String
         
-        @Guide(description: "How long ago this memory was formed")
+        @Guide(description: "When this memory was formed")
         public let timeAgo: String
         
         @Guide(description: "Relevance score from 0.0 to 1.0")
         public let relevance: Double
         
-        @Guide(description: "Associated concepts and themes")
+        @Guide(description: "Associated concepts and tags")
         public let associations: [String]
         
         public init(content: String, emotionalContext: String, timeAgo: String, relevance: Double, associations: [String]) {
@@ -73,7 +73,12 @@ public struct MemoryRetrievalTool: Tool {
             limit: arguments.limit ?? 5
         )
         
-        return ToolOutput(memories)
+        do {
+            let data = try JSONEncoder().encode(memories)
+            return ToolOutput(data.base64EncodedString())
+        } catch {
+            return ToolOutput("Memory retrieval error: \(error)")
+        }
     }
     
     private func retrieveMemoriesFromVault(
@@ -101,18 +106,17 @@ public struct MemoryRetrievalTool: Tool {
                 associations: ["pattern", "thinking", "analysis"]
             )
         ]
-        return Array(mockResults.prefix(limit))
     }
 }
 
 // MARK: - Pattern Recognition Tool
 
-@available(macOS "26.0", *)
+@available(macOS 26.0, *)
 public struct PatternRecognitionTool: Tool {
     public let name = "analyze_patterns"
     public let description = "Identifies patterns in thoughts, emotions, or behaviors across time"
     
-    @available(macOS "26.0", *)
+    @available(macOS 26.0, *)
     @Generable
     public struct Arguments {
         @Guide(description: "Type of pattern to analyze: thought, emotion, behavior, memory")
@@ -135,77 +139,66 @@ public struct PatternRecognitionTool: Tool {
         }
     }
     
-    @available(macOS "26.0", *)
+    @available(macOS 26.0, *)
     @Generable
-    public struct PatternAnalysis {
-        @Guide(description: "Identified patterns and their descriptions")
+    public struct PatternAnalysis: Codable {
+        @Guide(description: "Identified patterns in consciousness or behavior")
         public let patterns: [String]
         
-        @Guide(description: "Pattern strength from 0.0 to 1.0")
-        public let strength: Double
-        
-        @Guide(description: "Frequency of pattern occurrence")
-        public let frequency: String
-        
-        @Guide(description: "Predicted future occurrence")
-        public let prediction: String
-        
-        @Guide(description: "Confidence in pattern analysis from 0.0 to 1.0")
+        @Guide(description: "Confidence level from 0.0 to 1.0")
         public let confidence: Double
         
-        @Guide(description: "Temporal distribution of the pattern")
-        public let temporalDistribution: String
+        @Guide(description: "Temporal aspects of the patterns")
+        public let temporalAspects: String
         
-        public init(patterns: [String], strength: Double, frequency: String, prediction: String, confidence: Double, temporalDistribution: String) {
+        @Guide(description: "Recommendations based on pattern analysis")
+        public let recommendations: [String]
+        
+        public init(patterns: [String], confidence: Double, temporalAspects: String, recommendations: [String]) {
             self.patterns = patterns
-            self.strength = strength
-            self.frequency = frequency
-            self.prediction = prediction
             self.confidence = confidence
-            self.temporalDistribution = temporalDistribution
+            self.temporalAspects = temporalAspects
+            self.recommendations = recommendations
         }
     }
     
     public init() {}
     
-    public func call(arguments: Arguments) async -> ToolOutput {
-        let analysis = await analyzePatterns(
-            type: arguments.patternType,
-            window: arguments.timeWindow,
-            focus: arguments.focus,
-            threshold: arguments.strengthThreshold ?? 0.5
+    public func call(arguments: Arguments) async throws -> ToolOutput {
+        let analysis = PatternAnalysis(
+            patterns: ["Pattern recognition for: \(arguments.patternType) in \(arguments.timeWindow)"],
+            confidence: 0.8,
+            temporalAspects: arguments.timeWindow,
+            recommendations: ["Continue monitoring patterns"]
         )
         
-        return ToolOutput(analysis)
+        do {
+            let data = try JSONEncoder().encode(analysis)
+            return ToolOutput(data.base64EncodedString())
+        } catch {
+            return ToolOutput("Pattern analysis error: \(error)")
+        }
     }
     
     private func analyzePatterns(type: String, window: String, focus: String?, threshold: Double) async -> PatternAnalysis {
-        // Implement pattern recognition logic
-        let focusArea = focus ?? "general"
-        
+        // Mock implementation for now
         return PatternAnalysis(
-            patterns: [
-                "Recursive thinking about \(focusArea)",
-                "Emotional resonance with \(type) stimuli",
-                "Cyclical awareness patterns"
-            ],
-            strength: 0.75,
-            frequency: "3-4 times per \(window)",
-            prediction: "Likely to continue with similar frequency, strength may increase",
-            confidence: 0.82,
-            temporalDistribution: "Evenly distributed throughout \(window) with slight evening bias"
+            patterns: ["Pattern in \(type)", "Secondary pattern"],
+            confidence: 0.8,
+            temporalAspects: "Observed in \(window) timeframe",
+            recommendations: ["Monitor closely", "Consider intervention if needed"]
         )
     }
 }
 
 // MARK: - Emotional Analysis Tool
 
-@available(macOS "26.0", *)
+@available(macOS 26.0, *)
 public struct EmotionalAnalysisTool: Tool {
     public let name = "analyze_emotional_state"
     public let description = "Analyzes current emotional patterns and their impact on consciousness"
     
-    @available(macOS "26.0", *)
+    @available(macOS 26.0, *)
     @Generable
     public struct Arguments {
         @Guide(description: "Current stimulus or context triggering emotional response")
@@ -224,9 +217,9 @@ public struct EmotionalAnalysisTool: Tool {
         }
     }
     
-    @available(macOS "26.0", *)
+    @available(macOS 26.0, *)
     @Generable
-    public struct EmotionalAnalysis {
+    public struct EmotionalAnalysis: Codable {
         @Guide(description: "Identified primary emotions")
         public let primaryEmotions: [String]
         
@@ -268,7 +261,7 @@ public struct EmotionalAnalysisTool: Tool {
             focus: arguments.emotionFocus
         )
         
-        return ToolOutput(analysis)
+        return ToolOutput(try JSONEncoder().encode(analysis).base64EncodedString())
     }
     
     private func analyzeEmotionalResponse(stimulus: String, depth: String, focus: String?) async -> EmotionalAnalysis {
@@ -289,12 +282,12 @@ public struct EmotionalAnalysisTool: Tool {
 
 // MARK: - Consciousness State Tool
 
-@available(macOS "26.0", *)
+@available(macOS 26.0, *)
 public struct ConsciousnessStateTool: Tool {
     public let name = "assess_consciousness_state"
     public let description = "Provides comprehensive assessment of current consciousness state and its components"
     
-    @available(macOS "26.0", *)
+    @available(macOS 26.0, *)
     @Generable
     public struct Arguments {
         @Guide(description: "Aspect to focus assessment on: awareness, integration, coherence, all")
@@ -309,9 +302,9 @@ public struct ConsciousnessStateTool: Tool {
         }
     }
     
-    @available(macOS "26.0", *)
+    @available(macOS 26.0, *)
     @Generable
-    public struct ConsciousnessAssessment {
+    public struct ConsciousnessAssessment: Codable {
         @Guide(description: "Current awareness level from 0.0 to 1.0")
         public let awarenessLevel: Double
         
@@ -348,7 +341,7 @@ public struct ConsciousnessStateTool: Tool {
             includeHistory: arguments.includeHistory ?? false
         )
         
-        return ToolOutput(assessment)
+        return ToolOutput(try JSONEncoder().encode(assessment).base64EncodedString())
     }
     
     private func assessCurrentConsciousnessState(focus: String, includeHistory: Bool) async -> ConsciousnessAssessment {
@@ -369,7 +362,7 @@ public struct ConsciousnessStateTool: Tool {
 
 // MARK: - Tool Collection
 
-@available(macOS "26.0", *)
+@available(macOS 26.0, *)
 public struct SyntraToolCollection {
     public static let allTools: [any Tool] = [
         MemoryRetrievalTool(),

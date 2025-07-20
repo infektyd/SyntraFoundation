@@ -2,7 +2,7 @@ import Foundation
 import ConsciousnessStructures
 
 /// Prototype fusion layer to combine Valon and Modi outputs via a trainable MLP or external microservice.
-@available(macOS "26.0", *)
+@available(macOS 26.0, *)
 public struct FusionMLP {
     public init() {}
 
