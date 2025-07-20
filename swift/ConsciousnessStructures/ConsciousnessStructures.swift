@@ -9,7 +9,7 @@ import FoundationModels
 
 // MARK: - Valon Moral Assessment Structure
 
-#if false // Disable FoundationModels for macOS 15.0 compatibility
+#if canImport(FoundationModels)
 @available(macOS 26.0, *)
 @Generable
 public struct ValonMoralAssessment {

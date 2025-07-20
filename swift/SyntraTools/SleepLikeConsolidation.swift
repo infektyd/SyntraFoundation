@@ -8,7 +8,7 @@ import ConsciousnessStructures
 
 // MARK: - Sleep Phase Types
 
-@Generable
+@available(macOS 26.0, *)
 public enum SleepPhase: String, Codable, CaseIterable {
     case awakening = "awakening"           // Active consciousness processing
     case lightSleep = "light_sleep"        // Initial memory processing
@@ -17,21 +17,12 @@ public enum SleepPhase: String, Codable, CaseIterable {
     case microSleep = "micro_sleep"        // Brief consolidation during active periods
 }
 
-@Generable
+@available(macOS 26.0, *)
 public struct SleepCycle {
-    @Guide(description: "Current phase of the sleep cycle")
     public let currentPhase: SleepPhase
-    
-    @Guide(description: "Duration of current phase in minutes")
     public let phaseDuration: Double
-    
-    @Guide(description: "Time remaining in current phase")
     public let timeRemaining: Double
-    
-    @Guide(description: "Cycle number since last awakening")
     public let cycleNumber: Int
-    
-    @Guide(description: "Overall sleep efficiency score")
     public let sleepEfficiency: Double
     
     public init(currentPhase: SleepPhase, phaseDuration: Double, timeRemaining: Double, 
@@ -46,27 +37,14 @@ public struct SleepCycle {
 
 // MARK: - Memory Replay Events
 
-@Generable
+@available(macOS 26.0, *)
 public struct MemoryReplayEvent {
-    @Guide(description: "Unique identifier for this replay event")
     public let id: UUID
-    
-    @Guide(description: "Type of replay occurring")
     public let replayType: ReplayType
-    
-    @Guide(description: "Memory traces being replayed")
     public let replayedMemories: [UUID]
-    
-    @Guide(description: "Patterns identified during replay")
     public let identifiedPatterns: [String]
-    
-    @Guide(description: "Integration score from 0.0 to 1.0")
     public let integrationScore: Double
-    
-    @Guide(description: "Duration of the replay event")
     public let duration: Double
-    
-    @Guide(description: "Sleep phase when replay occurred")
     public let sleepPhase: SleepPhase
     
     public init(id: UUID = UUID(), replayType: ReplayType, replayedMemories: [UUID], 
@@ -82,7 +60,7 @@ public struct MemoryReplayEvent {
     }
 }
 
-@Generable
+@available(macOS 26.0, *)
 public enum ReplayType: String, Codable, CaseIterable {
     case forwardReplay = "forward_replay"         // Sequential memory reinforcement
     case reverseReplay = "reverse_replay"         // Pattern discovery through reverse processing
@@ -93,6 +71,7 @@ public enum ReplayType: String, Codable, CaseIterable {
 
 // MARK: - Sleep-Like Consolidation Engine
 
+@available(macOS 26.0, *)
 public actor SleepLikeConsolidationEngine {
     
     private let memoryManager: DualStreamMemoryManager

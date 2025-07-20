@@ -7,6 +7,7 @@ import MoralDriftMonitoring
 // Integrates Apple FoundationModels Tool Calling with consciousness components
 // Enables natural tool activation and sophisticated reasoning workflows
 
+@available(macOS 26.0, *)
 public class SyntraToolCallingService {
     
     private let model: SystemLanguageModel
@@ -83,11 +84,12 @@ public class SyntraToolCallingService {
         let response = try await session.respond(to: enhancedInput)
         
         // Extract tool usage information from the session
-        let toolsUsed = extractToolUsage(from: response)
-        let reasoningChain = extractReasoningChain(from: response)
+        let responseContent = response.content
+        let toolsUsed = extractToolUsage(from: responseContent)
+        let reasoningChain = extractReasoningChain(from: responseContent)
         
         return ToolBasedResult(
-            finalResponse: response,
+            finalResponse: responseContent,
             toolsUsed: toolsUsed,
             reasoningChain: reasoningChain,
             consciousnessLevel: determineConsciousnessLevel(toolsUsed),
@@ -136,12 +138,13 @@ public class SyntraToolCallingService {
         
         let response = try await session.respond(to: complexPrompt)
         
-        let toolChain = extractToolChain(from: response)
+        let responseContent = response.content
+        let toolChain = extractToolChain(from: responseContent)
         let integrationQuality = assessIntegrationQuality(toolChain)
-        let wisdomApplied = extractWisdomApplied(from: response)
+        let wisdomApplied = extractWisdomApplied(from: responseContent)
         
         return ComplexReasoningResult(
-            finalResponse: response,
+            finalResponse: responseContent,
             toolChain: toolChain,
             integrationQuality: integrationQuality,
             wisdomApplied: wisdomApplied,
@@ -375,7 +378,7 @@ public enum ToolCallingError: Error, LocalizedError {
         case .sessionNotAvailable:
             return "Tool calling session not available"
         case .toolExecutionFailed(let reason):
-            return "Tool execution failed: \\(reason)"
+            return "Tool execution failed: \(reason)"
         }
     }
 }

@@ -8,36 +8,17 @@ import ConsciousnessStructures
 
 // MARK: - Wisdom Core Structures
 
-@Generable
+@available(macOS 26.0, *)
 public struct WisdomInsight {
-    @Guide(description: "Unique identifier for this wisdom insight")
     public let insightId: UUID
-    
-    @Guide(description: "Type of wisdom accumulated")
     public let wisdomType: WisdomType
-    
-    @Guide(description: "The wisdom insight itself")
     public let insight: String
-    
-    @Guide(description: "Confidence level in this insight from 0.0 to 1.0")
     public let confidence: Double
-    
-    @Guide(description: "Evidence supporting this insight")
     public let supportingEvidence: [Evidence]
-    
-    @Guide(description: "Contexts where this wisdom applies")
     public let applicableContexts: [String]
-    
-    @Guide(description: "How generalizable this wisdom is")
     public let generalizability: Double
-    
-    @Guide(description: "When this wisdom was first recognized")
     public let discoveryTimestamp: Date
-    
-    @Guide(description: "How many times this wisdom has been validated")
     public let validationCount: Int
-    
-    @Guide(description: "Source experiences that led to this wisdom")
     public let sourceExperiences: [UUID]
     
     public init(insightId: UUID = UUID(), wisdomType: WisdomType, insight: String, confidence: Double, 
@@ -56,7 +37,7 @@ public struct WisdomInsight {
     }
 }
 
-@Generable
+@available(macOS 26.0, *)
 public enum WisdomType: String, Codable, CaseIterable {
     case practical = "practical"                   // How-to knowledge and procedures
     case moral = "moral"                           // Ethical insights and principles
@@ -70,18 +51,11 @@ public enum WisdomType: String, Codable, CaseIterable {
     case intuitive = "intuitive"                   // Pattern-based implicit knowledge
 }
 
-@Generable
+@available(macOS 26.0, *)
 public struct Evidence {
-    @Guide(description: "Type of evidence supporting the wisdom")
     public let evidenceType: EvidenceType
-    
-    @Guide(description: "Description of the evidence")
     public let description: String
-    
-    @Guide(description: "Strength of this evidence from 0.0 to 1.0")
     public let strength: Double
-    
-    @Guide(description: "Source of the evidence")
     public let source: String
     
     public init(evidenceType: EvidenceType, description: String, strength: Double, source: String) {
@@ -92,7 +66,7 @@ public struct Evidence {
     }
 }
 
-@Generable
+@available(macOS 26.0, *)
 public enum EvidenceType: String, Codable, CaseIterable {
     case experiential = "experiential"             // Direct experience
     case observational = "observational"           // Observed patterns
@@ -105,30 +79,15 @@ public enum EvidenceType: String, Codable, CaseIterable {
 
 // MARK: - Knowledge Distillation
 
-@Generable
+@available(macOS 26.0, *)
 public struct KnowledgeDistillation {
-    @Guide(description: "Unique identifier for this distillation")
     public let distillationId: UUID
-    
-    @Guide(description: "Source knowledge being distilled")
     public let sourceKnowledge: [UUID] // Memory IDs
-    
-    @Guide(description: "Distilled essence of the knowledge")
     public let distilledEssence: String
-    
-    @Guide(description: "Abstraction level of the distillation")
     public let abstractionLevel: AbstractionLevel
-    
-    @Guide(description: "Compression ratio achieved")
     public let compressionRatio: Double
-    
-    @Guide(description: "Fidelity of the distillation")
     public let fidelity: Double
-    
-    @Guide(description: "Key patterns extracted")
     public let extractedPatterns: [String]
-    
-    @Guide(description: "When this distillation was created")
     public let creationTimestamp: Date
     
     public init(distillationId: UUID = UUID(), sourceKnowledge: [UUID], distilledEssence: String, 
@@ -145,7 +104,7 @@ public struct KnowledgeDistillation {
     }
 }
 
-@Generable
+@available(macOS 26.0, *)
 public enum AbstractionLevel: String, Codable, CaseIterable {
     case concrete = "concrete"                     // Specific facts and procedures
     case conceptual = "conceptual"                 // General concepts and principles
@@ -155,30 +114,15 @@ public enum AbstractionLevel: String, Codable, CaseIterable {
 
 // MARK: - Continuous Learning
 
-@Generable
+@available(macOS 26.0, *)
 public struct LearningCycle {
-    @Guide(description: "Unique identifier for this learning cycle")
     public let cycleId: UUID
-    
-    @Guide(description: "Phase of the learning cycle")
     public let currentPhase: LearningPhase
-    
-    @Guide(description: "Experiences being processed in this cycle")
     public let cycleExperiences: [UUID]
-    
-    @Guide(description: "Learning objectives for this cycle")
     public let objectives: [String]
-    
-    @Guide(description: "Progress toward objectives")
     public let progress: Double
-    
-    @Guide(description: "Insights generated in this cycle")
     public let generatedInsights: [UUID]
-    
-    @Guide(description: "When this cycle started")
     public let startTimestamp: Date
-    
-    @Guide(description: "Expected duration of the cycle")
     public let expectedDuration: Double
     
     public init(cycleId: UUID = UUID(), currentPhase: LearningPhase, cycleExperiences: [UUID], 
@@ -195,7 +139,7 @@ public struct LearningCycle {
     }
 }
 
-@Generable
+@available(macOS 26.0, *)
 public enum LearningPhase: String, Codable, CaseIterable {
     case experience = "experience"                 // Gathering new experiences
     case reflection = "reflection"                 // Analyzing experiences
@@ -207,6 +151,7 @@ public enum LearningPhase: String, Codable, CaseIterable {
 
 // MARK: - Wisdom Accumulation Engine
 
+@available(macOS 26.0, *)
 public actor WisdomAccumulationEngine {
     
     private let memoryManager: DualStreamMemoryManager

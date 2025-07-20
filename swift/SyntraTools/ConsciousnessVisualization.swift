@@ -49,7 +49,7 @@ public struct ConsciousnessView: View {
             .padding()
             .navigationTitle("SYNTRA Consciousness")
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .primaryAction) {
                     Button(action: { showAdvancedControls.toggle() }) {
                         Image(systemName: "gear")
                     }
@@ -105,7 +105,12 @@ public struct ConsciousnessView: View {
             
             // Emotional State
             if let emotion = state.emotionalState {
-                emotionalStateView(emotion)
+                // Handle PartiallyGenerated emotional state
+                if let fullEmotion = try? emotion.generated() {
+                    emotionalStateView(fullEmotion)
+                } else {
+                    placeholderView("Processing emotional state...")
+                }
             } else {
                 placeholderView("Processing emotional state...")
             }
@@ -195,7 +200,7 @@ public struct ConsciousnessView: View {
             
             Text("Provide a stimulus to begin consciousness processing")
                 .font(.caption)
-                .foregroundColor(.tertiary)
+                .foregroundStyle(.tertiary)
                 .multilineTextAlignment(.center)
         }
         .frame(maxWidth: .infinity, minHeight: 200)

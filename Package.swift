@@ -27,65 +27,65 @@ let package = Package(
         .target(
             name: "Valon",
             dependencies: ["ConsciousnessStructures"],
-            path: "Sources/Valon"
+            path: "swift/Valon"
         ),
         .target(
             name: "Modi",
             dependencies: ["ConsciousnessStructures"],
-            path: "Sources/Modi"
+            path: "swift/Modi"
         ),
         .target(
             name: "Drift",
-            path: "Sources/Drift"
+            path: "swift/Drift"
         ),
         .target(
             name: "MemoryEngine",
             dependencies: ["Valon", "Modi", "Drift"],
-            path: "Sources/MemoryEngine"
+            path: "swift/MemoryEngine"
         ),
         .target(
             name: "ConsciousnessStructures",
-            path: "Sources/ConsciousnessStructures"
+            path: "swift/ConsciousnessStructures"
         ),
         .target(
             name: "BrainEngine",
             dependencies: ["Valon", "Modi", "Drift", "ConsciousnessStructures", "SyntraConfig"],
-            path: "Sources/BrainEngine"
+            path: "swift/BrainEngine"
         ),
-        // .target(
-        //     name: "ConversationalInterface",
-        //     dependencies: ["BrainEngine", "MoralDriftMonitoring", "MemoryEngine", "ConsciousnessStructures"],
-        //     path: "Sources/ConversationalInterface"
-        // ),
+         .target(
+             name: "ConversationalInterface",
+             dependencies: ["BrainEngine", "MoralDriftMonitoring", "MemoryEngine", "ConsciousnessStructures"],
+             path: "swift/ConversationalInterface"
+         ),
         .target(
             name: "MoralDriftMonitoring",
             dependencies: ["ConsciousnessStructures"],
-            path: "Sources/MoralDriftMonitoring"
+            path: "swift/MoralDriftMonitoring"
         ),
         .target(
             name: "StructuredConsciousnessService",
             dependencies: ["ConsciousnessStructures", "MoralDriftMonitoring"],
-            path: "Sources/StructuredConsciousnessService"
+            path: "swift/StructuredConsciousnessService"
         ),
         .target(
             name: "SyntraConfig",
             dependencies: [],
-            path: "Sources/SyntraConfig"
+            path: "swift/SyntraConfig"
         ),
         .target(
             name: "MoralCore",
             dependencies: ["ConsciousnessStructures"],
-            path: "Sources/MoralCore"
+            path: "swift/MoralCore"
         ),
-        // .target(
-        //     name: "SyntraTools",
-        //     dependencies: ["ConsciousnessStructures", "MoralCore"],
-        //     path: "Sources/SyntraTools"
-        // ),
+        .target(
+            name: "SyntraTools",
+            dependencies: ["ConsciousnessStructures", "MoralCore"],
+            path: "swift/SyntraTools"
+        ),
         .target(
             name: "CognitiveDrift",
             dependencies: ["SyntraConfig", "Valon", "Modi", "Drift", "MemoryEngine"],
-            path: "Sources/CognitiveDrift"
+            path: "swift/CognitiveDrift"
         ),
         .executableTarget(
             name: "SyntraSwiftCLI",
@@ -95,7 +95,7 @@ let package = Package(
                 "StructuredConsciousnessService"
             ],
             path: "swift",
-            sources: ["main.swift"]
+            sources: ["Main/main.swift"]
         ),
         .testTarget(
             name: "SyntraSwiftTests",
