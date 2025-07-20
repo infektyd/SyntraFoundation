@@ -96,9 +96,19 @@ public struct CognitiveDrift {
         let valonStrength = calculateValonStrength(valonResponse)
         let modiStrength = calculateModiStrength(modiResponse)
         
-        // Get baseline weights from config
-        let valonWeight = cognitiveBaseline["valon"] ?? 0.5
-        let modiWeight = cognitiveBaseline["modi"] ?? 0.5
+        // Determine weights: static baseline or adaptive based on similarity
+        var valonWeight = cognitiveBaseline["valon"] ?? 0.5
+        var modiWeight = cognitiveBaseline["modi"] ?? 0.5
+        if let useAdaptive = try? SyntraConfig.loadConfig().useAdaptiveWeighting, useAdaptive {
+            let valonTokens = Set(valonResponse.split(separator: " ").map(String.init))
+            let modiTokens = Set(modiResponse.map(String.init))
+            let intersectionCount = valonTokens.intersection(modiTokens).count
+            let unionCount = valonTokens.union(modiTokens).count
+            let similarity = unionCount > 0 ? Double(intersectionCount) / Double(unionCount) : 0.0
+            // More agreement pushes weights toward even blend
+            valonWeight = valonWeight * (1.0 - similarity) + 0.5 * similarity
+            modiWeight = 1.0 - valonWeight
+        }
         
         // Apply personality weighting (not computational throttling!)
         let weightedValonInfluence = valonStrength * valonWeight

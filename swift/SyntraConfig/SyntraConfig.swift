@@ -13,6 +13,8 @@ public struct SyntraConfig: Codable {
     public var driftRatio: [String: Double]?
     /// Whether to use trainable FusionMLP instead of static averaging
     public var useAdaptiveFusion: Bool?
+    /// Whether to use dynamic drift weighting based on Valon/Modi similarity
+    public var useAdaptiveWeighting: Bool?
     public var enableValonOutput: Bool?
     public var enableModiOutput: Bool?
     public var enableDriftOutput: Bool?
@@ -50,6 +52,7 @@ public struct SyntraConfig: Codable {
     if let val = env["ELEVENLABS_API_KEY"] { cfg.elevenlabsApiKey = val }
     if let val = env["APPLE_LLM_API_KEY"] { cfg.appleLLMApiKey = val }
     if let val = env["USE_ADAPTIVE_FUSION"] { cfg.useAdaptiveFusion = (val as NSString).boolValue }
+    if let val = env["USE_ADAPTIVE_WEIGHTING"] { cfg.useAdaptiveWeighting = (val as NSString).boolValue }
     return cfg
     }
 }
