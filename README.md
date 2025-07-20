@@ -1,4 +1,4 @@
-# SYNTRA GPT
+# SYNTRAFoundation
 
 This repository powers the SYNTRA language experiments. API keys were
 previously stored in `config.json`, but this file is now only a template.
