@@ -261,7 +261,12 @@ public struct EmotionalAnalysisTool: Tool {
             focus: arguments.emotionFocus
         )
         
-        return ToolOutput(try JSONEncoder().encode(analysis).base64EncodedString())
+        do {
+            let data = try JSONEncoder().encode(analysis)
+            return ToolOutput(data.base64EncodedString())
+        } catch {
+            return ToolOutput("Emotional analysis error: \(error)")
+        }
     }
     
     private func analyzeEmotionalResponse(stimulus: String, depth: String, focus: String?) async -> EmotionalAnalysis {
@@ -341,7 +346,12 @@ public struct ConsciousnessStateTool: Tool {
             includeHistory: arguments.includeHistory ?? false
         )
         
-        return ToolOutput(try JSONEncoder().encode(assessment).base64EncodedString())
+        do {
+            let data = try JSONEncoder().encode(assessment)
+            return ToolOutput(data.base64EncodedString())
+        } catch {
+            return ToolOutput("Consciousness assessment error: \(error)")
+        }
     }
     
     private func assessCurrentConsciousnessState(focus: String, includeHistory: Bool) async -> ConsciousnessAssessment {
