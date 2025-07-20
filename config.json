@@ -10,6 +10,8 @@
     "modi": 0.3
   },
   "use_adaptive_fusion": false,
+  "use_adaptive_weighting": false,
+  "enable_two_pass_loop": false,
   "enable_valon_output": true,
   "enable_modi_output": true,
   "enable_drift_output": true,

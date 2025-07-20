@@ -64,6 +64,12 @@ def process_through_brains(input_data, citation_info=None):
     cfg = load_config()
     valon_output = _valon_stage(input_data, citation_info=citation_info)
     modi_output = _modi_stage(input_data, citation_info=citation_info)
+    # Two-pass feedback loop: let each brain see the other's initial output
+    cfg = load_config()
+    if cfg.get("enable_two_pass_loop", False):
+        feedback = f"Valon said: {valon_output}\nModi said: {modi_output}"
+        valon_output = _valon_stage(input_data + "\n\n[FEEDBACK]\n" + feedback, citation_info=citation_info)
+        modi_output = _modi_stage(input_data + "\n\n[FEEDBACK]\n" + feedback, citation_info=citation_info)
     drift_output = _drift_stage(valon_output, modi_output)
 
     # Track drift between flat vault and DAG snapshot
