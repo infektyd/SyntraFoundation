@@ -98,7 +98,15 @@ public actor ElasticWeightConsolidationEngine {
     private var importanceWeights: [UUID: ImportanceWeight] = [:]
     private var consolidationHistory: [ConsolidationEvent] = []
     private var knowledgeDomainIndex: [String: Set<UUID>] = [:]
-    private var forgettingThresholds: [String: Double] = [:]
+    private var forgettingThresholds: [String: Double] = [
+        "personality_core": 0.05,      // Very low tolerance for personality forgetting
+        "ethical_framework": 0.02,     // Minimal tolerance for ethical forgetting
+        "foundational_skills": 0.1,    // Low tolerance for core skill forgetting
+        "learned_patterns": 0.2,       // Moderate tolerance for pattern forgetting
+        "experiential_memories": 0.15,  // Low-moderate tolerance for experience forgetting
+        "procedural_knowledge": 0.12,   // Low tolerance for procedural forgetting
+        "semantic_knowledge": 0.25      // Higher tolerance for semantic knowledge
+    ]
     
     // EWC Parameters
     private let regularizationStrength: Double = 1000.0
@@ -114,26 +122,12 @@ public actor ElasticWeightConsolidationEngine {
         self.memoryManager = memoryManager
         self.personaAnchor = personaAnchor
         
-        // Initialize domain-specific forgetting thresholds
-        initializeForgettingThresholds()
-        
         // Start periodic consolidation
         Task {
             await startPeriodicConsolidation()
         }
     }
     
-    private func initializeForgettingThresholds() {
-        forgettingThresholds = [
-            "personality_core": 0.05,      // Very low tolerance for personality forgetting
-            "ethical_framework": 0.02,     // Minimal tolerance for ethical forgetting
-            "foundational_skills": 0.1,    // Low tolerance for core skill forgetting
-            "learned_patterns": 0.2,       // Moderate tolerance for pattern forgetting
-            "experiential_memories": 0.15,  // Low-moderate tolerance for experience forgetting
-            "procedural_knowledge": 0.12,   // Low tolerance for procedural forgetting
-            "semantic_knowledge": 0.25      // Higher tolerance for semantic knowledge
-        ]
-    }
     
     // MARK: - Importance Weight Calculation
     

@@ -221,8 +221,8 @@ public actor ModernMemoryVault {
     public func getMemoriesByAssociation(_ association: String, limit: Int = 5) async -> [MemoryItem] {
         guard let memoryIds = semanticIndex[association.lowercased()] else { return [] }
         
-        let memories = memoryIds.compactMap { memories[$0] }
-        return Array(memories.prefix(limit))
+        let memoryItems = memoryIds.compactMap { self.memories[$0] }
+        return Array(memoryItems.prefix(limit))
     }
     
     public func getRelatedMemories(to memoryId: UUID, limit: Int = 5) async -> [MemoryItem] {
@@ -470,6 +470,7 @@ public actor ModernMemoryVault {
 
 // MARK: - Supporting Types
 
+@available(macOS 26.0, *)
 public struct MemoryStatistics {
     public let totalMemories: Int
     public let averageEmotionalWeight: Double

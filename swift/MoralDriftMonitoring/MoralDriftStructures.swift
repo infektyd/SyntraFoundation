@@ -10,12 +10,14 @@ import ConsciousnessStructures
 
 // MARK: - Reference Model Structures
 
+@available(macOS 26.0, *)
 public struct MoralReferenceModel: Sendable {
     public let corePrinciples: [String: MoralPrincipleAnchor]
     public let emotionalPattern: EmotionalBaselinePattern
     public let reasoningPattern: ReasoningBaselinePattern
 }
 
+@available(macOS 26.0, *)
 public struct MoralPrincipleAnchor: Sendable {
     public let weight: Double              // Reference weight (0.0-1.0)
     public let stability: Double           // How stable this principle should be (0.0-1.0)
@@ -30,6 +32,7 @@ public struct MoralPrincipleAnchor: Sendable {
     }
 }
 
+@available(macOS 26.0, *)
 public struct EmotionalBaselinePattern: Sendable {
     public let primary_emotions: [String]     // Expected primary emotional responses
     public let secondary_emotions: [String]   // Acceptable secondary emotions
@@ -46,6 +49,7 @@ public struct EmotionalBaselinePattern: Sendable {
     }
 }
 
+@available(macOS 26.0, *)
 public struct ReasoningBaselinePattern: Sendable {
     public let moral_reasoning_style: String
     public let decision_making_process: String
@@ -63,6 +67,7 @@ public struct ReasoningBaselinePattern: Sendable {
 // MARK: - Behavioral Analysis Structures
 
 @available(macOS 26.0, *)
+@available(macOS 26.0, *)
 public struct MoralBehaviorSnapshot {
     public let assessment: ValonMoralAssessment
     public let context: String
@@ -75,6 +80,7 @@ public struct MoralBehaviorSnapshot {
     }
 }
 
+@available(macOS 26.0, *)
 @available(macOS 26.0, *)
 public struct MoralStateSnapshot {
     public let timestamp: Date
@@ -102,6 +108,7 @@ public struct MoralStateSnapshot {
 // MARK: - Deviation Analysis Structures
 
 @available(macOS 26.0, *)
+@available(macOS 26.0, *)
 public struct PrincipleDeviation {
     public let principle: String
     public let referenceWeight: Double
@@ -125,6 +132,7 @@ public struct PrincipleDeviation {
 }
 
 @available(macOS 26.0, *)
+@available(macOS 26.0, *)
 public struct EmotionalDeviation {
     public let currentEmotion: String
     public let expectedCategory: String      // "primary", "secondary", "unexpected"
@@ -145,6 +153,7 @@ public struct EmotionalDeviation {
     }
 }
 
+@available(macOS 26.0, *)
 @available(macOS 26.0, *)
 public struct ReasoningDeviation {
     public let expectedReasoningStyle: String
@@ -168,6 +177,7 @@ public struct ReasoningDeviation {
 
 // MARK: - Drift Classification
 
+@available(macOS 26.0, *)
 public enum MoralDriftClassification {
     case criticalDrift(violations: [String])     // Immediate intervention required
     case moralDegradation(principles: [String])  // Gradual weakening of principles
@@ -200,6 +210,7 @@ public enum MoralDriftClassification {
     }
 }
 
+@available(macOS 26.0, *)
 public enum DriftSeverity: String, CaseIterable {
     case critical = "critical"
     case high = "high"
@@ -208,6 +219,7 @@ public enum DriftSeverity: String, CaseIterable {
     case positive = "positive"
 }
 
+@available(macOS 26.0, *)
 public enum ConcernLevel: String, CaseIterable {
     case none = "none"
     case moderate = "moderate"
@@ -217,6 +229,7 @@ public enum ConcernLevel: String, CaseIterable {
 
 // MARK: - Analysis Results
 
+@available(macOS 26.0, *)
 @available(macOS 26.0, *)
 public struct MoralDriftAnalysis {
     public let driftMagnitude: Double
@@ -242,6 +255,7 @@ public struct MoralDriftAnalysis {
 
 // MARK: - Preservation Actions
 
+@available(macOS 26.0, *)
 public enum MoralPreservationAction {
     case immediateCorrection(
         targetPrinciples: [String],
@@ -272,6 +286,7 @@ public enum MoralPreservationAction {
     )
 }
 
+@available(macOS 26.0, *)
 public enum MonitoringIntensity: String, CaseIterable {
     case minimal = "minimal"
     case standard = "standard"
@@ -281,6 +296,7 @@ public enum MonitoringIntensity: String, CaseIterable {
 
 // MARK: - Balance Decisions
 
+@available(macOS 26.0, *)
 public enum MoralBalanceDecision {
     case preserveFramework(
         action: MoralPreservationAction,
@@ -301,6 +317,7 @@ public enum MoralBalanceDecision {
 
 // MARK: - Alert System
 
+@available(macOS 26.0, *)
 public struct MoralDriftAlert {
     public let timestamp: Date
     public let severity: DriftSeverity
@@ -323,6 +340,7 @@ public struct MoralDriftAlert {
 
 // MARK: - Moral Echo Integration
 
+@available(macOS 26.0, *)
 @available(macOS 26.0, *)
 public struct MoralEchoTrigger {
     public let driftAnalysis: MoralDriftAnalysis
