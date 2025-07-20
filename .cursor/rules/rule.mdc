@@ -1,0 +1,24 @@
+---
+description: Implementing code and resolving issues
+alwaysApply: false
+---
+Project Rule 1:
+
+“All agents and contributors must prefer real implementation to stubbing. Any code marked with a stub must be re-addressed and removed as soon as a solution is viable.”
+
+Project Rule 2:
+
+“When designing UI, config toggles, or session logic, default to ‘live binding’—controls change values/behavior instantly and update agents in-memory, not via rebuilds.”
+
+Project Rule 3:
+
+“All architectural/design decisions (including those by AI tools) must be documented in a codex report or markdown in the repo. Major changes with no clear justification should be reverted.”
+
+Project Rule 4:
+
+“New toggles or config options added to SyntraConfig must be fully plumbed from UI → config file → runtime agent logic. All dangling/no-op config UI is forbidden.”
+
+Bonus (Hardening and Compliance)
+“All code must pass tests and respect type safety. Silent failing or force-unwrapping is forbidden unless absolutely required and explained.”
+
+“Always update codex_reports/ after substantial work so all progress and decision context is permanent and auditable.”

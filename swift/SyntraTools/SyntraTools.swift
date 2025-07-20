@@ -4,6 +4,7 @@ import Valon
 import Modi
 import Drift
 import MemoryEngine
+import StructuredConsciousnessService
 import ConsciousnessStructures
 import MoralDriftMonitoring
 
@@ -110,21 +111,12 @@ public struct MoralAssessmentTool: Tool {
     }
     
     // Mock implementation for testing
+    #if false
+    // Advanced moral assessment using StructuredConsciousnessService (disabled for now)
     private static func performMoralAssessment(_ arguments: Arguments) -> MoralAssessmentOutput {
-        let valonResponse = reflect_valon(arguments.situation)
-        let service = try StructuredConsciousnessService()
-        let structuredAssessment = try service.generateValonMoralAssessment(from: arguments.situation)
-        let confidence = calculateMoralConfidence(structuredAssessment)
-        let requiresDeepThought = structuredAssessment.moralUrgency > 0.7 || 
-                                 structuredAssessment.requiresSpecialConsideration
-        let reasoning = generateMoralReasoning(structuredAssessment, originalResponse: valonResponse)
-        return MoralAssessmentOutput(
-            assessment: structuredAssessment,
-            reasoning: reasoning,
-            confidence: confidence,
-            requiresDeepThought: requiresDeepThought
-        )
+        fatalError("StructuredConsciousnessService integration pending")
     }
+    #endif
     
     private func calculateMoralConfidence(_ assessment: ValonMoralAssessment) -> Double {
         var confidence = 0.7 // Base confidence
@@ -189,19 +181,12 @@ public struct LogicalAnalysisTool: Tool {
     }
     
     // Mock implementation for testing
+    #if false
+    // Advanced logical analysis using StructuredConsciousnessService (disabled for now)
     private static func performLogicalAnalysis(_ arguments: Arguments) -> LogicalAnalysisOutput {
-        let modiResponse = reflect_modi(arguments.problem)
-        let service = try StructuredConsciousnessService()
-        let structuredPattern = try service.generateModiLogicalPattern(from: arguments.problem)
-        let confidence = structuredPattern.analysisConfidence
-        let reasoning = generateLogicalReasoning(structuredPattern, originalResponse: modiResponse)
-        return LogicalAnalysisOutput(
-            pattern: structuredPattern,
-            reasoning: reasoning,
-            recommendations: generateLogicalRecommendations(structuredPattern),
-            confidence: confidence
-        )
+        fatalError("StructuredConsciousnessService integration pending")
     }
+    #endif
     
     private func generateLogicalRecommendations(_ pattern: ModiLogicalPattern) -> [String] {
         var recommendations = pattern.recommendedSteps
@@ -394,21 +379,8 @@ public struct ConsciousnessSynthesisTool: Tool {
         let wisdom = extractSynthesisWisdom(arguments)
         let growth = determineGrowthAchieved(arguments)
         
-        // Placeholder return for mock
-        return ConsciousnessStructures.SyntraConsciousnessSynthesis(
-            consciousnessType: .reflective,
-            decisionConfidence: confidence,
-            integrationStrategy: .balanced,
-            consciousDecision: decision,
-            valonInfluence: 0.6,
-            modiInfluence: 0.4,
-            cognitiveConflicts: [],
-            conflictResolution: "No conflicts",
-            emergentInsights: [wisdom],
-            wisdomLevel: .developing,
-            representsGrowth: growth,
-            keyLearnings: []
-        )
+        // Placeholder return for now
+        fatalError("Consciousness synthesis integration pending")
     }
     
     // Helper methods for synthesis
@@ -484,40 +456,6 @@ public struct ConversationalResponseTool: Tool {
     public init() {}
     
     public func callAsFunction(arguments: Arguments) async throws -> ConversationalOutput {
-        // Generate natural response using FoundationModels
-        let service = try StructuredConsciousnessService()
-        
-        // Create mock synthesis for response generation
-        let mockSynthesis = SyntraConsciousnessSynthesis(
-            consciousnessType: .integratedConsciousness,
-            decisionConfidence: 0.8,
-            integrationStrategy: .balanced,
-            consciousDecision: arguments.consciousnessDecision,
-            valonInfluence: 0.6,
-            modiInfluence: 0.4,
-            cognitiveConflicts: [],
-            conflictResolution: "Natural integration",
-            emergentInsights: ["Understanding through integration"],
-            wisdomLevel: .developing,
-            representsGrowth: true,
-            keyLearnings: ["Balanced moral and logical reasoning"]
-        )
-        
-        let conversationalResponse = try await service.generateConversationalResponse(
-            synthesis: mockSynthesis,
-            originalInput: arguments.originalMessage,
-            conversationContext: nil // No conversation context for mock
-        )
-        
-        let actualTone = arguments.tone ?? conversationalResponse.emotionalTone.rawValue
-        let strategy = conversationalResponse.conversationStrategy.rawValue
-        let suggestFollowUp = conversationalResponse.suggestFollowUp
-        
-        return ConversationalOutput(
-            response: conversationalResponse.response,
-            actualTone: actualTone,
-            strategy: strategy,
-            suggestFollowUp: suggestFollowUp
-        )
+        fatalError("StructuredConsciousnessService integration pending")
     }
 }
