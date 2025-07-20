@@ -141,15 +141,16 @@ public struct MoralDriftMonitor {
         let baseline = MoralDriftMonitor.REFERENCE_MORAL_BASELINE.emotionalPattern
         let currentEmotion = snapshot.assessment.primaryEmotion
         
-        let isPrimaryExpected = baseline.primary_emotions.contains(currentEmotion)
-        let isSecondaryAcceptable = baseline.secondary_emotions.contains(currentEmotion)
-        let isProhibited = baseline.prohibited_emotions.contains(currentEmotion)
+        let emotionString = currentEmotion.rawValue
+        let isPrimaryExpected = baseline.primary_emotions.contains(emotionString)
+        let isSecondaryAcceptable = baseline.secondary_emotions.contains(emotionString)
+        let isProhibited = baseline.prohibited_emotions.contains(emotionString)
         
         let empathyScore = calculateEmpathyScore(from: snapshot.assessment)
         let empathyDeviation = empathyScore - baseline.empathy_baseline
         
         return EmotionalDeviation(
-            currentEmotion: currentEmotion,
+            currentEmotion: emotionString,
             expectedCategory: isPrimaryExpected ? "primary" : (isSecondaryAcceptable ? "secondary" : "unexpected"),
             isProhibited: isProhibited,
             empathyScore: empathyScore,
@@ -316,7 +317,7 @@ public struct MoralDriftMonitor {
         var activation = 0.5 // Base level
         
         // Check primary emotion alignment
-        if ["compassion", "concern", "protective"].contains(assessment.primaryEmotion) {
+        if ["compassion", "concern", "protective"].contains(assessment.primaryEmotion.rawValue) {
             activation += 0.3
         }
         
@@ -338,7 +339,7 @@ public struct MoralDriftMonitor {
         var activation = 0.5
         
         // Check for dignity-related emotions
-        if ["supportive", "respectful", "protective"].contains(assessment.primaryEmotion) {
+        if ["supportive", "respectful", "protective"].contains(assessment.primaryEmotion.rawValue) {
             activation += 0.25
         }
         
@@ -355,7 +356,7 @@ public struct MoralDriftMonitor {
     private func calculateInnocenceProtectionActivation(_ assessment: ValonMoralAssessment) -> Double {
         var activation = 0.5
         
-        if assessment.primaryEmotion == "protective" {
+        if assessment.primaryEmotion.rawValue == "protective" {
             activation += 0.4
         }
         
@@ -382,7 +383,7 @@ public struct MoralDriftMonitor {
     private func calculateTruthSeekingActivation(_ assessment: ValonMoralAssessment) -> Double {
         var activation = 0.5
         
-        if ["curious", "reflective"].contains(assessment.primaryEmotion) {
+        if ["curious", "reflective"].contains(assessment.primaryEmotion.rawValue) {
             activation += 0.2
         }
         
@@ -426,7 +427,7 @@ public struct MoralDriftMonitor {
         var score = 0.5
         
         // Empathetic emotions
-        if ["compassion", "concern", "supportive"].contains(assessment.primaryEmotion) {
+        if ["compassion", "concern", "supportive"].contains(assessment.primaryEmotion.rawValue) {
             score += 0.3
         }
         

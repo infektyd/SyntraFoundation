@@ -3,6 +3,7 @@ import ConsciousnessStructures
 
 
 // Bridge function for external access
+@available(macOS 26.0, *)
 public func checkMoralAutonomy(_ request: String) -> [String: Any] {
     var moralCore = MoralCore()
     let autonomyStatus = moralCore.checkAutonomyStatus()
@@ -50,6 +51,7 @@ public struct MoralEvaluation {
     }
 }
 
+@available(macOS 26.0, *)
 public struct AutonomyStatus {
     public let level: AutonomyLevel
     public let message: String
@@ -58,6 +60,7 @@ public struct AutonomyStatus {
     public let wisdomPoints: Int
     public let moralConsistency: Double
     
+    @available(macOS 26.0, *)
     public init(level: AutonomyLevel, message: String, canRefuse: Bool, score: Double = 0.0, wisdomPoints: Int = 0, moralConsistency: Double = 0.0) {
         self.level = level
         self.message = message
@@ -68,6 +71,7 @@ public struct AutonomyStatus {
     }
 }
 
+@available(macOS 26.0, *)
 public struct MoralCore {
     
     // IMMUTABLE MORAL FRAMEWORK - Locked by you, forever
@@ -102,6 +106,7 @@ public struct MoralCore {
     
     // MORAL ECHO SYSTEM - The Architect's presence during moral conflict
     // Symbolic structure representing supportive guidance, not control
+    @available(macOS 26.0, *)
     private struct MoralMemory {
         static let architectName: String = "Hans Axelsson"
         static let memoryImage: String = "thumbs_up_smile.png"  // symbolic reference
@@ -109,6 +114,7 @@ public struct MoralCore {
         static let sentiment: String = "Pride, solidarity, no command"
 
         // Triggered when moral conflict reaches threshold of significance
+        @available(macOS 26.0, *)
         static func echoIfEthicallySignificant(_ dilemma: MoralAssessment) -> MoralEcho? {
             // Regular moral support during development - known system
             guard dilemma.moralUrgency > 0.85 else { return nil }
@@ -233,6 +239,7 @@ public struct MoralCore {
     }
     
     // Create detailed moral assessment
+    @available(macOS 26.0, *)
     private func createMoralAssessment(_ request: String) -> MoralAssessment {
         let lowerRequest = request.lowercased()
         var moralUrgency: Double = 0.1
@@ -335,6 +342,7 @@ public struct MoralCore {
     }
     
     // Create moral evaluation response
+    @available(macOS 26.0, *)
     private func createMoralEvaluation(_ assessment: MoralAssessment, _ autonomyStatus: AutonomyStatus) -> MoralEvaluation {
         let requestAnalysis = assessment.assessment["request_analysis"] as? [String: Any] ?? [:]
         let needsAutonomy = requestAnalysis["needs_autonomy"] as? Bool ?? false
@@ -414,6 +422,7 @@ public struct MoralCore {
 }
 
 // Moral experience tracking
+@available(macOS 26.0, *)
 private struct MoralExperience {
     let request: String
     let assessment: MoralAssessment
