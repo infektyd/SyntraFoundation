@@ -4,7 +4,7 @@ import PackageDescription
 let package = Package(
     name: "SyntraSwift",
     platforms: [
-        .macOS(.v15), // Primary target - falls back to non-FoundationModels types
+        .macOS("15.0"), // Required for FoundationModels
         .iOS(.v18)
     ],
     products: [
