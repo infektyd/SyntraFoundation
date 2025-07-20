@@ -1,4 +1,0 @@
-module StructuredConsciousnessService {
-    header "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/StructuredConsciousnessService.build/StructuredConsciousnessService-Swift.h"
-    requires objc
-}

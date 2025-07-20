@@ -1,4 +1,0 @@
-module Valon {
-    header "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/Valon.build/Valon-Swift.h"
-    requires objc
-}

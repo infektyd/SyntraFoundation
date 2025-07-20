@@ -1,4 +1,0 @@
-module ConversationalInterface {
-    header "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/ConversationalInterface.build/ConversationalInterface-Swift.h"
-    requires objc
-}

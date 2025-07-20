@@ -1,4 +1,0 @@
-module SyntraTools {
-    header "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraTools.build/SyntraTools-Swift.h"
-    requires objc
-}

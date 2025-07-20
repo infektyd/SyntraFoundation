@@ -1,4 +1,0 @@
-module SyntraSwiftPackageTests {
-    header "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/SyntraSwiftPackageTests.build/SyntraSwiftPackageTests-Swift.h"
-    requires objc
-}

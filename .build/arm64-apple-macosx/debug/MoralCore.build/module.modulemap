@@ -1,4 +1,0 @@
-module MoralCore {
-    header "/Users/hansaxelsson/SyntraFoundation/.build/arm64-apple-macosx/debug/MoralCore.build/MoralCore-Swift.h"
-    requires objc
-}
