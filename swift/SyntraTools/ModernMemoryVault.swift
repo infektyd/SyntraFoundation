@@ -12,7 +12,7 @@ public actor ModernMemoryVault {
     // MARK: - Memory Data Structures
     
     @available(macOS 26.0, *)
-    public struct MemoryItem {
+    public struct MemoryItem: @unchecked Sendable {
         public let id: UUID
         public let content: String
         public let emotionalWeight: Double
@@ -39,7 +39,7 @@ public actor ModernMemoryVault {
     }
     
     @available(macOS 26.0, *)
-    public enum MemoryType: String, CaseIterable {
+    public enum MemoryType: String, CaseIterable, Sendable {
         case experience = "experience"
         case learning = "learning"
         case insight = "insight"
@@ -66,7 +66,7 @@ public actor ModernMemoryVault {
     }
     
     @available(macOS 26.0, *)
-    public struct MemorySearchResult {
+    public struct MemorySearchResult: Sendable {
         public let memory: MemoryItem
         public let relevanceScore: Double
         public let relevanceReason: String
@@ -471,7 +471,7 @@ public actor ModernMemoryVault {
 // MARK: - Supporting Types
 
 @available(macOS 26.0, *)
-public struct MemoryStatistics {
+public struct MemoryStatistics: @unchecked Sendable {
     public let totalMemories: Int
     public let averageEmotionalWeight: Double
     public let averageConsolidationLevel: Double

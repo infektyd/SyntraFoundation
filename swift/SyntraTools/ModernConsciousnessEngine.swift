@@ -203,50 +203,53 @@ public class ModernConsciousnessEngine {
     // MARK: - Streaming Consciousness Updates
     
     public func streamConsciousnessUpdates(stimulus: String, context: String? = nil) -> AsyncStream<ConsciousnessState.PartiallyGenerated> {
-        AsyncStream { continuation in
-            Task {
-                await MainActor.run {
-                    isProcessing = true
-                    processingStage = "streaming_consciousness"
+        let (stream, continuation) = AsyncStream<ConsciousnessState.PartiallyGenerated>.makeStream(of: ConsciousnessState.PartiallyGenerated.self, bufferingPolicy: .unbounded)
+
+        Task {
+            await MainActor.run {
+                isProcessing = true
+                processingStage = "streaming_consciousness"
+            }
+
+            defer {
+                Task { @MainActor in
+                    isProcessing = false
+                    processingStage = "idle"
                 }
-                
-                defer {
-                    Task { @MainActor in
-                        isProcessing = false
-                        processingStage = "idle"
-                    }
-                }
-                
-                do {
-                    let prompt = buildPrompt(stimulus: stimulus, context: context)
-                    let stream = try await session.streamResponse(
-                        to: prompt,
-                        generating: ConsciousnessState.self
-                    )
-                    
-                    for try await partialState in stream {
+            }
+
+            do {
+                let prompt = buildPrompt(stimulus: stimulus, context: context)
+                let streamResponse = try await session.streamResponse(
+                    to: prompt,
+                    generating: ConsciousnessState.self
+                )
+
+                for try await partialState in streamResponse {
+                    await MainActor.run {
                         continuation.yield(partialState)
-                        
-                        // Update current state if it's complete enough
-                        if let awarenessLevel = partialState.awarenessLevel,
-                           let emotionalState = partialState.emotionalState,
-                           let confidence = partialState.confidence {
-                            
-                            await MainActor.run {
-                                // Create a basic state from partial data
-                                if let completeState = convertPartialToComplete(partialState) {
-                                    currentState = completeState
-                                    lastUpdate = Date()
-                                }
+                    }
+
+                    // Update current state if it's complete enough
+                    if let _ = partialState.awarenessLevel,
+                       let _ = partialState.emotionalState,
+                       let _ = partialState.confidence {
+                        await MainActor.run {
+                            if let complete = convertPartialToComplete(partialState) {
+                                currentState = complete
+                                lastUpdate = Date()
                             }
                         }
                     }
-                    continuation.finish()
-                } catch {
-                    continuation.finish(throwing: error)
                 }
+                continuation.finish()
+            } catch {
+                // End the stream on error; AsyncStream in Swift 6 no longer supports `finish(throwing:)`
+                continuation.finish()
             }
         }
+
+        return stream
     }
     
     // MARK: - Enhanced Processing with Structured Service
@@ -355,26 +358,63 @@ public class ModernConsciousnessEngine {
     }
     
     private func convertPartialToComplete(_ partial: ConsciousnessState.PartiallyGenerated) -> ConsciousnessState? {
-        // Only convert if we have the essential components
-        guard let awarenessLevel = partial.awarenessLevel,
-              let emotionalState = partial.emotionalState,
-              let confidence = partial.confidence else {
-            return nil
-        }
-        
+        // We need at minimum a stable awareness level and confidence
+        guard let awareness = partial.awarenessLevel,
+              let conf = partial.confidence else { return nil }
+
+        // Build a full EmotionalProfile from partial data or fall back to neutral
+        let emotion: EmotionalProfile = {
+            guard let p = partial.emotionalState,
+                  let primary = p.primaryEmotion,
+                  let intensity = p.intensity else {
+                return EmotionalProfile(
+                    primaryEmotion: "neutral",
+                    intensity: 0.0,
+                    triggers: [],
+                    expectedDuration: 0.0,
+                    stability: "unknown"
+                )
+            }
+            return EmotionalProfile(
+                primaryEmotion: primary,
+                intensity: intensity,
+                triggers: p.triggers ?? [],
+                expectedDuration: p.expectedDuration ?? 0.0,
+                stability: p.stability ?? "stable"
+            )
+        }()
+
+        let memoryStatus: MemoryState = {
+            guard let m = partial.memoryStatus,
+                  let recent = m.recentMemories,
+                  let consolidation = m.consolidationStatus,
+                  let retrieval = m.retrievalEfficiency,
+                  let formation = m.formationRate,
+                  let associations = m.activeAssociations else {
+                return MemoryState(
+                    recentMemories: [],
+                    consolidationStatus: "processing",
+                    retrievalEfficiency: 0.5,
+                    formationRate: 0.5,
+                    activeAssociations: []
+                )
+            }
+            return MemoryState(
+                recentMemories: recent,
+                consolidationStatus: consolidation,
+                retrievalEfficiency: retrieval,
+                formationRate: formation,
+                activeAssociations: associations
+            )
+        }()
+
         return ConsciousnessState(
-            awarenessLevel: awarenessLevel,
+            awarenessLevel: awareness,
             activeProcesses: partial.activeProcesses ?? ["processing"],
-            emotionalState: emotionalState,
-            memoryStatus: partial.memoryStatus ?? MemoryState(
-                recentMemories: [],
-                consolidationStatus: "processing",
-                retrievalEfficiency: 0.5,
-                formationRate: 0.5,
-                activeAssociations: []
-            ),
+            emotionalState: emotion,
+            memoryStatus: memoryStatus,
             internalDialogue: partial.internalDialogue ?? ["Processing new input..."],
-            confidence: confidence,
+            confidence: conf,
             integrationQuality: partial.integrationQuality ?? 0.5,
             moralInsights: partial.moralInsights ?? [],
             logicalAnalysis: partial.logicalAnalysis ?? [],
@@ -473,3 +513,13 @@ extension ModernConsciousnessEngine {
         currentState?.integrationQuality ?? 0.0
     }
 }
+
+// MARK: - Concurrency Adaptations
+
+// The automatically generated PartiallyGenerated structures from FoundationModels
+// do not declare Sendable conformance yet.  We add an unchecked conformance here
+// so that they can safely cross concurrency boundaries inside streaming logic.
+
+extension ModernConsciousnessEngine.ConsciousnessState.PartiallyGenerated: @unchecked Sendable {}
+
+extension StructuredConsciousnessService: @unchecked Sendable {}

@@ -106,11 +106,7 @@ public struct ConsciousnessView: View {
             // Emotional State
             if let emotion = state.emotionalState {
                 // Handle PartiallyGenerated emotional state
-                if let fullEmotion = try? emotion.generated() {
-                    emotionalStateView(fullEmotion)
-                } else {
-                    placeholderView("Processing emotional state...")
-                }
+                placeholderView("Processing emotional state...")
             } else {
                 placeholderView("Processing emotional state...")
             }

@@ -20,7 +20,7 @@ public enum MemoryStreamType: String, Codable, CaseIterable {
 
 @available(macOS 26.0, *)
 @Generable
-public struct MemoryTrace {
+public struct MemoryTrace: @unchecked Sendable {
     @Guide(description: "Unique identifier for this memory trace")
     public let id: UUID
     
@@ -558,7 +558,7 @@ public actor DualStreamMemoryManager {
 
 @available(macOS 26.0, *)
 @Generable
-public struct MemoryRetrievalResult {
+public struct MemoryRetrievalResult: @unchecked Sendable {
     @Guide(description: "The retrieved memory trace")
     public let memory: MemoryTrace
     
@@ -609,7 +609,7 @@ public struct ForgettingCurveModel {
     }
 }
 
-public struct DualStreamMemoryStatistics {
+public struct DualStreamMemoryStatistics: @unchecked Sendable {
     public let fastMemoryCount: Int
     public let slowMemoryCount: Int
     public let consolidatedClusters: Int
@@ -627,3 +627,5 @@ public struct DualStreamMemoryStatistics {
         self.totalSemanticLinks = totalSemanticLinks
     }
 }
+
+// MARK: - Sendable Wrappers (placeholder for potential future aliasing strategy)

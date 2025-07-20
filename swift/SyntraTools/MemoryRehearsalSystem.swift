@@ -774,9 +774,9 @@ public actor MemoryRehearsalEngine {
         }
         
         // Remove completed rehearsals
-        let dueRehearsalIds = Set(dueRehearsals.map { $0.rehearsalId })
+        let dueRehearsalIds = Set(dueRehearsals.map { $0.id })
         scheduledRehearsals.removeAll { rehearsal in
-            dueRehearsalIds.contains(rehearsal.rehearsalId)
+            dueRehearsalIds.contains(rehearsal.id)
         }
     }
     
