@@ -35,7 +35,7 @@ public class ConversationalInterface {
         let synthesis = await brainEngine.processInput(input)
         
         // 3. Monitor for moral drift
-        if #available(macOS 26.0, *) {
+        if #available(macOS "26.0", *) {
             let currentDrift = driftMonitor.analyzeDecisionDrift(synthesis, context: input)
             
             // 4. Handle critical drift with immediate intervention
@@ -80,7 +80,7 @@ public class ConversationalInterface {
         return harmfulKeywords.contains { lower.contains($0) }
     }
     
-    @available(macOS 26.0, *)
+    @available(macOS "26.0", *)
     private func handleCriticalDrift(
         synthesis: SyntraConsciousnessSynthesis,
         driftAnalysis: MoralDriftAnalysis,
@@ -116,7 +116,7 @@ public class ConversationalInterface {
         )
     }
     
-    @available(macOS 26.0, *)
+    @available(macOS "26.0", *)
     private func generatePreservationMessage(driftAnalysis: MoralDriftAnalysis) -> String {
         if !driftAnalysis.recommendedActions.isEmpty {
             return "I'm guided by my commitment to \(driftAnalysis.recommendedActions.first ?? "ethical principles")."

@@ -25,7 +25,7 @@ previously stored in `config.json`, but this file is now only a template.
 6. To enable Apple's local LLM, define `apple_llm_api_base` and optionally
    `apple_llm_api_key` in your configuration or environment variables.
 7. To use the new FoundationModels bridge, set `USE_FOUNDATION_MODEL=1` in your
-   environment (macOS 15+ required).
+   environment (macOS 26+ required).
 
 Example `config.local.json`:
 ```json

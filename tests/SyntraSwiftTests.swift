@@ -74,7 +74,7 @@ final class SyntraSwiftTests: XCTestCase {
     }
 
     func testProcessThroughBrainsBasicStructure() async throws {
-        // Test the basic structure without Apple LLM (since it requires macOS 26.0+)
+        // Test the basic structure without Apple LLM (since it requires macOS "26.0"+)
         let result = await BrainEngine.processThroughBrains("hi")
         
         // Verify basic structure
@@ -83,22 +83,22 @@ final class SyntraSwiftTests: XCTestCase {
         XCTAssertNotNil(result["consciousness"])
         XCTAssertNotNil(result["internal_dialogue"])
         
-        // On macOS < 26.0, Apple LLM should either be absent or show compatibility message
+        // On macOS < "26.0", Apple LLM should either be absent or show compatibility message
         if let appleLLM = result["appleLLM"] as? String {
-            XCTAssertTrue(appleLLM.contains("Apple LLM requires macOS 26.0+") || appleLLM.contains("not available"))
+            XCTAssertTrue(appleLLM.contains("Apple LLM requires macOS "26.0"+") || appleLLM.contains("not available"))
         }
     }
     
     @available(macOS 26.0, *)
     func testStructuredConsciousnessServiceInitialization() throws {
         // Test that StructuredConsciousnessService can be initialized
-        // Note: This will only pass on macOS 26.0+ with FoundationModels available
+        // Note: This will only pass on macOS "26.0"+ with FoundationModels available
         do {
             let service = try StructuredConsciousnessService()
             XCTAssertNotNil(service)
         } catch StructuredGenerationError.modelUnavailable {
             // Expected on systems without FoundationModels
-            XCTAssertTrue(true, "FoundationModels not available - expected on macOS < 26.0")
+            XCTAssertTrue(true, "FoundationModels not available - expected on macOS < "26.0"")
         }
     }
     

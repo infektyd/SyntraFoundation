@@ -5,7 +5,7 @@ import FoundationModels
 // Real-time SwiftUI interface for SYNTRA consciousness states
 // Implements streaming updates with modern Apple design principles
 
-@available(macOS 26.0, *)
+@available(macOS "26.0", *)
 public struct ConsciousnessView: View {
     @State private var engine: ModernConsciousnessEngine
     @State private var currentInput = ""
@@ -574,7 +574,7 @@ public struct ConsciousnessView: View {
 
 // MARK: - Preview
 
-@available(macOS 26.0, *)
+@available(macOS "26.0", *)
 struct ConsciousnessView_Previews: PreviewProvider {
     static var previews: some View {
         ConsciousnessView()

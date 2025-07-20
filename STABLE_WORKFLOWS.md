@@ -44,7 +44,7 @@ swift run SyntraSwiftCLI processThroughBrains "input"
 # Drift analysis
 swift run SyntraSwiftCLI drift_average "valon_result" '["modi", "array"]'
 
-# Foundation model access (macOS 15+)
+# Foundation model access (macOS "26.0")
 swift run SyntraSwiftCLI foundation_model "prompt"
 ```
 
@@ -80,4 +80,4 @@ swift run SyntraSwiftCLI processThroughBrains "Hello SYNTRA"
 ## Xcode Development
 - Open `SyntraSwift.xcodeproj` in Xcode 16 Beta 3
 - Build scheme: `SyntraSwiftCLI`
-- Supports FoundationModels on macOS 15+
+- Supports FoundationModels on macOS 26+

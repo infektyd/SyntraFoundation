@@ -14,7 +14,13 @@ struct ContentView: View {
     @State private var isLoading: Bool = false
     
     var body: some View {
-        VStack(spacing: 0) {
+        ZStack {
+            // Liquid glass background
+            Color.clear
+                .background(.ultraThinMaterial)
+                .edgesIgnoringSafeArea(.all)
+            HSplitView {
+                VStack(spacing: 0) {
             // Header with status
             HStack {
                 Text("SYNTRA Consciousness Chat")
@@ -69,10 +75,16 @@ struct ContentView: View {
                 onSend: sendMessage
             )
         }
-        .onAppear {
-            // Welcome message
-            if messages.isEmpty {
-                addWelcomeMessage()
+            .onAppear {
+                // Welcome message
+                if messages.isEmpty {
+                    addWelcomeMessage()
+                }
+                }
+                .frame(minWidth: 400)
+
+                // Settings panel
+                SettingsPanel(settings: ConfigViewModel())
             }
         }
     }

@@ -8,7 +8,7 @@ import ConsciousnessStructures
 
 // MARK: - Wisdom Core Structures
 
-@available(macOS 26.0, *)
+@available(macOS "26.0", *)
 public struct WisdomInsight {
     public let insightId: UUID
     public let wisdomType: WisdomType
@@ -37,7 +37,7 @@ public struct WisdomInsight {
     }
 }
 
-@available(macOS 26.0, *)
+@available(macOS "26.0", *)
 public enum WisdomType: String, Codable, CaseIterable {
     case practical = "practical"                   // How-to knowledge and procedures
     case moral = "moral"                           // Ethical insights and principles
@@ -51,7 +51,7 @@ public enum WisdomType: String, Codable, CaseIterable {
     case intuitive = "intuitive"                   // Pattern-based implicit knowledge
 }
 
-@available(macOS 26.0, *)
+@available(macOS "26.0", *)
 public struct Evidence {
     public let evidenceType: EvidenceType
     public let description: String
@@ -66,7 +66,7 @@ public struct Evidence {
     }
 }
 
-@available(macOS 26.0, *)
+@available(macOS "26.0", *)
 public enum EvidenceType: String, Codable, CaseIterable {
     case experiential = "experiential"             // Direct experience
     case observational = "observational"           // Observed patterns
@@ -79,7 +79,7 @@ public enum EvidenceType: String, Codable, CaseIterable {
 
 // MARK: - Knowledge Distillation
 
-@available(macOS 26.0, *)
+@available(macOS "26.0", *)
 public struct KnowledgeDistillation {
     public let distillationId: UUID
     public let sourceKnowledge: [UUID] // Memory IDs
@@ -104,7 +104,7 @@ public struct KnowledgeDistillation {
     }
 }
 
-@available(macOS 26.0, *)
+@available(macOS "26.0", *)
 public enum AbstractionLevel: String, Codable, CaseIterable {
     case concrete = "concrete"                     // Specific facts and procedures
     case conceptual = "conceptual"                 // General concepts and principles
@@ -114,7 +114,7 @@ public enum AbstractionLevel: String, Codable, CaseIterable {
 
 // MARK: - Continuous Learning
 
-@available(macOS 26.0, *)
+@available(macOS "26.0", *)
 public struct LearningCycle {
     public let cycleId: UUID
     public let currentPhase: LearningPhase
@@ -139,7 +139,7 @@ public struct LearningCycle {
     }
 }
 
-@available(macOS 26.0, *)
+@available(macOS "26.0", *)
 public enum LearningPhase: String, Codable, CaseIterable {
     case experience = "experience"                 // Gathering new experiences
     case reflection = "reflection"                 // Analyzing experiences
@@ -151,7 +151,7 @@ public enum LearningPhase: String, Codable, CaseIterable {
 
 // MARK: - Wisdom Accumulation Engine
 
-@available(macOS 26.0, *)
+@available(macOS "26.0", *)
 public actor WisdomAccumulationEngine {
     
     private let memoryManager: DualStreamMemoryManager

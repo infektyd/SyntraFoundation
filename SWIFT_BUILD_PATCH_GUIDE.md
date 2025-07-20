@@ -54,9 +54,9 @@ This means Xcode/SwiftPM found **code or global declarations outside your @main 
    - **No top-level function or variable declarations, nor any `print` or logic outside the struct.**
 
 4. **Fix FoundationModels API Usage**
-   - Use correct availability checks: `#available(macOS 26.0, *)`
+   - Use correct availability checks: `#available(macOS "26.0", *)`
    - Add `try` for LanguageModelSession initialization: `let session = try LanguageModelSession(model: model)`
-   - SystemLanguageModel APIs require macOS 26.0, not 15.0
+   - SystemLanguageModel APIs require macOS "26.0", not 15.0
 
 5. **Update `Package.swift` to Ignore Non-Swift Tests**
    - Within the `.testTarget` for your tests suite, add:
@@ -92,7 +92,7 @@ struct SyntraSwiftCLI {
 }
 
 #if canImport(FoundationModels)
-@available(macOS 26.0, *)
+@available(macOS "26.0", *)
 func queryFoundationModel(_ input: String) async -> String {
     // async FoundationModels LLM call goes here (used from inside main struct)
 }
@@ -110,7 +110,7 @@ func queryFoundationModel(_ input: String) async -> String {
 ### Correct API Usage:
 ```swift
 #if canImport(FoundationModels)
-@available(macOS 26.0, *)
+@available(macOS "26.0", *)
 func queryFoundationModel(_ input: String) async -> String {
     do {
         let model = SystemLanguageModel.default
@@ -129,7 +129,7 @@ func queryFoundationModel(_ input: String) async -> String {
 ```
 
 ### Key Points:
-- SystemLanguageModel requires macOS 26.0+
+- SystemLanguageModel requires macOS "26.0"+
 - LanguageModelSession initialization can throw
 - Always check model.availability first
 - Use proper error handling
@@ -143,7 +143,7 @@ func queryFoundationModel(_ input: String) async -> String {
 - [ ] No duplicate main.swift files in nested directories.
 - [ ] Tests folder: only Swift source referenced in SwiftPM; Python is present but excluded.
 - [ ] All imported module logic is scoped inside `@main` or called from within.
-- [ ] Xcode 26, Swift 6.x, and FoundationModels logic guarded with `#if canImport...` AND `#available(macOS 26.0, *)`.
+- [ ] Xcode 26, Swift 6.x, and FoundationModels logic guarded with `#if canImport...` AND `#available(macOS "26.0", *)`.
 - [ ] FoundationModels API calls use proper `try` keywords and error handling.
 
 ---
@@ -152,7 +152,7 @@ func queryFoundationModel(_ input: String) async -> String {
 
 - If adding a new feature/agent, always create helpers as static methods inside the main struct, not as separate free functions.
 - If re-introducing any form of agents.md or markdown doc, **clearly state**: "All new agent logic must be statically included in the CLI struct or in target-scoped modules."
-- When working with FoundationModels, always test on macOS 26.0+ or expect graceful fallbacks.
+- When working with FoundationModels, always test on macOS "26.0"+ or expect graceful fallbacks.
 - Clean build artifacts regularly: `swift package clean && rm -rf .build`
 
 ---

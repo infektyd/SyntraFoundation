@@ -162,8 +162,8 @@ Sources/
 
 ### Dependencies
 - **Apple FoundationModels** - For @Generable structured generation
-- **macOS 15.0+** - Required for FoundationModels
-- **Swift 5.9+** - Required for @Generable macro support
+- **macOS "26.0"** - Required for FoundationModels
+- **Swift 6.0+** - Required for @Generable macro support
 
 ## Benefits
 

@@ -4,7 +4,7 @@ import FoundationModels
 // FOUNDATIONMODELS EXTENSIONS
 // Extensions to make common types compatible with @Generable macro
 
-@available(macOS 26.0, *)
+@available(macOS "26.0", *)
 extension UUID: ConvertibleFromGeneratedContent {
     public init(_ content: GeneratedContent) throws {
         let stringValue: String = try content.value(forProperty: "uuidString")
@@ -15,7 +15,7 @@ extension UUID: ConvertibleFromGeneratedContent {
     }
 }
 
-@available(macOS 26.0, *)
+@available(macOS "26.0", *)
 extension Date: ConvertibleFromGeneratedContent {
     public init(_ content: GeneratedContent) throws {
         let timeInterval: Double = try content.value(forProperty: "timeIntervalSince1970")
@@ -24,7 +24,7 @@ extension Date: ConvertibleFromGeneratedContent {
 }
 
 // Error type for conversion failures
-@available(macOS 26.0, *)
+@available(macOS "26.0", *)
 public enum GeneratedContentError: Error {
     case invalidFormat(String)
 }
