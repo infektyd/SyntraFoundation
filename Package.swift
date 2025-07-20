@@ -4,7 +4,7 @@ import PackageDescription
 let package = Package(
     name: "SyntraSwift",
     platforms: [
-        .macOS("15.0"), // Required for FoundationModels
+        .macOS(.v26), // Required for FoundationModels
         .iOS(.v18)
     ],
     products: [
@@ -84,15 +84,20 @@ let package = Package(
         ),
         .target(
             name: "CognitiveDrift",
-            dependencies: ["SyntraConfig", "Valon", "Modi", "Drift", "MemoryEngine"],
+            dependencies: ["SyntraConfig", "Valon", "Modi", "Drift", "MemoryEngine", "ConsciousnessStructures", "ConflictResolver"],
             path: "swift/CognitiveDrift"
+        ),
+        .target(
+            name: "ConflictResolver",
+            dependencies: ["ConsciousnessStructures"],
+            path: "swift/ConflictResolver"
         ),
         .executableTarget(
             name: "SyntraSwiftCLI",
             dependencies: [
                 "Valon", "Modi", "Drift", "MemoryEngine", "BrainEngine",
                 "ConsciousnessStructures", "MoralDriftMonitoring",
-                "StructuredConsciousnessService", "SyntraConfig", "MoralCore"
+                "StructuredConsciousnessService", "SyntraTools", "SyntraConfig", "MoralCore"
             ],
             path: "swift",
             sources: ["Main/main.swift"]
@@ -105,4 +110,3 @@ let package = Package(
         )
     ]
 )
-

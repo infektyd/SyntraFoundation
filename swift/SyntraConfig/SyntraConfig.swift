@@ -11,6 +11,8 @@ public struct SyntraConfig: Codable {
     public var useMistralForValon: Bool?
     public var preferredVoice: String?
     public var driftRatio: [String: Double]?
+    /// Whether to use trainable FusionMLP instead of static averaging
+    public var useAdaptiveFusion: Bool?
     public var enableValonOutput: Bool?
     public var enableModiOutput: Bool?
     public var enableDriftOutput: Bool?
@@ -47,6 +49,7 @@ public struct SyntraConfig: Codable {
     if let val = env["OPENAI_API_KEY"] { cfg.openaiApiKey = val }
     if let val = env["ELEVENLABS_API_KEY"] { cfg.elevenlabsApiKey = val }
     if let val = env["APPLE_LLM_API_KEY"] { cfg.appleLLMApiKey = val }
+    if let val = env["USE_ADAPTIVE_FUSION"] { cfg.useAdaptiveFusion = (val as NSString).boolValue }
     return cfg
     }
 }

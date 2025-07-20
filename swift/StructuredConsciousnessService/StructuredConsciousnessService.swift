@@ -1337,7 +1337,7 @@ public class StructuredConsciousnessService {
 // Fallback for non-Foundation Models environments
 @available(macOS 26.0, *)
 public class StructuredConsciousnessService {
-    // private var driftMonitor: MoralDriftMonitor // Disabled for macOS 15.0 compatibility
+    // private var driftMonitor: MoralDriftMonitor // Disabled for macOS 26.0 compatibility
     
     public init() throws {
         // self.driftMonitor = MoralDriftMonitor()

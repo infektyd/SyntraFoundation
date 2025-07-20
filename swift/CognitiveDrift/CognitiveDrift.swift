@@ -5,6 +5,8 @@ import Valon
 import Modi
 import Drift
 import MemoryEngine
+import ConflictResolver
+import FusionMLP
 
 // Bridge function for external access
 public func processThroughBrainsWithDrift(_ input: String, config: SyntraConfig) -> [String: Any] {
@@ -37,12 +39,23 @@ public func processThroughBrainsWithDrift(_ input: String, config: SyntraConfig)
         cognitiveDrift.adaptBaseline(currentBias: currentBias)
     }
     
-    // Synthesize final decision using drift-weighted approach
-    let driftWeightedDecision = drift_average(valonResponse, modiResponse)
+    // Synthesize final decision with conflict detection + adaptive or static fusion
+    let conflicts = ConflictResolver().detectConflicts(valon: valonResponse, modi: modiResponse)
+    let conflictResolution = ConflictResolver().resolve(conflicts, valon: valonResponse, modi: modiResponse)
     
-    // Log drift information (disabled for macOS 15.0 compatibility)
-    // logStage(stage: "cognitive_drift", output: driftAnalysis, directory: "entropy_logs")
-    // logStage(stage: "personality_weighting", output: personalityWeighting, directory: "entropy_logs")
+    // Build shared bridge for fusion
+    let bridge = ValonModiBridge(valon: valonResponse, modi: modiResponse, driftAnalysis: driftAnalysis)
+    let driftWeightedDecision: String
+    if config.useAdaptiveFusion == true {
+        driftWeightedDecision = FusionMLP().fuse(bridge)
+    } else {
+        driftWeightedDecision = drift_average(valonResponse, modiResponse)
+    }
+    
+    // Log intermediate data for tuning
+    logStage(stage: "cognitive_drift", output: driftAnalysis, directory: "entropy_logs")
+    logStage(stage: "conflicts_detected", output: conflicts, directory: "entropy_logs")
+    logStage(stage: "conflict_resolution", output: conflictResolution, directory: "entropy_logs")
     
     return [
         "valon": valonResponse,
@@ -51,6 +64,8 @@ public func processThroughBrainsWithDrift(_ input: String, config: SyntraConfig)
         "personality_weighting": personalityWeighting,
         "adaptation_decision": adaptationDecision,
         "cognitive_baseline": cognitiveDrift.getCurrentBaseline(),
+        "conflicts": conflicts,
+        "conflict_resolution": conflictResolution,
         "drift_weighted_decision": driftWeightedDecision,
         "personality_maintained": true
     ]

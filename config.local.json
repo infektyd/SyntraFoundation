@@ -8,6 +8,7 @@
   "drift_ratio": { "valon": 0.7, "modi": 0.3 },
   "memory_mode": "flat",
   "telemetry_csv_path": "/Users/hansaxelsson/SyntraFoundation/telemetry/syntra_runtime.csv",
+  "use_adaptive_fusion": false,
   "apple_llm_api_base": "http://localhost:8080/v1",
   "apple_llm_api_key": "apple-...",
   "use_apple_llm": false
