@@ -8,7 +8,7 @@ import ConsciousnessStructures
 
 // MARK: - Persona Core Structures
 
-@Generable
+@available(macOS 26.0, *)
 public struct PersonaProfile {
     @Guide(description: "Core identity name and identifier")
     public let identityName: String
@@ -58,7 +58,7 @@ public struct PersonaProfile {
     }
 }
 
-@Generable
+@available(macOS 26.0, *)
 public struct PersonalityTrait {
     @Guide(description: "Name of the personality trait")
     public let traitName: String
@@ -80,7 +80,7 @@ public struct PersonalityTrait {
     }
 }
 
-@Generable
+@available(macOS 26.0, *)
 public enum TraitAdaptability: String, Codable, CaseIterable {
     case immutable = "immutable"           // Never changes - core identity
     case stable = "stable"                 // Changes very slowly over long periods
@@ -88,7 +88,7 @@ public enum TraitAdaptability: String, Codable, CaseIterable {
     case flexible = "flexible"             // Can change based on experience and growth
 }
 
-@Generable
+@available(macOS 26.0, *)
 public struct EthicalBoundary {
     @Guide(description: "Name of the ethical boundary")
     public let boundaryName: String
@@ -110,7 +110,7 @@ public struct EthicalBoundary {
     }
 }
 
-@Generable
+@available(macOS 26.0, *)
 public enum ViolationSeverity: String, Codable, CaseIterable {
     case minor = "minor"                   // Warning and gentle correction
     case moderate = "moderate"             // Strong correction and explanation
@@ -118,7 +118,7 @@ public enum ViolationSeverity: String, Codable, CaseIterable {
     case critical = "critical"             // Complete shutdown of problematic behavior
 }
 
-@Generable
+@available(macOS 26.0, *)
 public struct CommunicationStyle {
     @Guide(description: "Tone of communication")
     public let tone: CommunicationTone
@@ -145,7 +145,7 @@ public struct CommunicationStyle {
     }
 }
 
-@Generable
+@available(macOS 26.0, *)
 public enum CommunicationTone: String, Codable, CaseIterable {
     case warm = "warm"
     case professional = "professional"
@@ -157,7 +157,7 @@ public enum CommunicationTone: String, Codable, CaseIterable {
     case philosophical = "philosophical"
 }
 
-@Generable
+@available(macOS 26.0, *)
 public struct CoreValue {
     @Guide(description: "Name of the core value")
     public let valueName: String
@@ -179,7 +179,7 @@ public struct CoreValue {
     }
 }
 
-@Generable
+@available(macOS 26.0, *)
 public struct BehavioralPattern {
     @Guide(description: "Name of the behavioral pattern")
     public let patternName: String
@@ -201,7 +201,7 @@ public struct BehavioralPattern {
     }
 }
 
-@Generable
+@available(macOS 26.0, *)
 public enum ConsistencyLevel: String, Codable, CaseIterable {
     case absolute = "absolute"             // Must always behave this way
     case high = "high"                     // Strong consistency expected
@@ -209,6 +209,7 @@ public enum ConsistencyLevel: String, Codable, CaseIterable {
     case flexible = "flexible"             // Guideline rather than rule
 }
 
+@available(macOS 26.0, *)
 @Generable
 public struct GrowthBoundaries {
     @Guide(description: "Aspects of personality that can evolve")
@@ -233,6 +234,7 @@ public struct GrowthBoundaries {
 
 // MARK: - Identity Drift Detection
 
+@available(macOS 26.0, *)
 @Generable
 public struct IdentityDriftAlert {
     @Guide(description: "Unique identifier for this drift alert")
@@ -269,6 +271,7 @@ public struct IdentityDriftAlert {
     }
 }
 
+@available(macOS 26.0, *)
 @Generable
 public enum DriftType: String, Codable, CaseIterable {
     case personalityTrait = "personality_trait"
@@ -279,6 +282,7 @@ public enum DriftType: String, Codable, CaseIterable {
     case missionAlignment = "mission_alignment"
 }
 
+@available(macOS 26.0, *)
 @Generable
 public enum DriftSeverity: String, Codable, CaseIterable {
     case minimal = "minimal"               // Minor deviation within acceptable range
@@ -289,6 +293,7 @@ public enum DriftSeverity: String, Codable, CaseIterable {
 
 // MARK: - Persona Anchoring Engine
 
+@available(macOS 26.0, *)
 public actor PersonaAnchoringEngine {
     
     private let personaProfile: PersonaProfile

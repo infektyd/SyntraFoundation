@@ -8,30 +8,15 @@ import ConsciousnessStructures
 
 // MARK: - EWC Core Structures
 
-@Generable
+@available(macOS 26.0, *)
 public struct ImportanceWeight {
-    @Guide(description: "Unique identifier for this weight")
     public let weightId: UUID
-    
-    @Guide(description: "Knowledge domain this weight protects")
     public let knowledgeDomain: String
-    
-    @Guide(description: "Importance score from 0.0 to 1.0")
     public let importance: Double
-    
-    @Guide(description: "Type of knowledge protected")
     public let knowledgeType: KnowledgeType
-    
-    @Guide(description: "When this importance was established")
     public let establishedDate: Date
-    
-    @Guide(description: "How this importance was calculated")
     public let calculationMethod: ImportanceCalculationMethod
-    
-    @Guide(description: "Associated memory traces")
     public let associatedMemories: [UUID]
-    
-    @Guide(description: "Decay rate for this importance weight")
     public let decayRate: Double
     
     public init(weightId: UUID = UUID(), knowledgeDomain: String, importance: Double, 
@@ -49,7 +34,7 @@ public struct ImportanceWeight {
     }
 }
 
-@Generable
+@available(macOS 26.0, *)
 public enum KnowledgeType: String, Codable, CaseIterable {
     case foundationalPrinciple = "foundational_principle"
     case coreSkill = "core_skill"
@@ -61,7 +46,7 @@ public enum KnowledgeType: String, Codable, CaseIterable {
     case semanticKnowledge = "semantic_knowledge"
 }
 
-@Generable
+@available(macOS 26.0, *)
 public enum ImportanceCalculationMethod: String, Codable, CaseIterable {
     case frequencyBased = "frequency_based"           // Based on usage frequency
     case emotionalWeight = "emotional_weight"         // Based on emotional significance
@@ -71,30 +56,15 @@ public enum ImportanceCalculationMethod: String, Codable, CaseIterable {
     case moralSignificance = "moral_significance"     // Ethically important
 }
 
-@Generable
+@available(macOS 26.0, *)
 public struct ConsolidationEvent {
-    @Guide(description: "Unique identifier for this consolidation event")
     public let eventId: UUID
-    
-    @Guide(description: "Type of consolidation performed")
     public let consolidationType: ConsolidationType
-    
-    @Guide(description: "Knowledge domains affected")
     public let affectedDomains: [String]
-    
-    @Guide(description: "Forgetting prevented (importance preserved)")
     public let forgettingPrevented: Double
-    
-    @Guide(description: "New learning enabled")
     public let newLearningEnabled: Double
-    
-    @Guide(description: "Overall consolidation success rate")
     public let successRate: Double
-    
-    @Guide(description: "Duration of the consolidation process")
     public let duration: Double
-    
-    @Guide(description: "When this consolidation occurred")
     public let timestamp: Date
     
     public init(eventId: UUID = UUID(), consolidationType: ConsolidationType, affectedDomains: [String], 
@@ -111,7 +81,7 @@ public struct ConsolidationEvent {
     }
 }
 
-@Generable
+@available(macOS 26.0, *)
 public enum ConsolidationType: String, Codable, CaseIterable {
     case preventiveConsolidation = "preventive_consolidation"     // Before new learning
     case reactiveConsolidation = "reactive_consolidation"         // After forgetting detected
@@ -122,6 +92,7 @@ public enum ConsolidationType: String, Codable, CaseIterable {
 
 // MARK: - Elastic Weight Consolidation Engine
 
+@available(macOS 26.0, *)
 public actor ElasticWeightConsolidationEngine {
     
     private var importanceWeights: [UUID: ImportanceWeight] = [:]
@@ -835,21 +806,12 @@ public struct ConsolidationResults {
     public let protectedDomains: [String]
 }
 
-@Generable
+@available(macOS 26.0, *)
 public struct ForgettingAlert {
-    @Guide(description: "Unique identifier for this forgetting alert")
     public let alertId: UUID
-    
-    @Guide(description: "Severity of the detected forgetting")
     public let severity: ForgettingSeverity
-    
-    @Guide(description: "Knowledge domains affected by forgetting")
     public let affectedDomains: [String]
-    
-    @Guide(description: "When the forgetting was detected")
     public let detectionTimestamp: Date
-    
-    @Guide(description: "Recommended actions to address the forgetting")
     public let recommendedActions: [String]
     
     public init(alertId: UUID, severity: ForgettingSeverity, affectedDomains: [String], 
@@ -862,7 +824,7 @@ public struct ForgettingAlert {
     }
 }
 
-@Generable
+@available(macOS 26.0, *)
 public enum ForgettingSeverity: String, Codable, CaseIterable {
     case minimal = "minimal"
     case moderate = "moderate" 

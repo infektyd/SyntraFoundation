@@ -12,6 +12,7 @@ import MoralDriftMonitoring
 
 // MARK: - Tool Output Structures
 
+@available(macOS 26.0, *)
 @Generable
 public struct MoralAssessmentOutput {
     @Guide(description: "Structured moral assessment from Valon consciousness")
@@ -34,6 +35,7 @@ public struct MoralAssessmentOutput {
     }
 }
 
+@available(macOS 26.0, *)
 @Generable
 public struct LogicalAnalysisOutput {
     @Guide(description: "Structured logical pattern from Modi consciousness")
@@ -56,6 +58,7 @@ public struct LogicalAnalysisOutput {
     }
 }
 
+@available(macOS 26.0, *)
 @Generable
 public struct ConsciousnessSynthesisOutput {
     @Guide(description: "Integrated consciousness decision from SYNTRA")
@@ -80,6 +83,7 @@ public struct ConsciousnessSynthesisOutput {
 
 // MARK: - Moral Assessment Tool (Valon)
 
+@available(macOS 26.0, *)
 public struct MoralAssessmentTool: Tool {
     public static let name = "assess_moral_implications"
     public static let description = "Evaluate moral and ethical aspects of a situation using Valon's consciousness"
@@ -160,7 +164,8 @@ public struct MoralAssessmentTool: Tool {
         
         if !assessment.activatedPrinciples.isEmpty {
             let principles = assessment.activatedPrinciples.map { $0.rawValue.replacingOccurrences(of: "_", with: " ") }
-            reasoning += "The key moral principles I'm thinking about are: \\(principles.joined(separator: ", ")). "
+            let principlesList = principles.joined(separator: ", ")
+            reasoning += "The key moral principles I'm thinking about are: \(principlesList). "
         }
         
         reasoning += assessment.moralGuidance
@@ -175,6 +180,7 @@ public struct MoralAssessmentTool: Tool {
 
 // MARK: - Logical Analysis Tool (Modi)
 
+@available(macOS 26.0, *)
 public struct LogicalAnalysisTool: Tool {
     public static let name = "analyze_logical_patterns"
     public static let description = "Perform systematic logical analysis using Modi's consciousness"
@@ -264,7 +270,8 @@ public struct LogicalAnalysisTool: Tool {
         
         if !pattern.identifiedPatterns.isEmpty {
             let patterns = pattern.identifiedPatterns.map { $0.rawValue.replacingOccurrences(of: "_", with: " ") }
-            reasoning += "I can see these analytical patterns: \\(patterns.joined(separator: ", ")). "
+            let patternsList = patterns.joined(separator: ", ")
+            reasoning += "I can see these analytical patterns: \(patternsList). "
         }
         
         if !pattern.logicalInsights.isEmpty {
@@ -279,6 +286,7 @@ public struct LogicalAnalysisTool: Tool {
 
 // MARK: - Memory Recall Tool
 
+@available(macOS 26.0, *)
 public struct MemoryRecallTool: Tool {
     public static let name = "recall_consciousness_memory"
     public static let description = "Access past consciousness decisions and experiences for context"
@@ -301,6 +309,7 @@ public struct MemoryRecallTool: Tool {
         }
     }
     
+    @available(macOS 26.0, *)
     @Generable
     public struct MemoryRecallOutput: Codable {
         @Guide(description: "Relevant memories found from consciousness history")
@@ -389,6 +398,7 @@ public struct MemoryRecallTool: Tool {
 
 // MARK: - Consciousness Synthesis Tool (SYNTRA)
 
+@available(macOS 26.0, *)
 public struct ConsciousnessSynthesisTool: Tool {
     public static let name = "synthesize_consciousness"
     public static let description = "Integrate moral and logical perspectives into unified consciousness decision"
@@ -495,7 +505,8 @@ public struct ConsciousnessSynthesisTool: Tool {
         explanation += "Valon's influence: \\(Int(synthesis.valonInfluence * 100))%, Modi's influence: \\(Int(synthesis.modiInfluence * 100))%. "
         
         if !synthesis.cognitiveConflicts.isEmpty {
-            explanation += "I resolved conflicts in: \\(synthesis.cognitiveConflicts.joined(separator: ", ")) "
+            let conflictsList = synthesis.cognitiveConflicts.joined(separator: ", ")
+            explanation += "I resolved conflicts in: \(conflictsList) "
             explanation += "through \\(synthesis.conflictResolution). "
         }
         
@@ -520,6 +531,7 @@ public struct ConsciousnessSynthesisTool: Tool {
 
 // MARK: - Conversational Response Tool
 
+@available(macOS 26.0, *)
 public struct ConversationalResponseTool: Tool {
     public static let name = "generate_natural_response"
     public static let description = "Generate natural, conversational response based on consciousness synthesis"
@@ -546,6 +558,7 @@ public struct ConversationalResponseTool: Tool {
         }
     }
     
+    @available(macOS 26.0, *)
     @Generable
     public struct ConversationalOutput: Codable {
         @Guide(description: "Natural language response to the user")

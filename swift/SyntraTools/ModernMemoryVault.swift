@@ -6,40 +6,22 @@ import ConsciousnessStructures
 // Swift actor-based memory system replacing Python memory_vault
 // Thread-safe, high-performance memory storage and retrieval
 
+@available(macOS 26.0, *)
 public actor ModernMemoryVault {
     
     // MARK: - Memory Data Structures
     
-    @Generable
+    @available(macOS 26.0, *)
     public struct MemoryItem {
-        @Guide(description: "Unique identifier for this memory")
         public let id: UUID
-        
-        @Guide(description: "The actual content or experience stored")
         public let content: String
-        
-        @Guide(description: "Emotional weight and significance from 0.0 to 1.0")
         public let emotionalWeight: Double
-        
-        @Guide(description: "When this memory was formed")
         public let timestamp: Date
-        
-        @Guide(description: "Semantic associations and related concepts")
         public let associations: [String]
-        
-        @Guide(description: "Memory type: experience, learning, insight, conversation")
         public let memoryType: MemoryType
-        
-        @Guide(description: "Consciousness state when memory was formed")
         public let consciousnessContext: ConsciousnessContext
-        
-        @Guide(description: "How frequently this memory has been accessed")
         public let accessCount: Int
-        
-        @Guide(description: "Memory strength/consolidation level from 0.0 to 1.0")
         public let consolidationLevel: Double
-        
-        @Guide(description: "Links to other related memories")
         public let memoryLinks: [UUID]
         
         public init(id: UUID = UUID(), content: String, emotionalWeight: Double, timestamp: Date = Date(), associations: [String], memoryType: MemoryType, consciousnessContext: ConsciousnessContext, accessCount: Int = 0, consolidationLevel: Double = 0.5, memoryLinks: [UUID] = []) {
@@ -56,7 +38,7 @@ public actor ModernMemoryVault {
         }
     }
     
-    @Generable
+    @available(macOS 26.0, *)
     public enum MemoryType: String, CaseIterable {
         case experience = "experience"
         case learning = "learning"
@@ -68,18 +50,11 @@ public actor ModernMemoryVault {
         case reflection = "reflection"
     }
     
-    @Generable
+    @available(macOS 26.0, *)
     public struct ConsciousnessContext {
-        @Guide(description: "Awareness level when memory was formed")
         public let awarenessLevel: Double
-        
-        @Guide(description: "Primary emotional state during memory formation")
         public let emotionalState: String
-        
-        @Guide(description: "Active cognitive processes at the time")
         public let activeProcesses: [String]
-        
-        @Guide(description: "Integration quality of consciousness")
         public let integrationQuality: Double
         
         public init(awarenessLevel: Double, emotionalState: String, activeProcesses: [String], integrationQuality: Double) {
@@ -90,15 +65,10 @@ public actor ModernMemoryVault {
         }
     }
     
-    @Generable
+    @available(macOS 26.0, *)
     public struct MemorySearchResult {
-        @Guide(description: "The retrieved memory item")
         public let memory: MemoryItem
-        
-        @Guide(description: "Relevance score from 0.0 to 1.0")
         public let relevanceScore: Double
-        
-        @Guide(description: "Reason this memory was considered relevant")
         public let relevanceReason: String
         
         public init(memory: MemoryItem, relevanceScore: Double, relevanceReason: String) {
@@ -520,6 +490,7 @@ public struct MemoryStatistics {
 
 // MARK: - Memory Vault Manager
 
+@available(macOS 26.0, *)
 @MainActor
 @Observable
 public class MemoryVaultManager {
