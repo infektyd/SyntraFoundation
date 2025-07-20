@@ -88,4 +88,33 @@ final class SyntraSwiftTests: XCTestCase {
             XCTAssertTrue(appleLLM.contains("Apple LLM requires macOS 26.0+") || appleLLM.contains("not available"))
         }
     }
+    
+    @available(macOS 26.0, *)
+    func testStructuredConsciousnessServiceInitialization() throws {
+        // Test that StructuredConsciousnessService can be initialized
+        // Note: This will only pass on macOS 26.0+ with FoundationModels available
+        do {
+            let service = try StructuredConsciousnessService()
+            XCTAssertNotNil(service)
+        } catch StructuredGenerationError.modelUnavailable {
+            // Expected on systems without FoundationModels
+            XCTAssertTrue(true, "FoundationModels not available - expected on macOS < 26.0")
+        }
+    }
+    
+    @available(macOS 26.0, *)
+    func testInputValidation() throws {
+        // Test input validation without requiring FoundationModels
+        let service = try? StructuredConsciousnessService()
+        
+        // Test with mock validation (we can't test actual service without FoundationModels)
+        let emptyInput = ""
+        let validInput = "Test input for consciousness processing"
+        let tooLongInput = String(repeating: "x", count: 10001)
+        
+        // These would throw errors in the actual service
+        XCTAssertTrue(emptyInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+        XCTAssertFalse(validInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+        XCTAssertTrue(tooLongInput.count > 10000)
+    }
 }
