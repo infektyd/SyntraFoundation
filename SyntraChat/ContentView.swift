@@ -120,6 +120,7 @@ struct ContentView: View {
                             
                             TextEditor(text: $inputText)
                                 .focused($isInputFocused)
+                                .focusable()  // ← macOS 26 Beta 3 workaround for SwiftUI focus regression
                                 .textSelection(.enabled)
                                 .disabled(!brain.isAvailable)
                                 .font(.body)
