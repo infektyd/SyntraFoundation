@@ -2,7 +2,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "SyntraSwift",
+    name: "SyntraFoundation",
     platforms: [
         .macOS ("26.0"), // Required for FoundationModels
         .iOS ("18.0")
@@ -21,6 +21,7 @@ let package = Package(
         .library(name: "MoralCore", targets: ["MoralCore"]),
         .library(name: "SyntraTools", targets: ["SyntraTools"]),
         .library(name: "CognitiveDrift", targets: ["CognitiveDrift"]),
+        .library(name: "ConflictResolver", targets: ["ConflictResolver"]),
         .executable(name: "SyntraSwiftCLI", targets: ["SyntraSwiftCLI"])
     ],
     targets: [
@@ -79,7 +80,7 @@ let package = Package(
         ),
         .target(
             name: "SyntraTools",
-            dependencies: ["ConsciousnessStructures", "MoralCore", "StructuredConsciousnessService", "MoralDriftMonitoring"],
+            dependencies: ["ConsciousnessStructures", "MoralCore", "StructuredConsciousnessService", "MoralDriftMonitoring", "Valon", "Modi", "Drift", "MemoryEngine", "BrainEngine"],
             path: "swift/SyntraTools"
         ),
         .target(
@@ -99,14 +100,17 @@ let package = Package(
                 "ConsciousnessStructures", "MoralDriftMonitoring",
                 "StructuredConsciousnessService", "SyntraTools", "SyntraConfig", "MoralCore"
             ],
-            path: "swift",
-            sources: ["Main/main.swift"]
+            path: "swift/Main",
+            exclude: [
+                "*.sh"
+            ],
+            sources: ["main.swift"]
         ),
         .testTarget(
             name: "SyntraSwiftTests",
             dependencies: ["Valon", "Modi", "Drift", "MemoryEngine", "BrainEngine", "SyntraConfig", "StructuredConsciousnessService"],
             path: "tests",
-            exclude: ["__pycache__", "test_citation_handler.py", "test_config_toggle.py", "test_io_tools.py"]
+            exclude: ["__pycache__", "*.py"]
         )
     ]
 )

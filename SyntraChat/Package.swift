@@ -11,13 +11,15 @@ let package = Package(
         .executable(name: "SyntraChat", targets: ["SyntraChat"])
     ],
     dependencies: [
-        // Local config package for runtime toggles
-        .package(path: "../swift/SyntraConfig"),
+        // Main SyntraFoundation package
+        .package(name: "SyntraFoundation", path: "../"),
     ],
     targets: [
         .executableTarget(
             name: "SyntraChat",
-            dependencies: ["SyntraConfig"],
+            dependencies: [
+                .product(name: "SyntraTools", package: "SyntraFoundation")
+            ],
             path: ".",
             sources: [
                 "SyntraChatApp.swift",
