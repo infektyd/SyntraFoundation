@@ -87,26 +87,7 @@ struct ChatView: View {
             .padding()
         }
         .sheet(isPresented: $showingSettings) {
-            NavigationStack {
-                VStack {
-                    Text("Settings")
-                        .font(.title)
-                        .padding()
-                    
-                    Text("Settings panel coming soon...")
-                        .foregroundColor(.secondary)
-                    
-                    Spacer()
-                }
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button("Done") {
-                            showingSettings = false
-                        }
-                    }
-                }
-            }
+            SettingsView()
         }
         .onAppear {
             setupInitialState()
