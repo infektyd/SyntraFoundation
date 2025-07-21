@@ -30,7 +30,8 @@ struct ContentView: View {
         }
     }
     
-    /// Configure global iOS app behavior and appearance
+    /// Configure global iOS app behavior (notifications only)
+    /// Note: UIKit appearance is handled in SyntraChatIOSApp.swift to avoid threading issues
     private func setupGlobalIOSBehavior() {
         // Setup notification permissions for future features
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
