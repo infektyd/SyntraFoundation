@@ -16,7 +16,9 @@ struct SyntraChatIOSApp: App {
     }
     
     private func setupIOSAppearance() {
-        // Ensure all UIKit appearance modifications happen on the main thread
+        // Ensure all UIKit appearance modifications happen synchronously on the main thread
+        // during the app's initialization. This prevents race conditions with the UI.
+        
         DispatchQueue.main.async {
             // Configure iOS navigation appearance
             let appearance = UINavigationBarAppearance()
@@ -29,7 +31,10 @@ struct SyntraChatIOSApp: App {
             UINavigationBar.appearance().compactAppearance = appearance
             UINavigationBar.appearance().scrollEdgeAppearance = appearance
             
-            // Configure iOS keyboard appearance
+            // Configure iOS keyboard appearance.
+            // These appearance proxies MUST be mutated on the main thread; otherwise UIKit will raise
+            // an NSInternalInconsistencyException like the crash we were seeing when focusing the
+            // message input field.
             UITextView.appearance().keyboardAppearance = .default
             UITextField.appearance().keyboardAppearance = .default
         }
