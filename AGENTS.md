@@ -112,6 +112,32 @@ print(response)
 - Out-of-sync errors: Run `swift package clean && rm -rf .build` and reload Xcode project.
 - For module linkage issues, verify `Package.swift` excludes and target memberships.
 
+## Known macOS 26 Beta Issues
+
+### SwiftUI Text Input Regression (Beta 3)
+**Issue**: SwiftUI TextField/TextEditor components refuse keyboard input (produce system beeps) on macOS 26 Beta 3.
+
+**Root Cause**: Apple's SwiftUI focus engine regression when text fields are inside certain containers (NavigationSplitView, disabled states, etc.).
+
+**Stable Workaround**: Use NSTextField wrapper via NSViewRepresentable to bypass SwiftUI entirely:
+```swift
+struct NativeTextField: NSViewRepresentable {
+    @Binding var text: String
+    let placeholder: String
+    let isEnabled: Bool
+    let onSubmit: () -> Void
+    
+    // Implementation bypasses SwiftUI focus engine
+    // Uses native AppKit NSTextField directly
+    // Provides reliable keyboard input on macOS 26 Beta 3
+}
+```
+
+**Status**: 
+- ✅ **Stable workaround implemented** using AppKit bridge
+- 🔄 **TODO**: Monitor for Beta 4 release and potential SwiftUI fixes
+- 📝 **Reference**: [Apple Developer Forums Thread #756685](https://developer.apple.com/forums/thread/756685)
+
 ---
 
 ## Final Notes
