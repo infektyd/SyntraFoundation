@@ -1,17 +1,37 @@
 import SwiftUI
+import UIKit
 import UserNotifications
 
 struct ContentView: View {
     var body: some View {
-        ChatView()
-            .preferredColorScheme(nil) // Support system appearance
-            .onAppear {
-                setupGlobalIOSBehavior()
+        NavigationStack {
+            VStack {
+                Text("🧠 SYNTRA Chat")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .padding()
+                
+                Text("iOS Native Interface")
+                    .font(.title2)
+                    .foregroundColor(.secondary)
+                
+                Spacer()
+                
+                // Simple test for ChatView
+                ChatView()
+                
+                Spacer()
             }
+            .navigationTitle("SYNTRA")
+            .navigationBarTitleDisplayMode(.inline)
+        }
+        .onAppear {
+            // Notification permissions are now the only thing handled here
+            requestNotificationPermission()
+        }
     }
     
-    /// Configure global iOS app behavior and appearance
-    private func setupGlobalIOSBehavior() {
+    private func requestNotificationPermission() {
         // Setup notification permissions for future features
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
             if let error = error {

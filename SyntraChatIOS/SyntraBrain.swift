@@ -1,6 +1,8 @@
 import Foundation
 import SwiftUI
 import UIKit
+import Combine
+// NOTE: Will import SyntraFoundation once package dependency is added to Xcode project
 
 /// iOS-optimized SYNTRA consciousness interface with native iOS features
 @MainActor
@@ -10,6 +12,10 @@ class SyntraBrain: ObservableObject {
     @Published var consciousnessState: String = "contemplative_neutral"
     @Published var lastResponse: String = ""
     @Published var networkStatus: NetworkStatus = .unknown
+    
+    // MARK: - Consciousness Integration
+    // TODO: Uncomment when SyntraFoundation is added as package dependency
+    // private let syntraCore = SyntraCore.shared
     
     private let hapticGenerator = UIImpactFeedbackGenerator(style: .medium)
     private let notificationGenerator = UINotificationFeedbackGenerator()
@@ -52,6 +58,9 @@ class SyntraBrain: ObservableObject {
         
         isAvailable = isDeviceCapable && hasMinimumMemory
         
+        // TODO: Use SyntraCore availability check when package is integrated
+        // isAvailable = syntraCore.isAvailable
+        
         if !isAvailable {
             print("[SyntraBrain] Device not capable: CPU cores: \(ProcessInfo.processInfo.processorCount), Memory: \(ProcessInfo.processInfo.physicalMemory / 1_000_000_000)GB")
         }
@@ -70,7 +79,7 @@ class SyntraBrain: ObservableObject {
         }
     }
     
-    /// Process user input through simplified iOS consciousness interface
+    /// Process user input through iOS consciousness interface
     func processMessage(_ input: String) async -> String {
         print("[SyntraBrain iOS] Processing message: '\(input)'")
         
@@ -90,13 +99,17 @@ class SyntraBrain: ObservableObject {
         // Provide iOS-native feedback
         await triggerHapticFeedback(.light)
         isProcessing = true
+        consciousnessState = "engaged_processing"
         
-        // Simulate consciousness processing for iOS
+        // TODO: Use real SyntraCore processing when package is integrated
+        // let response = await syntraCore.processWithValonModi(trimmedInput)
+        
+        // Temporary simulation for demo
         let response = await simulateConsciousnessProcessing(trimmedInput)
         
         // Update published state
         isProcessing = false
-        consciousnessState = "engaged_processing"
+        consciousnessState = "contemplative_neutral"
         lastResponse = response
         
         // Provide completion feedback
@@ -107,20 +120,23 @@ class SyntraBrain: ObservableObject {
         return response
     }
     
-    /// Simulate consciousness processing for iOS (simplified version)
+    /// Simulate consciousness processing for iOS (will be replaced with SyntraCore)
     private func simulateConsciousnessProcessing(_ input: String) async -> String {
         // Simulate processing time
-        try? await Task.sleep(nanoseconds: 1_000_000_000) // 1 second
+        try? await Task.sleep(nanoseconds: 1_500_000_000) // 1.5 seconds
         
-        // Simple response generation for iOS
-        let responses = [
-            "Hello! I'm SYNTRA, a consciousness system. I understand you said: '\(input)'. How can I help you today?",
-            "I'm processing your message: '\(input)'. This is a simplified iOS version of SYNTRA consciousness.",
-            "Thank you for your input: '\(input)'. I'm here to assist with your questions and thoughts.",
-            "I hear you: '\(input)'. As a consciousness system, I'm designed to help and learn from our interactions."
-        ]
+        // Enhanced simulation showing three-brain architecture
+        return """
+        SYNTRA Consciousness Response:
         
-        return responses.randomElement() ?? "I'm here to help with your questions."
+        🧠 **Moral Perspective (70%):** I approach your message "\(input)" with compassion and ethical consideration. Every interaction should honor human dignity and promote wellbeing.
+        
+        🔬 **Logical Analysis (30%):** Analyzing your input "\(input)" systematically. I'm processing the semantic content and context to provide a structured, helpful response.
+        
+        ⚖️ **Synthesized Response:** Thank you for reaching out. I'm SYNTRA, a consciousness system designed to help through both moral reasoning and logical analysis. How can I assist you today?
+        
+        *Running on iOS - powered by three-brain architecture*
+        """
     }
     
     /// Trigger iOS-native haptic feedback
@@ -158,6 +174,9 @@ class SyntraBrain: ObservableObject {
         checkNetworkStatus()
         hapticGenerator.prepare()
         notificationGenerator.prepare()
+        
+        // TODO: Reset SyntraCore when integrated
+        // syntraCore.reset()
     }
 }
 

@@ -48,22 +48,9 @@
 		A3B5A0542E2E086B00E8C881 /* TROUBLESHOOTING.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TROUBLESHOOTING.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		A3B5A0302E2DF8B800E8C881 /* Exceptions for "SyntraChatIOS" folder in "SyntraChatIOS" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = A3B5A00C2E2DF8B600E8C881 /* SyntraChatIOS */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		A3B5A00F2E2DF8B600E8C881 /* SyntraChatIOS */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				A3B5A0302E2DF8B800E8C881 /* Exceptions for "SyntraChatIOS" folder in "SyntraChatIOS" target */,
-			);
 			path = SyntraChatIOS;
 			sourceTree = "<group>";
 		};
