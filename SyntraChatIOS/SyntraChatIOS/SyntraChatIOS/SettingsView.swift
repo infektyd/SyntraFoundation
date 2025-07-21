@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 import Combine
 
 struct SettingsView: View {
@@ -186,14 +187,18 @@ class SettingsManager: ObservableObject {
         processingTimeout = UserDefaults.standard.double(forKey: "ProcessingTimeout") 
         if processingTimeout == 0 { processingTimeout = 30.0 }
         
-        enableHaptics = UserDefaults.standard.bool(forKey: "EnableHaptics")
-        if !UserDefaults.standard.object(forKey: "EnableHaptics") != nil {
+        // Fixed: Check if the key exists, not comparing Bool to nil
+        if UserDefaults.standard.object(forKey: "EnableHaptics") == nil {
             enableHaptics = true // Default to enabled
+        } else {
+            enableHaptics = UserDefaults.standard.bool(forKey: "EnableHaptics")
         }
         
-        autoScrollEnabled = UserDefaults.standard.bool(forKey: "AutoScrollEnabled")
-        if !UserDefaults.standard.object(forKey: "AutoScrollEnabled") != nil {
+        // Fixed: Check if the key exists, not comparing Bool to nil
+        if UserDefaults.standard.object(forKey: "AutoScrollEnabled") == nil {
             autoScrollEnabled = true // Default to enabled
+        } else {
+            autoScrollEnabled = UserDefaults.standard.bool(forKey: "AutoScrollEnabled")
         }
         
         moralWeight = UserDefaults.standard.double(forKey: "MoralWeight")
