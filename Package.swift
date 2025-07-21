@@ -1,124 +1,39 @@
-// swift-tools-version:6.0
+// swift-tools-version: 6.0
 import PackageDescription
 
 let package = Package(
     name: "SyntraFoundation",
     platforms: [
-        .macOS ("26.0"), // Required for FoundationModels
-        .iOS ("18.0")
+        .iOS(.v17),        // Modern syntax - NOT .v17 vs "17.0"
+        .macOS(.v14)       // Required for FoundationModels
     ],
     products: [
-        .library(name: "Valon", targets: ["Valon"]),
-        .library(name: "Modi", targets: ["Modi"]),
-        .library(name: "Drift", targets: ["Drift"]),
-        .library(name: "MemoryEngine", targets: ["MemoryEngine"]),
-        .library(name: "ConsciousnessStructures", targets: ["ConsciousnessStructures"]),
-        .library(name: "BrainEngine", targets: ["BrainEngine"]),
-        .library(name: "ConversationalInterface", targets: ["ConversationalInterface"]),
-        .library(name: "StructuredConsciousnessService", targets: ["StructuredConsciousnessService"]),
-        .library(name: "MoralDriftMonitoring", targets: ["MoralDriftMonitoring"]),
-        .library(name: "SyntraConfig", targets: ["SyntraConfig"]),
-        .library(name: "MoralCore", targets: ["MoralCore"]),
-        .library(name: "SyntraTools", targets: ["SyntraTools"]),
-        .library(name: "CognitiveDrift", targets: ["CognitiveDrift"]),
-        .library(name: "ConflictResolver", targets: ["ConflictResolver"]),
-        .executable(name: "SyntraSwiftCLI", targets: ["SyntraSwiftCLI"])
+        .executable(name: "SyntraSwiftCLI", targets: ["SyntraSwiftCLI"]),
+        .library(name: "SyntraSwift", targets: ["SyntraSwift"])
     ],
     targets: [
         .target(
-            name: "Valon",
-            dependencies: ["ConsciousnessStructures"],
-            path: "swift/Valon"
-        ),
-        .target(
-            name: "Modi",
-            dependencies: ["ConsciousnessStructures"],
-            path: "swift/Modi"
-        ),
-        .target(
-            name: "Drift",
-            path: "swift/Drift"
-        ),
-        .target(
-            name: "MemoryEngine",
-            dependencies: ["Valon", "Modi", "Drift"],
-            path: "swift/MemoryEngine"
-        ),
-        .target(
-            name: "ConsciousnessStructures",
-            path: "swift/ConsciousnessStructures"
-        ),
-        .target(
-            name: "BrainEngine",
-            dependencies: ["Valon", "Modi", "Drift", "ConsciousnessStructures", "SyntraConfig"],
-            path: "swift/BrainEngine"
-        ),
-         .target(
-             name: "ConversationalInterface",
-             dependencies: ["BrainEngine", "MoralDriftMonitoring", "MemoryEngine", "ConsciousnessStructures"],
-             path: "swift/ConversationalInterface"
-         ),
-        .target(
-            name: "MoralDriftMonitoring",
-            dependencies: ["ConsciousnessStructures"],
-            path: "swift/MoralDriftMonitoring"
-        ),
-        .target(
-            name: "StructuredConsciousnessService",
-            dependencies: ["ConsciousnessStructures", "MoralDriftMonitoring"],
-            path: "swift/StructuredConsciousnessService"
-        ),
-        .target(
-            name: "SyntraConfig",
+            name: "SyntraSwift",
             dependencies: [],
-            path: "swift/SyntraConfig"
-        ),
-        .target(
-            name: "MoralCore",
-            dependencies: ["ConsciousnessStructures"],
-            path: "swift/MoralCore"
-        ),
-        .target(
-            name: "SyntraTools",
-            dependencies: ["ConsciousnessStructures", "MoralCore", "StructuredConsciousnessService", "MoralDriftMonitoring", "Valon", "Modi", "Drift", "MemoryEngine", "BrainEngine"],
-            path: "swift/SyntraTools"
-        ),
-        .target(
-            name: "CognitiveDrift",
-            dependencies: ["SyntraConfig", "Valon", "Modi", "Drift", "MemoryEngine", "ConsciousnessStructures", "ConflictResolver"],
-            path: "swift/CognitiveDrift"
-        ),
-        .target(
-            name: "ConflictResolver",
-            dependencies: ["ConsciousnessStructures"],
-            path: "swift/ConflictResolver"
+            swiftSettings: [
+                .enableUpcomingFeature("BareSlashRegexLiterals"),
+                .enableExperimentalFeature("StrictConcurrency"),
+                .unsafeFlags([
+                    "-Xfrontend", "-warn-concurrency"
+                ])
+            ]
         ),
         .executableTarget(
             name: "SyntraSwiftCLI",
-            dependencies: [
-                "Valon", "Modi", "Drift", "MemoryEngine", "BrainEngine",
-                "ConsciousnessStructures", "MoralDriftMonitoring",
-                "StructuredConsciousnessService", "SyntraTools", "SyntraConfig", "MoralCore"
-            ],
-            path: "swift/Main",
-            exclude: [
-                "make_scripts_executable.sh",
-                "make_scripts_executable 2.sh",
-                "verify_hidden_integrity.sh",
-                "verify_hidden_integrity 2.sh",
-                "check_legacy_references.sh",
-                "check_legacy_references 2.sh",
-                "complete_legacy_fix.sh",
-                "complete_legacy_fix 2.sh",
-                "fix_sources_legacy.sh"
-            ],
-            sources: ["main.swift"]
+            dependencies: ["SyntraSwift"],
+            path: "swift/Main",  // CLAUDE.md: Isolate to Main directory
+            swiftSettings: [
+                .enableExperimentalFeature("StrictConcurrency")
+            ]
         ),
         .testTarget(
             name: "SyntraSwiftTests",
-            dependencies: ["Valon", "Modi", "Drift", "MemoryEngine", "BrainEngine", "SyntraConfig", "StructuredConsciousnessService"],
-            path: "tests",
-            exclude: ["__pycache__", "*.py"]
+            dependencies: ["SyntraSwift"]
         )
     ]
 )
