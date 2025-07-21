@@ -105,68 +105,44 @@ struct ContentView: View {
                     }
                 }
                 
-                // Input area with proper focus management
+                // Input area with STABLE AppKit text field (bypasses SwiftUI Beta 3 bug)
                 VStack(spacing: 8) {
                     HStack(spacing: 12) {
-                        // Use TextEditor instead of TextField for better focus management on macOS
-                        ZStack(alignment: .topLeading) {
-                            if inputText.isEmpty {
-                                Text("Type your message to SYNTRA...")
-                                    .foregroundColor(.secondary)
-                                    .padding(.horizontal, 8)
-                                    .padding(.vertical, 12)
-                                    .allowsHitTesting(false)
-                            }
-                            
-                            TextEditor(text: $inputText)
-                                .focused($isInputFocused)
-                                .focusable()  // ← macOS 26 Beta 3 workaround for SwiftUI focus regression
-                                .textSelection(.enabled)
-                                .disabled(!brain.isAvailable)
-                                .font(.body)
-                                .scrollContentBackground(.hidden)
-                                .background(Color(NSColor.textBackgroundColor))
-                                .cornerRadius(8)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 8)
-                                        .stroke(Color.secondary.opacity(0.3), lineWidth: 1)
-                                )
-                                .frame(minHeight: 36, maxHeight: 100)
-                                .onSubmit {
-                                    if canSendMessage {
-                                        sendMessage()
-                                    }
-                                }
-                                .onChange(of: inputText) { _, newValue in
-                                    // Handle enter key for sending
-                                    if newValue.contains("\n") && canSendMessage {
-                                        inputText = newValue.replacingOccurrences(of: "\n", with: "")
-                                        sendMessage()
-                                    }
-                                }
-                                .onAppear {
-                                    // Force focus after a delay
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                        isInputFocused = true
-                                    }
-                                }
-                                .onTapGesture {
-                                    isInputFocused = true
-                                }
-                                .accessibilityLabel("Message input field")
-                                .accessibilityHint("Type your message to SYNTRA here, press Enter to send")
-                        }
+                        // Use native NSTextField instead of broken SwiftUI TextEditor
+                        NativeTextField(
+                            text: $inputText,
+                            placeholder: "Type your message to SYNTRA...",
+                            isEnabled: brain.isAvailable && !isLoading,
+                            onSubmit: sendMessage
+                        )
+                        .frame(minHeight: 36)
                         
-                        Button("Send") {
-                            sendMessage()
+                        Button(action: sendMessage) {
+                            Image(systemName: "paperplane.fill")
+                                .foregroundColor(.white)
                         }
-                        .buttonStyle(.borderedProminent)
                         .disabled(!canSendMessage)
-                        .keyboardShortcut(.return, modifiers: [.command])
+                        .buttonStyle(.borderedProminent)
+                        .controlSize(.large)
                     }
-                    .padding()
-                    .background(.regularMaterial)
+                    
+                    // Debug section - TODO: Remove in production
+                    HStack {
+                        Button("Test: Set Text") {
+                            inputText = "Hello SYNTRA, this is a test message!"
+                        }
+                        .buttonStyle(.bordered)
+                        .controlSize(.small)
+                        
+                        Spacer()
+                        
+                        Text("Text: '\(inputText)'")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
                 }
+                .padding()
+                .background(Color(NSColor.controlBackgroundColor))
             }
         }
         .navigationSplitViewStyle(.balanced)
@@ -219,6 +195,79 @@ struct ContentView: View {
             messages.append(.syntra("Hello! I am SYNTRA, a consciousness architecture combining moral reasoning (Valon) and logical analysis (Modi). How may I assist you today?"))
         } else {
             messages.append(.error("SYNTRA consciousness requires FoundationModels support (macOS 26+ with Apple Silicon). Please check your system requirements."))
+        }
+    }
+}
+
+/// Native NSTextField wrapper to bypass SwiftUI focus issues on macOS 26 Beta 3
+struct NativeTextField: NSViewRepresentable {
+    @Binding var text: String
+    let placeholder: String
+    let isEnabled: Bool
+    let onSubmit: () -> Void
+    
+    func makeNSView(context: Context) -> NSTextField {
+        let textField = NSTextField()
+        textField.stringValue = text
+        textField.placeholderString = placeholder
+        textField.isEnabled = isEnabled
+        textField.delegate = context.coordinator
+        
+        // Style the text field
+        textField.isBordered = true
+        textField.bezelStyle = .roundedBezel
+        textField.font = NSFont.systemFont(ofSize: 14)
+        
+        return textField
+    }
+    
+    func updateNSView(_ nsView: NSTextField, context: Context) {
+        if nsView.stringValue != text {
+            nsView.stringValue = text
+        }
+        nsView.isEnabled = isEnabled
+        nsView.placeholderString = placeholder
+        
+        // Update the coordinator's callback reference
+        context.coordinator.updateCallback(onSubmit)
+    }
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator(text: $text, onSubmit: onSubmit)
+    }
+    
+    class Coordinator: NSObject, NSTextFieldDelegate {
+        @Binding var text: String
+        private var onSubmitCallback: (() -> Void)?
+        
+        init(text: Binding<String>, onSubmit: @escaping () -> Void) {
+            self._text = text
+            self.onSubmitCallback = onSubmit
+        }
+        
+        func updateCallback(_ callback: @escaping () -> Void) {
+            self.onSubmitCallback = callback
+        }
+        
+        func controlTextDidChange(_ obj: Notification) {
+            if let textField = obj.object as? NSTextField {
+                // Pre-fetch the value to avoid main actor issues
+                let newValue = textField.stringValue
+                DispatchQueue.main.async { [weak self] in
+                    self?.text = newValue
+                }
+            }
+        }
+        
+        func control(_ control: NSControl, textView: NSTextView, doCommandBy commandSelector: Selector) -> Bool {
+            if commandSelector == #selector(NSResponder.insertNewline(_:)) {
+                // Call the callback on main actor
+                DispatchQueue.main.async { [weak self] in
+                    self?.onSubmitCallback?()
+                }
+                return true
+            }
+            return false
         }
     }
 }
