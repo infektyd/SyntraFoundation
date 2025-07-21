@@ -15,6 +15,8 @@ class SyntraBrain: ObservableObject {
     
     // MARK: - Consciousness Integration
     private let syntraCore: SyntraCore
+    private let sessionId = UUID().uuidString
+    private var notificationTasks: [Task<Void, Never>] = []
     
     private let hapticGenerator = UIImpactFeedbackGenerator(style: .medium)
     private let notificationGenerator = UINotificationFeedbackGenerator()
@@ -26,6 +28,10 @@ class SyntraBrain: ObservableObject {
         checkAvailability()
     }
     
+    deinit {
+        notificationTasks.forEach { $0.cancel() }
+    }
+    
     private func setupIOSIntegration() {
         // Prepare haptic generators
         hapticGenerator.prepare()
@@ -34,22 +40,22 @@ class SyntraBrain: ObservableObject {
         // Monitor network status for AI features
         checkNetworkStatus()
         
-        // Handle iOS app lifecycle
-        NotificationCenter.default.addObserver(
-            forName: UIApplication.didBecomeActiveNotification,
-            object: nil,
-            queue: .main
-        ) { [weak self] _ in
-            self?.checkAvailability()
-        }
+        // Handle iOS app lifecycle using modern async streams
+        notificationTasks.append(
+            Task { @MainActor in
+                for await _ in NotificationCenter.default.notifications(named: UIApplication.didBecomeActiveNotification) {
+                    self.checkAvailability()
+                }
+            }
+        )
         
-        NotificationCenter.default.addObserver(
-            forName: UIApplication.willResignActiveNotification,
-            object: nil,
-            queue: .main
-        ) { [weak self] _ in
-            self?.pauseProcessing()
-        }
+        notificationTasks.append(
+            Task { @MainActor in
+                for await _ in NotificationCenter.default.notifications(named: UIApplication.willResignActiveNotification) {
+                    self.pauseProcessing()
+                }
+            }
+        )
     }
     
     private func checkAvailability() {
@@ -79,7 +85,7 @@ class SyntraBrain: ObservableObject {
     }
     
     /// Process user input through iOS consciousness interface
-    func processMessage(_ input: String) async -> String {
+    func processMessage(_ input: String, withHistory history: [Message]) async -> String {
         print("[SyntraBrain iOS] Processing message: '\(input)'")
         
         // Guard against empty/whitespace input
@@ -100,11 +106,12 @@ class SyntraBrain: ObservableObject {
         isProcessing = true
         consciousnessState = "engaged_processing"
         
-        // Use real SyntraCore processing
+        // Use real SyntraCore processing with the correct context
+        let historyStrings = history.map { "\($0.sender.displayName): \($0.text)" }
         let context = SyntraContext(
-            timestamp: Date(),
-            deviceInfo: ["cores": "\(ProcessInfo.processInfo.processorCount)"],
-            recentHistory: [] // Can be populated with recent messages
+            conversationHistory: historyStrings,
+            userPreferences: [:], // Placeholder for future implementation
+            sessionId: self.sessionId
         )
         let response = await syntraCore.processInput(trimmedInput, context: context)
         
@@ -156,8 +163,7 @@ class SyntraBrain: ObservableObject {
         hapticGenerator.prepare()
         notificationGenerator.prepare()
         
-        // Reset SyntraCore
-        syntraCore.reset()
+        // The new SyntraCore is stateless and does not require a reset.
     }
 }
 
