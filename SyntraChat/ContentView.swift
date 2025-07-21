@@ -54,7 +54,7 @@ struct ContentView: View {
             .frame(minWidth: 200, maxWidth: 250)
             
         } detail: {
-            // Main chat area - simple and reliable
+            // Main chat area with proper layout
             VStack(spacing: 0) {
                 // Header
                 HStack {
@@ -66,7 +66,7 @@ struct ContentView: View {
                 .padding()
                 .background(.regularMaterial)
                 
-                // Messages list
+                // Messages list - takes up available space
                 ScrollViewReader { proxy in
                     List {
                         ForEach(messages) { message in
@@ -105,10 +105,10 @@ struct ContentView: View {
                     }
                 }
                 
-                // Input area with STABLE AppKit text field (bypasses SwiftUI Beta 3 bug)
+                // Input area - FIXED at bottom with proper spacing
                 VStack(spacing: 8) {
                     HStack(spacing: 12) {
-                        // Use native NSTextField instead of broken SwiftUI TextEditor
+                        // Use native NSTextField with improved copy/paste support
                         NativeTextField(
                             text: $inputText,
                             placeholder: "Type your message to SYNTRA...",
@@ -124,21 +124,6 @@ struct ContentView: View {
                         .disabled(!canSendMessage)
                         .buttonStyle(.borderedProminent)
                         .controlSize(.large)
-                    }
-                    
-                    // Debug section - TODO: Remove in production
-                    HStack {
-                        Button("Test: Set Text") {
-                            inputText = "Hello SYNTRA, this is a test message!"
-                        }
-                        .buttonStyle(.bordered)
-                        .controlSize(.small)
-                        
-                        Spacer()
-                        
-                        Text("Text: '\(inputText)'")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
                     }
                 }
                 .padding()
@@ -199,7 +184,7 @@ struct ContentView: View {
     }
 }
 
-/// Native NSTextField wrapper to bypass SwiftUI focus issues on macOS 26 Beta 3
+/// Native NSTextField wrapper with improved copy/paste support
 struct NativeTextField: NSViewRepresentable {
     @Binding var text: String
     let placeholder: String
@@ -217,6 +202,11 @@ struct NativeTextField: NSViewRepresentable {
         textField.isBordered = true
         textField.bezelStyle = .roundedBezel
         textField.font = NSFont.systemFont(ofSize: 14)
+        
+        // Enable copy/paste and all standard text editing features
+        textField.allowsEditingTextAttributes = false
+        textField.cell?.wraps = false
+        textField.cell?.isScrollable = true
         
         return textField
     }
