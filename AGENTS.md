@@ -140,6 +140,48 @@ struct NativeTextField: NSViewRepresentable {
 
 ---
 
+## iOS Native Migration Branch
+
+**Branch:** `feature/ios-native-migration` (Coming Soon)  
+**Directory:** `SyntraChatIOS/`  
+**Purpose:** Native iOS experience bypassing macOS 26 Beta 3 SwiftUI bugs
+
+### **iOS Development Guidelines**
+
+- **iOS 16+ Target**: Wide compatibility while future-proofing for iOS 26
+- **Native iOS Patterns**: NavigationStack, Form, bottom input bars, haptic feedback
+- **SwiftUI + UIKit Bridge**: Use UIKit when SwiftUI has limitations
+- **Accessibility First**: VoiceOver, Dynamic Type, and motor accessibility support
+- **Performance Optimized**: 30-second timeouts, background processing management
+
+### **Key iOS Differences from macOS**
+
+| Component | macOS | iOS |
+|-----------|-------|-----|
+| Navigation | NavigationSplitView | NavigationStack |
+| Settings | Sidebar panel | Modal sheet with Form |
+| Input | NSTextField wrapper | Native TextField with keyboard toolbar |
+| Feedback | Visual only | Haptic + visual feedback |
+| Lifecycle | Window-based | Scene-based with background handling |
+
+### **iOS-Specific Architecture**
+
+- **SyntraBrain (iOS)**: Optimized for mobile with device capability checking
+- **Message Model**: Enhanced with accessibility and haptic feedback properties  
+- **Native Components**: MessageBubble, ChatInputBar, iOS settings controls
+- **Keyboard Management**: Automatic avoidance and focus state management
+- **App Lifecycle**: Background processing pause/resume for consciousness
+
+### **Consciousness Preservation**
+
+- ✅ **Full SyntraCore Integration**: All consciousness features preserved
+- ✅ **Three-Brain Architecture**: Valon (70%) + Modi (30%) + Core synthesis  
+- ✅ **Moral Framework**: Immutable ethical foundation maintained
+- ✅ **Real-time Processing**: Optimized async/await patterns for iOS
+- ✅ **Error Recovery**: Mobile-appropriate timeout and fallback handling
+
+---
+
 ## Final Notes
 
 - The SYNTRA project’s architecture is 70%+ complete—focus all new work on robust, readable integration and testable connections.
