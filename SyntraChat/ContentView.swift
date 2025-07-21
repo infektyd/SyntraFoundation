@@ -10,7 +10,11 @@ struct ContentView: View {
         }
     }()
     @State private var messages: [Message] = []
-    @State private var inputText: String = ""
+    @State private var inputText: String = "" {
+        didSet {
+            print("[ContentView] inputText changed to: '\(inputText)'")
+        }
+    }
     @State private var isLoading: Bool = false
     
     var body: some View {
@@ -20,7 +24,18 @@ struct ContentView: View {
                 .background(.ultraThinMaterial)
                 .edgesIgnoringSafeArea(.all)
             HSplitView {
-                VStack(spacing: 0) {
+            // Chat area - should get most of the space
+            VStack(spacing: 0) {
+            // ... chat content ...
+            }
+            .frame(minWidth: 600)
+            .layoutPriority(1) // High priority for chat area
+    
+    // Settings panel - should be small
+    SettingsPanel(settings: ConfigViewModel())
+        .frame(minWidth: 180, maxWidth: 200)
+        .layoutPriority(0) // Low priority for settings
+}
             // Header with status
             HStack {
                 Text("SYNTRA Consciousness Chat")
@@ -74,50 +89,71 @@ struct ContentView: View {
                 isEnabled: brain.isAvailable && !isLoading,
                 onSend: sendMessage
             )
+            
+            // Debug button to test text input
+            Button("Test: Set Text") {
+                print("[ContentView] Test button tapped, setting inputText to 'test message'")
+                inputText = "test message"
+            }
+            .padding(.horizontal)
         }
-            .onAppear {
-                // Welcome message
-                if messages.isEmpty {
-                    addWelcomeMessage()
-                }
-                }
-                .frame(minWidth: 400)
-
-                // Settings panel
-                SettingsPanel(settings: ConfigViewModel())
+        .onAppear {
+            // Welcome message
+            if messages.isEmpty {
+                addWelcomeMessage()
             }
         }
+        .frame(minWidth: 600)
+        .layoutPriority(1) // Give chat area priority
+
+        // Settings panel - make it much smaller
+        SettingsPanel(settings: ConfigViewModel())
+            .frame(minWidth: 180, maxWidth: 200)
+            .layoutPriority(0) // Lower priority for settings
     }
     
     /// Send user message and get SYNTRA response
     private func sendMessage() {
         let userMessage = inputText.trimmingCharacters(in: .whitespacesAndNewlines)
         
+        print("[ContentView] sendMessage called with: '\(userMessage)'")
+        
         // Validate input
-        guard !userMessage.isEmpty else { return }
+        guard !userMessage.isEmpty else { 
+            print("[ContentView] Empty message, returning")
+            return 
+        }
         guard brain.isAvailable else {
+            print("[ContentView] Brain not available")
             messages.append(.error("SYNTRA consciousness is not available on this device"))
             return
         }
         
+        print("[ContentView] Adding user message to UI")
         // Add user message
         messages.append(.user(userMessage))
         inputText = ""
         isLoading = true
         
+        print("[ContentView] Starting async task for SYNTRA response")
         // Get SYNTRA response
         Task {
+            print("[ContentView] Task started, calling brain.processMessage")
             let response = await brain.processMessage(userMessage)
+            print("[ContentView] Got response from brain: '\(response)'")
             
             await MainActor.run {
+                print("[ContentView] Updating UI on MainActor")
                 isLoading = false
                 
                 // Determine if response is an error
                 let isError = response.hasPrefix("[") && response.hasSuffix("]")
                 
                 if isError {
+                    print("[ContentView] Adding error message to UI")
                     messages.append(.error(response))
                 } else {
+                    print("[ContentView] Adding SYNTRA message to UI")
                     messages.append(.syntra(response))
                 }
             }
@@ -247,19 +283,41 @@ struct ChatInputArea: View {
     @Binding var inputText: String
     let isEnabled: Bool
     let onSend: () -> Void
+    @FocusState private var isTextFieldFocused: Bool
     
     var body: some View {
         HStack(spacing: 12) {
-            TextField("Type your message to SYNTRA...", text: $inputText)
-                .textFieldStyle(.roundedBorder)
+            TextEditor(text: $inputText)
+                .focused($isTextFieldFocused)
                 .disabled(!isEnabled)
-                .onSubmit {
-                    if canSend {
-                        onSend()
+                .frame(minHeight: 40, maxHeight: 100)
+                .padding(8)
+                .background(Color(NSColor.textBackgroundColor))
+                .cornerRadius(6)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 6)
+                        .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                )
+                .onChange(of: inputText) { oldValue, newValue in
+                    print("[ChatInputArea] Text changed from '\(oldValue)' to '\(newValue)'")
+                }
+                .onChange(of: isTextFieldFocused) { oldValue, newValue in
+                    print("[ChatInputArea] Focus changed from \(oldValue) to \(newValue)")
+                }
+                .onTapGesture {
+                    print("[ChatInputArea] Text field tapped")
+                }
+                .onAppear {
+                    print("[ChatInputArea] Text field appeared")
+                    // Auto-focus the text field when the view appears
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        print("[ChatInputArea] Setting focus to true")
+                        isTextFieldFocused = true
                     }
                 }
             
             Button("Send") {
+                print("[ChatInputArea] Send button tapped")
                 onSend()
             }
             .disabled(!canSend)
@@ -267,10 +325,15 @@ struct ChatInputArea: View {
         }
         .padding()
         .background(Color(NSColor.controlBackgroundColor))
+        .onAppear {
+            print("[ChatInputArea] ChatInputArea appeared, isEnabled: \(isEnabled)")
+        }
     }
     
     private var canSend: Bool {
-        isEnabled && !inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        let canSendValue = isEnabled && !inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        print("[ChatInputArea] canSend: \(canSendValue) (isEnabled: \(isEnabled), inputText: '\(inputText)')")
+        return canSendValue
     }
 }
 
