@@ -159,12 +159,12 @@ struct ChatView: View {
         }
     }
     
-    private func scrollToBottom(proxy: ScrollViewReader<AnyHashable>) {
+    private func scrollToBottom(proxy: ScrollViewReader) {
         withAnimation(.easeOut(duration: 0.5)) {
             if brain.isProcessing {
-                proxy.scrollTo("loading", anchor: .bottom)
+                proxy.scrollTo("loading", anchor: UnitPoint.bottom)
             } else if let lastMessage = messages.last {
-                proxy.scrollTo(lastMessage.id, anchor: .bottom)
+                proxy.scrollTo(lastMessage.id, anchor: UnitPoint.bottom)
             }
         }
     }
