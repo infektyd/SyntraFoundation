@@ -14,20 +14,10 @@
 		A3280D992E2F005200E1BCC5 /* SyntraChatIOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3280D922E2F005200E1BCC5 /* SyntraChatIOSApp.swift */; };
 		A3280D9A2E2F005200E1BCC5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3280D872E2F005200E1BCC5 /* ContentView.swift */; };
 		A3280D9B2E2F005200E1BCC5 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3280D8D2E2F005200E1BCC5 /* SettingsView.swift */; };
-		A3280D9C2E2F005200E1BCC5 /* AGENTS.md in Resources */ = {isa = PBXBuildFile; fileRef = A3280D832E2F005200E1BCC5 /* AGENTS.md */; };
-		A3280D9E2E2F005200E1BCC5 /* CLAUDE.md in Resources */ = {isa = PBXBuildFile; fileRef = A3280D862E2F005200E1BCC5 /* CLAUDE.md */; };
-		A3280D9F2E2F005200E1BCC5 /* Rules.md in Resources */ = {isa = PBXBuildFile; fileRef = A3280D8C2E2F005200E1BCC5 /* Rules.md */; };
-		A3280DA02E2F005200E1BCC5 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = A3280D8B2E2F005200E1BCC5 /* README.md */; };
 		A3280DA12E2F005200E1BCC5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A3280D842E2F005200E1BCC5 /* Assets.xcassets */; };
 		A3280DA42E2F010F00E1BCC5 /* SyntraSwift in Frameworks */ = {isa = PBXBuildFile; productRef = A3280DA32E2F010F00E1BCC5 /* SyntraSwift */; };
-		A39DE6272E2E091C006A1E2D /* fix-build-issue.sh in Resources */ = {isa = PBXBuildFile; fileRef = A39DE6262E2E091C006A1E2D /* fix-build-issue.sh */; };
-		A39DE6292E2E0934006A1E2D /* diagnose-build-issue.sh in Resources */ = {isa = PBXBuildFile; fileRef = A39DE6282E2E0934006A1E2D /* diagnose-build-issue.sh */; };
-		A39DE62B2E2E094B006A1E2D /* BUILD-FIX-APPLIED.md in Resources */ = {isa = PBXBuildFile; fileRef = A39DE62A2E2E094B006A1E2D /* BUILD-FIX-APPLIED.md */; };
-		A39DE62D2E2E09EF006A1E2D /* immediate-fix.sh in Resources */ = {isa = PBXBuildFile; fileRef = A39DE62C2E2E09EF006A1E2D /* immediate-fix.sh */; };
-		A39DE62F2E2E09F3006A1E2D /* run-fix.command in Resources */ = {isa = PBXBuildFile; fileRef = A39DE62E2E2E09F3006A1E2D /* run-fix.command */; };
 		A3B5A04F2E2E03D100E8C881 /* SyntraChatIOSTests-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A3B5A04E2E2E03D100E8C881 /* SyntraChatIOSTests-Info.plist */; };
 		A3B5A0512E2E03D500E8C881 /* SyntraChatIOSUITests-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A3B5A0502E2E03D500E8C881 /* SyntraChatIOSUITests-Info.plist */; };
-		A3B5A0552E2E086B00E8C881 /* TROUBLESHOOTING.md in Resources */ = {isa = PBXBuildFile; fileRef = A3B5A0542E2E086B00E8C881 /* TROUBLESHOOTING.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,32 +38,22 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		A3280D832E2F005200E1BCC5 /* AGENTS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AGENTS.md; sourceTree = "<group>"; };
 		A3280D842E2F005200E1BCC5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A3280D852E2F005200E1BCC5 /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
-		A3280D862E2F005200E1BCC5 /* CLAUDE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CLAUDE.md; sourceTree = "<group>"; };
 		A3280D872E2F005200E1BCC5 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		A3280D882E2F005200E1BCC5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A3280D892E2F005200E1BCC5 /* IOSNativeComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOSNativeComponents.swift; sourceTree = "<group>"; };
 		A3280D8A2E2F005200E1BCC5 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
-		A3280D8B2E2F005200E1BCC5 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		A3280D8C2E2F005200E1BCC5 /* Rules.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Rules.md; sourceTree = "<group>"; };
 		A3280D8D2E2F005200E1BCC5 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		A3280D8E2E2F005200E1BCC5 /* SyntraBrain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyntraBrain.swift; sourceTree = "<group>"; };
 		A3280D902E2F005200E1BCC5 /* SyntraChatIOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SyntraChatIOS.entitlements; sourceTree = "<group>"; };
 		A3280D912E2F005200E1BCC5 /* SyntraChatIOS.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = SyntraChatIOS.xcodeproj; sourceTree = "<group>"; };
 		A3280D922E2F005200E1BCC5 /* SyntraChatIOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyntraChatIOSApp.swift; sourceTree = "<group>"; };
-		A39DE6262E2E091C006A1E2D /* fix-build-issue.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "fix-build-issue.sh"; sourceTree = "<group>"; };
-		A39DE6282E2E0934006A1E2D /* diagnose-build-issue.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "diagnose-build-issue.sh"; sourceTree = "<group>"; };
-		A39DE62A2E2E094B006A1E2D /* BUILD-FIX-APPLIED.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "BUILD-FIX-APPLIED.md"; sourceTree = "<group>"; };
-		A39DE62C2E2E09EF006A1E2D /* immediate-fix.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "immediate-fix.sh"; sourceTree = "<group>"; };
-		A39DE62E2E2E09F3006A1E2D /* run-fix.command */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "run-fix.command"; sourceTree = "<group>"; };
 		A3B5A00D2E2DF8B600E8C881 /* SyntraChatIOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SyntraChatIOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3B5A01E2E2DF8B800E8C881 /* SyntraChatIOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SyntraChatIOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3B5A0282E2DF8B800E8C881 /* SyntraChatIOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SyntraChatIOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3B5A04E2E2E03D100E8C881 /* SyntraChatIOSTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SyntraChatIOSTests-Info.plist"; sourceTree = "<group>"; };
 		A3B5A0502E2E03D500E8C881 /* SyntraChatIOSUITests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SyntraChatIOSUITests-Info.plist"; sourceTree = "<group>"; };
-		A3B5A0542E2E086B00E8C881 /* TROUBLESHOOTING.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TROUBLESHOOTING.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -120,43 +100,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		A3280D8F2E2F005200E1BCC5 /* SyntraChatIOS */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = SyntraChatIOS;
-			sourceTree = "<group>";
-		};
-		A3280D932E2F005200E1BCC5 /* Products */ = {
-			isa = PBXGroup;
-			name = Products;
-			sourceTree = "<group>";
-		};
-		A3280DA22E2F010F00E1BCC5 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		A3B5A0042E2DF8B600E8C881 = {
 			isa = PBXGroup;
 			children = (
-				A3280D832E2F005200E1BCC5 /* AGENTS.md */,
 				A3280D842E2F005200E1BCC5 /* Assets.xcassets */,
 				A3280D852E2F005200E1BCC5 /* ChatView.swift */,
-				A3280D862E2F005200E1BCC5 /* CLAUDE.md */,
 				A3280D872E2F005200E1BCC5 /* ContentView.swift */,
 				A3280D882E2F005200E1BCC5 /* Info.plist */,
 				A3280D892E2F005200E1BCC5 /* IOSNativeComponents.swift */,
 				A3280D8A2E2F005200E1BCC5 /* Message.swift */,
-				A3280D8B2E2F005200E1BCC5 /* README.md */,
-				A3280D8C2E2F005200E1BCC5 /* Rules.md */,
 				A3280D8D2E2F005200E1BCC5 /* SettingsView.swift */,
 				A3280D8E2E2F005200E1BCC5 /* SyntraBrain.swift */,
-				A3280D8F2E2F005200E1BCC5 /* SyntraChatIOS */,
 				A3280D902E2F005200E1BCC5 /* SyntraChatIOS.entitlements */,
-				A3280D912E2F005200E1BCC5 /* SyntraChatIOS.xcodeproj */,
 				A3280D922E2F005200E1BCC5 /* SyntraChatIOSApp.swift */,
 				A3B5A00F2E2DF8B600E8C881 /* SyntraChatIOS */,
 				A3B5A0212E2DF8B800E8C881 /* SyntraChatIOSTests */,
@@ -164,12 +119,6 @@
 				A3B5A00E2E2DF8B600E8C881 /* Products */,
 				A3B5A04E2E2E03D100E8C881 /* SyntraChatIOSTests-Info.plist */,
 				A3B5A0502E2E03D500E8C881 /* SyntraChatIOSUITests-Info.plist */,
-				A3B5A0542E2E086B00E8C881 /* TROUBLESHOOTING.md */,
-				A39DE6262E2E091C006A1E2D /* fix-build-issue.sh */,
-				A39DE6282E2E0934006A1E2D /* diagnose-build-issue.sh */,
-				A39DE62A2E2E094B006A1E2D /* BUILD-FIX-APPLIED.md */,
-				A39DE62C2E2E09EF006A1E2D /* immediate-fix.sh */,
-				A39DE62E2E2E09F3006A1E2D /* run-fix.command */,
 				A3280DA22E2F010F00E1BCC5 /* Frameworks */,
 			);
 			sourceTree = "<group>";
