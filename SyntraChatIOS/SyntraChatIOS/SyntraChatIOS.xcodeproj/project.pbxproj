@@ -12,13 +12,8 @@
 		A39DE62B2E2E094B006A1E2D /* BUILD-FIX-APPLIED.md in Resources */ = {isa = PBXBuildFile; fileRef = A39DE62A2E2E094B006A1E2D /* BUILD-FIX-APPLIED.md */; };
 		A39DE62D2E2E09EF006A1E2D /* immediate-fix.sh in Resources */ = {isa = PBXBuildFile; fileRef = A39DE62C2E2E09EF006A1E2D /* immediate-fix.sh */; };
 		A39DE62F2E2E09F3006A1E2D /* run-fix.command in Resources */ = {isa = PBXBuildFile; fileRef = A39DE62E2E2E09F3006A1E2D /* run-fix.command */; };
-		A3B5A0472E2E027C00E8C881 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A3B5A0462E2E027C00E8C881 /* Info.plist */; };
-		A3B5A0492E2E02F500E8C881 /* Info 2.plist in Resources */ = {isa = PBXBuildFile; fileRef = A3B5A0482E2E02F500E8C881 /* Info 2.plist */; };
-		A3B5A04B2E2E032500E8C881 /* Info 3.plist in Resources */ = {isa = PBXBuildFile; fileRef = A3B5A04A2E2E032500E8C881 /* Info 3.plist */; };
-		A3B5A04D2E2E037F00E8C881 /* Info 4.plist in Resources */ = {isa = PBXBuildFile; fileRef = A3B5A04C2E2E037F00E8C881 /* Info 4.plist */; };
 		A3B5A04F2E2E03D100E8C881 /* SyntraChatIOSTests-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A3B5A04E2E2E03D100E8C881 /* SyntraChatIOSTests-Info.plist */; };
 		A3B5A0512E2E03D500E8C881 /* SyntraChatIOSUITests-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A3B5A0502E2E03D500E8C881 /* SyntraChatIOSUITests-Info.plist */; };
-		A3B5A0532E2E03E400E8C881 /* Info 5.plist in Resources */ = {isa = PBXBuildFile; fileRef = A3B5A0522E2E03E400E8C881 /* Info 5.plist */; };
 		A3B5A0552E2E086B00E8C881 /* TROUBLESHOOTING.md in Resources */ = {isa = PBXBuildFile; fileRef = A3B5A0542E2E086B00E8C881 /* TROUBLESHOOTING.md */; };
 /* End PBXBuildFile section */
 
@@ -48,13 +43,8 @@
 		A3B5A00D2E2DF8B600E8C881 /* SyntraChatIOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SyntraChatIOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3B5A01E2E2DF8B800E8C881 /* SyntraChatIOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SyntraChatIOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3B5A0282E2DF8B800E8C881 /* SyntraChatIOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SyntraChatIOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		A3B5A0462E2E027C00E8C881 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A3B5A0482E2E02F500E8C881 /* Info 2.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info 2.plist"; sourceTree = "<group>"; };
-		A3B5A04A2E2E032500E8C881 /* Info 3.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info 3.plist"; sourceTree = "<group>"; };
-		A3B5A04C2E2E037F00E8C881 /* Info 4.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info 4.plist"; sourceTree = "<group>"; };
 		A3B5A04E2E2E03D100E8C881 /* SyntraChatIOSTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SyntraChatIOSTests-Info.plist"; sourceTree = "<group>"; };
 		A3B5A0502E2E03D500E8C881 /* SyntraChatIOSUITests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SyntraChatIOSUITests-Info.plist"; sourceTree = "<group>"; };
-		A3B5A0522E2E03E400E8C881 /* Info 5.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info 5.plist"; sourceTree = "<group>"; };
 		A3B5A0542E2E086B00E8C881 /* TROUBLESHOOTING.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TROUBLESHOOTING.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -121,13 +111,8 @@
 				A3B5A0212E2DF8B800E8C881 /* SyntraChatIOSTests */,
 				A3B5A02B2E2DF8B800E8C881 /* SyntraChatIOSUITests */,
 				A3B5A00E2E2DF8B600E8C881 /* Products */,
-				A3B5A0462E2E027C00E8C881 /* Info.plist */,
-				A3B5A0482E2E02F500E8C881 /* Info 2.plist */,
-				A3B5A04A2E2E032500E8C881 /* Info 3.plist */,
-				A3B5A04C2E2E037F00E8C881 /* Info 4.plist */,
 				A3B5A04E2E2E03D100E8C881 /* SyntraChatIOSTests-Info.plist */,
 				A3B5A0502E2E03D500E8C881 /* SyntraChatIOSUITests-Info.plist */,
-				A3B5A0522E2E03E400E8C881 /* Info 5.plist */,
 				A3B5A0542E2E086B00E8C881 /* TROUBLESHOOTING.md */,
 				A39DE6262E2E091C006A1E2D /* fix-build-issue.sh */,
 				A39DE6282E2E0934006A1E2D /* diagnose-build-issue.sh */,
@@ -268,17 +253,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				A39DE6292E2E0934006A1E2D /* diagnose-build-issue.sh in Resources */,
-				A3B5A0472E2E027C00E8C881 /* Info.plist in Resources */,
 				A3B5A0512E2E03D500E8C881 /* SyntraChatIOSUITests-Info.plist in Resources */,
 				A3B5A04F2E2E03D100E8C881 /* SyntraChatIOSTests-Info.plist in Resources */,
 				A39DE62D2E2E09EF006A1E2D /* immediate-fix.sh in Resources */,
 				A39DE6272E2E091C006A1E2D /* fix-build-issue.sh in Resources */,
-				A3B5A04B2E2E032500E8C881 /* Info 3.plist in Resources */,
 				A39DE62B2E2E094B006A1E2D /* BUILD-FIX-APPLIED.md in Resources */,
 				A3B5A0552E2E086B00E8C881 /* TROUBLESHOOTING.md in Resources */,
-				A3B5A0492E2E02F500E8C881 /* Info 2.plist in Resources */,
-				A3B5A04D2E2E037F00E8C881 /* Info 4.plist in Resources */,
-				A3B5A0532E2E03E400E8C881 /* Info 5.plist in Resources */,
 				A39DE62F2E2E09F3006A1E2D /* run-fix.command in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
