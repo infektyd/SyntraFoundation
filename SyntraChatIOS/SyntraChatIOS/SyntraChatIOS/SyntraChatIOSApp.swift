@@ -3,14 +3,15 @@ import UIKit
 
 @main
 struct SyntraChatIOSApp: App {
+    init() {
+        // Configure iOS-specific app behavior on main thread before any UI is rendered
+        setupIOSAppearance()
+    }
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .preferredColorScheme(nil) // Support system light/dark mode
-                .onAppear {
-                    // Configure iOS-specific app behavior on main thread
-                    setupIOSAppearance()
-                }
         }
     }
     

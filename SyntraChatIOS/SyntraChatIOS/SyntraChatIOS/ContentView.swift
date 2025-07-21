@@ -26,13 +26,12 @@ struct ContentView: View {
             .navigationBarTitleDisplayMode(.inline)
         }
         .onAppear {
-            setupGlobalIOSBehavior()
+            // Notification permissions are now the only thing handled here
+            requestNotificationPermission()
         }
     }
     
-    /// Configure global iOS app behavior (notifications only)
-    /// Note: UIKit appearance is handled in SyntraChatIOSApp.swift to avoid threading issues
-    private func setupGlobalIOSBehavior() {
+    private func requestNotificationPermission() {
         // Setup notification permissions for future features
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
             if let error = error {
