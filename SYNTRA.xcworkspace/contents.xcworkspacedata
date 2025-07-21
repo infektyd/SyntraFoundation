@@ -2,12 +2,12 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:SyntraFoundation">
+      location = "group:.">
    </FileRef>
    <FileRef
-      location = "group:SyntraChat">
+      location = "group:SyntraChatIOS/SyntraChatIOS.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:SyntraChatIOS">
+      location = "group:SyntraMacOS">
    </FileRef>
-</Workspace> 
+</Workspace>
