@@ -4,11 +4,30 @@ import UserNotifications
 
 struct ContentView: View {
     var body: some View {
-        ChatView()
-            .preferredColorScheme(nil) // Support system appearance
-            .onAppear {
-                setupGlobalIOSBehavior()
+        NavigationStack {
+            VStack {
+                Text("🧠 SYNTRA Chat")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .padding()
+                
+                Text("iOS Native Interface")
+                    .font(.title2)
+                    .foregroundColor(.secondary)
+                
+                Spacer()
+                
+                // Simple test for ChatView
+                ChatView()
+                
+                Spacer()
             }
+            .navigationTitle("SYNTRA")
+            .navigationBarTitleDisplayMode(.inline)
+        }
+        .onAppear {
+            setupGlobalIOSBehavior()
+        }
     }
     
     /// Configure global iOS app behavior and appearance
