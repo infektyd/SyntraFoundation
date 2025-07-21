@@ -1,9 +1,17 @@
 #!/bin/bash
-chmod +x fix_sources_legacy.sh
-chmod +x check_legacy_references.sh  
+
+echo "🔧 Making SYNTRA diagnostic scripts executable..."
+
 chmod +x complete_legacy_fix.sh
-chmod +x find_main_conflict.sh
-chmod +x test_main_fix_grep.sh
-chmod +x debug_main_conflict.sh
-chmod +x test_main_fix.sh
-echo "✅ All diagnostic and fix scripts are now executable"
+chmod +x check_legacy_references.sh  
+chmod +x verify_hidden_integrity.sh
+chmod +x make_scripts_executable.sh
+
+echo "✅ All scripts are now executable:"
+echo "  - complete_legacy_fix.sh"
+echo "  - check_legacy_references.sh"
+echo "  - verify_hidden_integrity.sh"
+echo "  - make_scripts_executable.sh"
+echo ""
+echo "🚀 Run the main fix with:"
+echo "  ./complete_legacy_fix.sh"

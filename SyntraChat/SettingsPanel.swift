@@ -47,6 +47,5 @@ struct SettingsPanel: View {
             }
         }
         .padding()
-        .frame(minWidth: 200)
     }
 }
