@@ -12,38 +12,41 @@ struct ContentView: View {
     
     /// Configure global iOS app behavior and appearance
     private func setupGlobalIOSBehavior() {
-        // Configure navigation bar appearance for the entire app
-        let navBarAppearance = UINavigationBarAppearance()
-        navBarAppearance.configureWithOpaqueBackground()
-        navBarAppearance.backgroundColor = UIColor.systemBackground
-        navBarAppearance.titleTextAttributes = [
-            .foregroundColor: UIColor.label,
-            .font: UIFont.systemFont(ofSize: 17, weight: .semibold)
-        ]
-        navBarAppearance.largeTitleTextAttributes = [
-            .foregroundColor: UIColor.label,
-            .font: UIFont.systemFont(ofSize: 34, weight: .bold)
-        ]
-        
-        // Apply to all navigation bars
-        UINavigationBar.appearance().standardAppearance = navBarAppearance
-        UINavigationBar.appearance().compactAppearance = navBarAppearance
-        UINavigationBar.appearance().scrollEdgeAppearance = navBarAppearance
-        
-        // Configure tab bar appearance (if we add tabs in future)
-        let tabBarAppearance = UITabBarAppearance()
-        tabBarAppearance.configureWithOpaqueBackground()
-        tabBarAppearance.backgroundColor = UIColor.systemBackground
-        UITabBar.appearance().standardAppearance = tabBarAppearance
-        UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
-        
-        // Configure text field and text view appearances
-        UITextField.appearance().keyboardAppearance = .default
-        UITextView.appearance().keyboardAppearance = .default
-        
-        // Configure list appearance
-        UITableView.appearance().backgroundColor = UIColor.systemBackground
-        UITableView.appearance().separatorStyle = .none
+        // CRITICAL: Ensure all UIKit appearance modifications happen on the main thread
+        DispatchQueue.main.async {
+            // Configure navigation bar appearance for the entire app
+            let navBarAppearance = UINavigationBarAppearance()
+            navBarAppearance.configureWithOpaqueBackground()
+            navBarAppearance.backgroundColor = UIColor.systemBackground
+            navBarAppearance.titleTextAttributes = [
+                .foregroundColor: UIColor.label,
+                .font: UIFont.systemFont(ofSize: 17, weight: .semibold)
+            ]
+            navBarAppearance.largeTitleTextAttributes = [
+                .foregroundColor: UIColor.label,
+                .font: UIFont.systemFont(ofSize: 34, weight: .bold)
+            ]
+            
+            // Apply to all navigation bars
+            UINavigationBar.appearance().standardAppearance = navBarAppearance
+            UINavigationBar.appearance().compactAppearance = navBarAppearance
+            UINavigationBar.appearance().scrollEdgeAppearance = navBarAppearance
+            
+            // Configure tab bar appearance (if we add tabs in future)
+            let tabBarAppearance = UITabBarAppearance()
+            tabBarAppearance.configureWithOpaqueBackground()
+            tabBarAppearance.backgroundColor = UIColor.systemBackground
+            UITabBar.appearance().standardAppearance = tabBarAppearance
+            UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
+            
+            // Configure text field and text view appearances - MUST be on main thread!
+            UITextField.appearance().keyboardAppearance = .default
+            UITextView.appearance().keyboardAppearance = .default
+            
+            // Configure list appearance
+            UITableView.appearance().backgroundColor = UIColor.systemBackground
+            UITableView.appearance().separatorStyle = .none
+        }
         
         // Setup notification permissions for future features
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
