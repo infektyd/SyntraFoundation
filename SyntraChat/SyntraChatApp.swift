@@ -6,9 +6,14 @@ struct SyntraChatApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .frame(minWidth: 600, minHeight: 400)
+                .frame(minWidth: 800, minHeight: 600)
+                .onAppear {
+                    print("[SyntraChatApp] Window appeared")
+                }
         }
-        .windowResizability(.contentSize)
+        .defaultSize(width: 1000, height: 700)
+        .windowStyle(.titleBar)
+        .windowToolbarStyle(.unified)
 
         Settings {
             SettingsPanel(settings: ConfigViewModel())
