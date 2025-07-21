@@ -7,16 +7,16 @@
       {
         "basedOn" : null,
         "packageRef" : {
-          "identity" : "syntraconfig",
+          "identity" : "syntrafoundation",
           "kind" : "fileSystem",
-          "location" : "/Users/hansaxelsson/SyntraFoundation/swift/SyntraConfig",
-          "name" : "SyntraConfig"
+          "location" : "/Users/hansaxelsson/SyntraFoundation",
+          "name" : "SyntraFoundation"
         },
         "state" : {
           "name" : "fileSystem",
-          "path" : "/Users/hansaxelsson/SyntraFoundation/swift/SyntraConfig"
+          "path" : "/Users/hansaxelsson/SyntraFoundation"
         },
-        "subpath" : "syntraconfig"
+        "subpath" : "syntrafoundation"
       }
     ],
     "prebuilts" : [

@@ -72,7 +72,7 @@ public enum ReplayType: String, Codable, CaseIterable {
 // MARK: - Sleep-Like Consolidation Engine
 
 @available(macOS 26.0, *)
-public actor SleepLikeConsolidationEngine {
+public actor SleepLikeConsolidationEngine: @unchecked Sendable {
     
     private let memoryManager: DualStreamMemoryManager
     private var currentSleepCycle: SleepCycle

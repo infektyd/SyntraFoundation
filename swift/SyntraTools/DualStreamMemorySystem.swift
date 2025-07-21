@@ -138,27 +138,25 @@ public actor DualStreamMemoryManager {
         content: String,
         emotionalValence: Double,
         attentionLevel: Double,
-        consciousnessContext: ModernConsciousnessEngine.ConsciousnessState,
+        consciousnessContext: String,
         interactionContext: String = ""
     ) async -> UUID {
         
         // Create memory context
         let context = MemoryContext(
-            consciousnessState: "\(consciousnessContext.awarenessLevel)",
-            emotionalState: consciousnessContext.emotionalState.primaryEmotion,
+            consciousnessState: consciousnessContext,
+            emotionalState: "", // No emotional state available from String context
             attentionLevel: attentionLevel,
             interactionContext: interactionContext,
-            environmentalFactors: consciousnessContext.activeProcesses
+            environmentalFactors: [] // No environmental factors available from String context
         )
-        
-        // Generate semantic links
         let semanticLinks = await generateSemanticLinks(content: content)
         
         // Calculate initial strength based on attention and emotion
         let initialStrength = calculateInitialStrength(
             attentionLevel: attentionLevel,
             emotionalValence: abs(emotionalValence),
-            consciousnessLevel: consciousnessContext.awarenessLevel
+            consciousnessLevel: attentionLevel
         )
         
         // Create memory trace in fast learning stream
@@ -539,8 +537,6 @@ public actor DualStreamMemoryManager {
             }
         }
     }
-    
-    // MARK: - Memory Statistics
     
     public func getMemoryStatistics() async -> DualStreamMemoryStatistics {
         return DualStreamMemoryStatistics(

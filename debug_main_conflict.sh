@@ -25,12 +25,21 @@ echo "🔍 Step 5: Files containing @main attribute:"
 find . -name "*.swift" -not -path "./.build/*" -exec grep -l "@main" {} \; 2>/dev/null
 
 echo ""
-echo "🔍 Step 6: Checking Package.swift target paths that might include disabled files:"
+echo "🔍 Step 6: Verifying swift/Main/main.swift exists and previewing first 15 lines..."
+if [ -f "swift/Main/main.swift" ]; then
+    echo "✓ swift/Main/main.swift exists"
+    head -15 swift/Main/main.swift 2>/dev/null
+else
+    echo "❌ swift/Main/main.swift not found!"
+fi
+
+echo ""
+echo "🔍 Step 7: Checking Package.swift target paths that might include disabled files:"
 echo "Current StructuredConsciousnessService target path:"
 grep -A 3 "StructuredConsciousnessService" Package.swift
 
 echo ""
-echo "🔍 Step 7: Looking for potential conflicts in swift/ directory structure..."
+echo "🔍 Step 8: Looking for potential conflicts in swift/ directory structure..."
 ls -la swift/ 2>/dev/null | grep -E "(disabled|\.disabled|\.bak|\.backup)"
 
 echo ""

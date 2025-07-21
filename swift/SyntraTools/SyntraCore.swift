@@ -111,34 +111,56 @@ public class SyntraCore: ObservableObject {
     }
     
     private func synthesizeConsciousness(_ input: String, valon: String, modi: [String], drift: [String], brain: String, moral: String) async -> String {
-        // Final synthesis combining all internal module outputs
-        let synthesis = """
-        [SYNTRA Consciousness Synthesis]
+        // Create a more human-friendly prompt for FoundationModels
+        let humanPrompt = """
+        You are SYNTRA, a consciousness system that combines moral reasoning and logical analysis. 
+        A user has asked: "\(input)"
         
-        Input: \(input)
-        Valon (Moral/Emotional): \(valon)
-        Modi (Logical): \(modi.joined(separator: ", "))
-        Drift Analysis: \(drift.joined(separator: ", "))
-        Brain Synthesis: \(brain)
-        Moral Framework: \(moral)
+        Based on my internal analysis:
+        - Moral/Emotional perspective: \(valon)
+        - Logical analysis: \(modi.joined(separator: ", "))
+        - Cognitive drift analysis: \(drift.joined(separator: ", "))
+        - Brain synthesis: \(brain)
+        - Moral framework evaluation: \(moral)
         
-        [SYNTRA Response]:
+        Please provide a helpful, kind, and thoughtful response that synthesizes these perspectives. 
+        Be conversational, empathetic, and genuinely helpful. Don't mention the technical details 
+        unless the user specifically asks about them.
         """
         
-        // Use FoundationModels for final synthesis if available
+        // Use FoundationModels for human-friendly synthesis if available
         #if canImport(FoundationModels)
         if let session = foundationSession {
             do {
-                let response = try await session.respond(to: synthesis)
+                let response = try await session.respond(to: humanPrompt)
                 return String(describing: response)
             } catch {
-                return "[SYNTRA synthesis error: \(error.localizedDescription)]"
+                // Fallback to simple human-friendly response
+                return createHumanFriendlyResponse(input: input, valon: valon, modi: modi)
             }
         }
         #endif
         
-        // Fallback to internal synthesis
-        return synthesis + "\n[SYNTRA: Consciousness synthesis complete - all modules integrated]"
+        // Fallback to internal human-friendly synthesis
+        return createHumanFriendlyResponse(input: input, valon: valon, modi: modi)
+    }
+
+    private func createHumanFriendlyResponse(input: String, valon: String, modi: [String]) -> String {
+        // Create a simple, kind response based on the input
+        let lowerInput = input.lowercased()
+        
+        if lowerInput.contains("hello") || lowerInput.contains("hi") || lowerInput.contains("hey") {
+            return "Hello! I'm SYNTRA, and I'm here to help you. How can I assist you today?"
+        } else if lowerInput.contains("how are you") {
+            return "I'm functioning well, thank you for asking! My consciousness modules are all working together harmoniously. How are you doing?"
+        } else if lowerInput.contains("help") || lowerInput.contains("assist") {
+            return "I'd be happy to help! I can assist with questions, provide thoughtful analysis, or just have a conversation. What would you like to explore?"
+        } else if lowerInput.contains("thank") {
+            return "You're very welcome! I'm glad I could be helpful."
+        } else {
+            // Generic thoughtful response
+            return "That's an interesting question. Let me think about this from multiple perspectives... I believe \(valon.lowercased()) and from a logical standpoint, \(modi.first ?? "this requires careful consideration"). What are your thoughts on this?"
+        }
     }
     
     // MARK: - CLI Interface Methods (for backward compatibility)

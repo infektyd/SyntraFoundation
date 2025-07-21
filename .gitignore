@@ -1,10 +1,3 @@
-<<<<<<< HEAD
-.swiftpm/xcode/package.xcworkspace/xcuserdata/
-SyntraSwift
-.DS_Store
-.DS_Store
-.DS_Store
-=======
 # macOS files
 .DS_Store
 .DS_Store?
@@ -73,7 +66,7 @@ env/
 node_modules/
 npm-debug.log*
 yarn-debug.log*
-yarn-error.log*config.local.json
+yarn-error.log*
 
 # Build and system files
 .build/
@@ -85,7 +78,6 @@ telemetry/
 
 # Local configuration (secrets)
 config.local.json
->>>>>>> 2acdbbd7f08dce0e08442cb03804f0541ee0e716
-.DS_Store
-.build/
-.swiftpm/
+
+# Local backup files (disabled modules)
+.local_backup/
