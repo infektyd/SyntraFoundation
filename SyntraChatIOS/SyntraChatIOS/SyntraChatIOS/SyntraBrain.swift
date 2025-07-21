@@ -1,6 +1,7 @@
 import Foundation
 import SwiftUI
 import UIKit
+import Combine
 
 /// iOS-optimized SYNTRA consciousness interface with native iOS features
 @MainActor
