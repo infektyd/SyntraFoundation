@@ -102,7 +102,15 @@ let package = Package(
             ],
             path: "swift/Main",
             exclude: [
-                "*.sh"
+                "make_scripts_executable.sh",
+                "make_scripts_executable 2.sh",
+                "verify_hidden_integrity.sh",
+                "verify_hidden_integrity 2.sh",
+                "check_legacy_references.sh",
+                "check_legacy_references 2.sh",
+                "complete_legacy_fix.sh",
+                "complete_legacy_fix 2.sh",
+                "fix_sources_legacy.sh"
             ],
             sources: ["main.swift"]
         ),
