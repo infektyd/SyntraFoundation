@@ -124,12 +124,16 @@ struct ChatView: View {
         }
         
         // Add user message
-        messages.append(.user(userMessage))
+        let userMsg = Message.user(userMessage)
+        messages.append(userMsg)
         inputText = ""
+        
+        // Create a snapshot of the history to send to the brain
+        let historySnapshot = messages
         
         // Get SYNTRA response
         Task {
-            let response = await brain.processMessage(userMessage)
+            let response = await brain.processMessage(userMessage, withHistory: historySnapshot)
             
             await MainActor.run {
                 messages.append(.syntra(response))
