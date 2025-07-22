@@ -126,6 +126,7 @@ struct NativeTextField: NSViewRepresentable {
         Coordinator(self)
     }
     
+    @MainActor
     class Coordinator: NSObject, NSTextFieldDelegate {
         var parent: NativeTextField
         
@@ -143,9 +144,8 @@ struct NativeTextField: NSViewRepresentable {
         }
         
         @objc func textFieldAction(_ sender: NSTextField) {
-            Task { @MainActor in
-                parent.onSubmit()
-            }
+            // Direct call since we're already on MainActor
+            parent.onSubmit()
         }
     }
 }

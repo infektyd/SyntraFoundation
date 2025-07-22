@@ -19,7 +19,7 @@ public final class ValonEngine {
             let model = SystemLanguageModel.default
             if model.availability == .available {
                 do {
-                    let session = try LanguageModelSession(model: model)
+                    let session = LanguageModelSession(model: model)
                     let moralPrompt = buildValonPrompt(input, context: context)
                     let response = try await session.respond(to: moralPrompt)
                     return ValonResponse(
@@ -98,7 +98,7 @@ public final class ModiEngine {
             let model = SystemLanguageModel.default
             if model.availability == .available {
                 do {
-                    let session = try LanguageModelSession(model: model)
+                    let session = LanguageModelSession(model: model)
                     let logicalPrompt = buildModiPrompt(input, context: context)
                     let response = try await session.respond(to: logicalPrompt)
                     return ModiResponse(
