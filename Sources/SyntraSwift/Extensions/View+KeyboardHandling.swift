@@ -27,6 +27,7 @@ extension View {
 }
 
 #if os(iOS)
+@MainActor
 struct KeyboardAdaptiveModifier: ViewModifier {
     @State private var keyboardHeight: CGFloat = 0
     
@@ -35,23 +36,25 @@ struct KeyboardAdaptiveModifier: ViewModifier {
             .padding(.bottom, keyboardHeight)
             .onAppear {
                 // CRITICAL: Register for keyboard notifications on main thread - Beta 3 fix
-                DispatchQueue.main.async {
-                    NotificationCenter.default.addObserver(
-                        forName: UIResponder.keyboardWillShowNotification,
-                        object: nil,
-                        queue: .main
-                    ) { notification in
+                NotificationCenter.default.addObserver(
+                    forName: UIResponder.keyboardWillShowNotification,
+                    object: nil,
+                    queue: .main
+                ) { [weak self] notification in
+                    Task { @MainActor in
                         if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
-                            keyboardHeight = keyboardFrame.height
+                            self?.keyboardHeight = keyboardFrame.height
                         }
                     }
-                    
-                    NotificationCenter.default.addObserver(
-                        forName: UIResponder.keyboardWillHideNotification,
-                        object: nil,
-                        queue: .main
-                    ) { _ in
-                        keyboardHeight = 0
+                }
+                
+                NotificationCenter.default.addObserver(
+                    forName: UIResponder.keyboardWillHideNotification,
+                    object: nil,
+                    queue: .main
+                ) { [weak self] _ in
+                    Task { @MainActor in
+                        self?.keyboardHeight = 0
                     }
                 }
             }
