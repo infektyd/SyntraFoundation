@@ -4,17 +4,19 @@ import AppKit
 #endif
 
 extension ProcessInfo {
-    /// Detects if running on problematic macOS 26 Beta 3
-    var isMacOS26Beta3: Bool {
-        #if os(macOS)
+    /// Detects if running on problematic macOS/iOS 26 Beta 3
+    var isBeta3Threading: Bool {
         let version = operatingSystemVersion
         let versionString = operatingSystemVersionString
         
+        #if os(macOS)
         return version.majorVersion == 26 && 
                version.minorVersion == 0 &&
-               (versionString.contains("Beta 3") || versionString.contains("23A5287g"))
+               (versionString.contains("Beta 3") || versionString.contains("23A5287"))
         #else
-        return false
+        return version.majorVersion == 26 && 
+               version.minorVersion == 0 &&
+               (versionString.contains("Beta 3") || versionString.contains("23A5287"))
         #endif
     }
     
@@ -23,7 +25,7 @@ extension ProcessInfo {
         operatingSystemVersionString.lowercased().contains("beta")
     }
     
-    /// Helper for SYNTRA debugging
+    /// Comprehensive version info for SYNTRA debugging
     var osVersionInfo: String {
         let version = operatingSystemVersion
         return "\(version.majorVersion).\(version.minorVersion).\(version.patchVersion) (\(operatingSystemVersionString))"
@@ -34,7 +36,7 @@ extension ProcessInfo {
 extension NSApplication {
     /// Check if current macOS version has text input threading issues
     static var hasTextInputThreadingBug: Bool {
-        return ProcessInfo.processInfo.isMacOS26Beta3
+        return ProcessInfo.processInfo.isBeta3Threading
     }
 }
 #endif 
