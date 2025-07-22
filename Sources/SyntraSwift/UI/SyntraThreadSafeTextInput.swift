@@ -134,6 +134,7 @@ struct MacOSTextFieldBridge: NSViewRepresentable {
         Coordinator(self)
     }
     
+    @MainActor
     class Coordinator: NSObject, NSTextFieldDelegate {
         var parent: MacOSTextFieldBridge
         
@@ -151,9 +152,8 @@ struct MacOSTextFieldBridge: NSViewRepresentable {
         }
         
         @objc func textFieldAction(_ sender: NSTextField) {
-            Task { @MainActor in
-                parent.onSubmit()
-            }
+            // Direct call since we're already on MainActor
+            parent.onSubmit()
         }
     }
 }
