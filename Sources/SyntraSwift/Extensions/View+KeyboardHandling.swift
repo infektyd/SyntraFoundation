@@ -40,10 +40,10 @@ struct KeyboardAdaptiveModifier: ViewModifier {
                     forName: UIResponder.keyboardWillShowNotification,
                     object: nil,
                     queue: .main
-                ) { [weak self] notification in
+                ) { notification in
                     Task { @MainActor in
                         if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
-                            self?.keyboardHeight = keyboardFrame.height
+                            self.keyboardHeight = keyboardFrame.height
                         }
                     }
                 }
@@ -52,9 +52,9 @@ struct KeyboardAdaptiveModifier: ViewModifier {
                     forName: UIResponder.keyboardWillHideNotification,
                     object: nil,
                     queue: .main
-                ) { [weak self] _ in
+                ) { _ in
                     Task { @MainActor in
-                        self?.keyboardHeight = 0
+                        self.keyboardHeight = 0
                     }
                 }
             }

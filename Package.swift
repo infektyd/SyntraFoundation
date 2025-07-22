@@ -16,7 +16,6 @@ let package = Package(
             name: "SyntraSwift",
             dependencies: [],
             swiftSettings: [
-                .enableUpcomingFeature("BareSlashRegexLiterals"),
                 .enableExperimentalFeature("StrictConcurrency"),
                 .unsafeFlags([
                     "-Xfrontend", "-warn-concurrency"
