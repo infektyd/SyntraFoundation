@@ -13,10 +13,10 @@ struct SyntraLogger {
         let timestamp = ISO8601DateFormatter().string(from: Date())
         let logMessage = "[\(timestamp)] [\(level.rawValue)] [\(function):\(line)] \(message)"
         
-        // Console logging
+        // Console logging (always safe)
         print(logMessage)
         
-        // System logging
+        // System logging (always safe)
         switch level {
         case .debug:
             logger.debug("\(message)")
@@ -30,7 +30,7 @@ struct SyntraLogger {
             logger.critical("\(message)")
         }
         
-        // File logging for hardcore debugging
+        // File logging (safe async)
         fileLogger.writeLog(logMessage)
     }
     
@@ -56,7 +56,8 @@ class FileLogger {
             FileManager.default.createFile(atPath: logFileURL.path, contents: nil, attributes: nil)
         }
         
-        SyntraLogger.log("Log file created at: \(logFileURL.path)", level: .info)
+        // Simple print instead of SyntraLogger.log to avoid circular dependency
+        print("[FileLogger] Log file ready at: \(logFileURL.path)")
     }
     
     func writeLog(_ message: String) {
@@ -70,6 +71,7 @@ class FileLogger {
                 fileHandle.write(data)
                 fileHandle.closeFile()
             } catch {
+                // Use print instead of SyntraLogger to avoid potential recursion
                 print("[FileLogger] Failed to write log: \(error)")
             }
         }
