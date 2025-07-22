@@ -3,6 +3,23 @@ import SwiftUI
 import UIKit
 import Combine
 
+// MARK: - iOS-Native SyntraContext
+struct SyntraContext {
+    let conversationHistory: [String]
+    let userPreferences: [String: Any]
+    let sessionId: String
+    
+    init(
+        conversationHistory: [String],
+        userPreferences: [String: Any],
+        sessionId: String
+    ) {
+        self.conversationHistory = conversationHistory
+        self.userPreferences = userPreferences
+        self.sessionId = sessionId
+    }
+}
+
 // MARK: - iOS-Native Configuration
 struct SyntraConfig {
     var driftRatio: [String: Double] = ["default": 0.5]
@@ -32,7 +49,12 @@ class SyntraCore: ObservableObject {
         consciousnessState = "processing"
         
         // Simulate iOS-optimized consciousness processing
-        await Task.sleep(nanoseconds: 1_000_000_000) // 1 second delay
+        do {
+            try await Task.sleep(nanoseconds: 1_000_000_000) // 1 second delay
+        } catch {
+            // Handle sleep interruption gracefully
+            print("Processing sleep interrupted: \(error)")
+        }
         
         let response = """
         SYNTRA (iOS) processes: \(input)
