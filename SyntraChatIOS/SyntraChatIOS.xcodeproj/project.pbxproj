@@ -6,9 +6,6 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXBuildFile section */
-/* End PBXBuildFile section */
-
 /* Begin PBXContainerItemProxy section */
 		A3B5A01F2E2DF8B800E8C881 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -27,17 +24,27 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-
 		A3B5A00D2E2DF8B600E8C881 /* SyntraChatIOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SyntraChatIOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3B5A01E2E2DF8B800E8C881 /* SyntraChatIOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SyntraChatIOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3B5A0282E2DF8B800E8C881 /* SyntraChatIOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SyntraChatIOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		A3B5A04E2E2E03D100E8C881 /* SyntraChatIOSTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SyntraChatIOSTests-Info.plist"; sourceTree = "<group>"; };
-		A3B5A0502E2E03D500E8C881 /* SyntraChatIOSUITests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SyntraChatIOSUITests-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		A3280F792E2F2AB100E1BCC5 /* Exceptions for "SyntraChatIOS" folder in "SyntraChatIOS" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				SyntraChatIOS/SyntraChatIOS/Info.plist,
+			);
+			target = A3B5A00C2E2DF8B600E8C881 /* SyntraChatIOS */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		A3B5A00F2E2DF8B600E8C881 /* SyntraChatIOS */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				A3280F792E2F2AB100E1BCC5 /* Exceptions for "SyntraChatIOS" folder in "SyntraChatIOS" target */,
+			);
 			path = SyntraChatIOS;
 			sourceTree = "<group>";
 		};
@@ -78,9 +85,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		A3280DAA2E2F080C00E1BCC5 /* Products */ = {
+		A3B5A0042E2DF8B600E8C881 = {
 			isa = PBXGroup;
-			name = Products;
+			children = (
+				A3B5A00F2E2DF8B600E8C881 /* SyntraChatIOS */,
+				A3B5A0212E2DF8B800E8C881 /* SyntraChatIOSTests */,
+				A3B5A02B2E2DF8B800E8C881 /* SyntraChatIOSUITests */,
+				A3B5A00E2E2DF8B600E8C881 /* Products */,
+			);
 			sourceTree = "<group>";
 		};
 		A3B5A00E2E2DF8B600E8C881 /* Products */ = {
@@ -91,16 +103,6 @@
 				A3B5A0282E2DF8B800E8C881 /* SyntraChatIOSUITests.xctest */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		A3B5A0042E2DF8B600E8C881 = {
-			isa = PBXGroup;
-			children = (
-				A3B5A00F2E2DF8B600E8C881 /* SyntraChatIOS */,
-				A3B5A0212E2DF8B800E8C881 /* SyntraChatIOSTests */,
-				A3B5A02B2E2DF8B800E8C881 /* SyntraChatIOSUITests */,
-				A3B5A00E2E2DF8B600E8C881 /* Products */,
-			);
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -206,6 +208,7 @@
 				Base,
 			);
 			mainGroup = A3B5A0042E2DF8B600E8C881;
+			preferredProjectObjectVersion = 77;
 			productRefGroup = A3B5A00E2E2DF8B600E8C881 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -285,13 +288,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = "SyntraChatIOS/SyntraChatIOS/SyntraChatIOS.entitlements";
+				CODE_SIGN_ENTITLEMENTS = SyntraChatIOS/SyntraChatIOS/SyntraChatIOS.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5BMZT525A2;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "SyntraChatIOS/Info.plist";
+				INFOPLIST_FILE = SyntraChatIOS/SyntraChatIOS/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -321,13 +324,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = "SyntraChatIOS/SyntraChatIOS/SyntraChatIOS.entitlements";
+				CODE_SIGN_ENTITLEMENTS = SyntraChatIOS/SyntraChatIOS/SyntraChatIOS.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5BMZT525A2;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "SyntraChatIOS/Info.plist";
+				INFOPLIST_FILE = SyntraChatIOS/SyntraChatIOS/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -595,8 +598,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-
 	};
 	rootObject = A3B5A0052E2DF8B600E8C881 /* Project object */;
 }
