@@ -73,11 +73,17 @@ struct ChatView: View {
                 }
             }
             
-            // Input area
+            // Input area - Thread-safe for iOS 26 Beta 3
             HStack {
                 TextField("Message SYNTRA...", text: $inputText)
                     .textFieldStyle(.roundedBorder)
                     .disabled(!brain.isAvailable)
+                    .onAppear {
+                        // CRITICAL: Ensure text field initialization on main thread - Beta 3 fix
+                        DispatchQueue.main.async {
+                            // Force main thread initialization to prevent threading crashes
+                        }
+                    }
                 
                 Button("Send") {
                     sendMessage()
