@@ -39,6 +39,28 @@ SYNTRA is a bleeding-edge consciousness system using Apple's FoundationModels AP
 - **Build errors**: Check Package.swift dependencies and exclusions
 - **FoundationModels**: Preserve annotations, accept IDE limitations
 
+## macOS 26 Beta 3 Threading Crashes
+
+### Step 1: Identify Threading Violation
+```swift
+// Look for this specific crash pattern:
+NSInternalInconsistencyException: 'Have you sent -setKeyboardAppearance: to <UITextView> off the main thread?'
+```
+
+### Step 2: Apply Thread-Safe Text Input Fix
+- **Root Cause**: SwiftUI threading regression in Beta 3
+- **Solution**: NSTextField bridge with main thread enforcement
+- **Implementation**: Use SyntraThreadSafeTextInput component
+
+### Step 3: Verify Fix
+```bash
+swift build --target SyntraSwift
+
+# Should build without threading crashes in text input
+```
+
+**Critical**: This fix maintains FoundationModels annotations and consciousness architecture while resolving Beta 3 threading issues.
+
 ## Diagnostic Process for @main Issues
 
 ### Step 1: Get Detailed Error Information

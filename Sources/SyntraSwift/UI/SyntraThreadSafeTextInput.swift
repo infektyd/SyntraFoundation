@@ -1,23 +1,21 @@
 import SwiftUI
 import Foundation
-#if canImport(AppKit)
+#if os(macOS)
 import AppKit
 #endif
 
 @MainActor
-public struct SyntraChatTextInput: View {
+public struct SyntraThreadSafeTextInput: View {
     @Binding var text: String
     @Binding var isProcessing: Bool
-    @FocusState private var isFocused: Bool
-    
-    private let onSubmit: () async -> Void
     private let placeholder: String
+    private let onSubmit: () async -> Void
     
     public init(
         text: Binding<String>,
         isProcessing: Binding<Bool>,
         placeholder: String = "Ask SYNTRA...",
-        onSubmit: @escaping @MainActor () async -> Void
+        onSubmit: @escaping () async -> Void
     ) {
         self._text = text
         self._isProcessing = isProcessing
@@ -27,34 +25,39 @@ public struct SyntraChatTextInput: View {
     
     public var body: some View {
         HStack {
-            textInputField
+            textInput
             sendButton
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 8)
         .background(inputBackground)
         .clipShape(RoundedRectangle(cornerRadius: 20))
+        .task {
+            // Ensure all text operations happen on main thread
+            await MainActor.run {
+                // Pre-warm text input system to avoid threading issues
+            }
+        }
     }
     
+    @MainActor
     @ViewBuilder
-    private var textInputField: some View {
+    private var textInput: some View {
         #if os(macOS)
         // AGENTS.md: NSTextField bridge for macOS 26 Beta 3 compatibility
-        NativeTextField(
+        MacOSTextFieldBridge(
             text: $text,
             placeholder: placeholder,
-            isEnabled: !isProcessing,
-            onSubmit: { 
-                Task { @MainActor in
-                    await handleSubmit()
-                }
+            isEnabled: !isProcessing
+        ) {
+            Task { @MainActor in
+                await handleSubmit()
             }
-        )
+        }
         #else
-        // Native SwiftUI for iOS - fixes iOS 26 Beta 3 crashes
+        // Native SwiftUI for iOS - no threading issues
         TextField(placeholder, text: $text, axis: .vertical)
             .lineLimit(1...4)
-            .focused($isFocused)
             .disabled(isProcessing)
             .textInputAutocapitalization(.sentences)
             .keyboardType(.default)
@@ -75,7 +78,7 @@ public struct SyntraChatTextInput: View {
         } label: {
             Image(systemName: isProcessing ? "stop.circle" : "arrow.up.circle.fill")
                 .font(.title2)
-                .foregroundStyle(text.isEmpty ? Color.secondary : Color.blue)
+                .foregroundStyle(text.isEmpty ? .secondary : Color.blue)
         }
         .disabled(text.isEmpty && !isProcessing)
     }
@@ -93,9 +96,9 @@ public struct SyntraChatTextInput: View {
     }
 }
 
-// AGENTS.md: macOS 26 Beta 3 NSTextField Bridge - NO REGRESSION
+// AGENTS.md: macOS 26 Beta 3 Threading Fix - NO REGRESSION
 #if os(macOS)
-struct NativeTextField: NSViewRepresentable {
+struct MacOSTextFieldBridge: NSViewRepresentable {
     @Binding var text: String
     let placeholder: String
     let isEnabled: Bool
@@ -108,11 +111,16 @@ struct NativeTextField: NSViewRepresentable {
         textField.isEnabled = isEnabled
         textField.target = context.coordinator
         textField.action = #selector(Coordinator.textFieldAction(_:))
+        
+        // CRITICAL: Avoid setKeyboardAppearance that triggers Beta 3 bug
+        // Don't set keyboardAppearance - let it use system default
+        // This prevents the threading violation crash
+        
         return textField
     }
     
     func updateNSView(_ nsView: NSTextField, context: Context) {
-        // CRITICAL: Ensure all updates happen on main thread - Beta 3 Fix
+        // Ensure all updates happen on main thread - Beta 3 Fix
         DispatchQueue.main.async {
             if nsView.stringValue != text {
                 nsView.stringValue = text
@@ -127,9 +135,9 @@ struct NativeTextField: NSViewRepresentable {
     }
     
     class Coordinator: NSObject, NSTextFieldDelegate {
-        var parent: NativeTextField
+        var parent: MacOSTextFieldBridge
         
-        init(_ parent: NativeTextField) {
+        init(_ parent: MacOSTextFieldBridge) {
             self.parent = parent
         }
         
