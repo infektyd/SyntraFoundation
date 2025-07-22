@@ -41,9 +41,11 @@ struct KeyboardAdaptiveModifier: ViewModifier {
                     object: nil,
                     queue: .main
                 ) { notification in
+                    // Extract keyboard frame data to avoid data races
+                    let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect
                     Task { @MainActor in
-                        if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
-                            self.keyboardHeight = keyboardFrame.height
+                        if let frame = keyboardFrame {
+                            self.keyboardHeight = frame.height
                         }
                     }
                 }
