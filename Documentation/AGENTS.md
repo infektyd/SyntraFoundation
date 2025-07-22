@@ -138,6 +138,31 @@ struct NativeTextField: NSViewRepresentable {
 - 🔄 **TODO**: Monitor for Beta 4 release and potential SwiftUI fixes
 - 📝 **Reference**: [Apple Developer Forums Thread #756685](https://developer.apple.com/forums/thread/756685)
 
+### macOS 26 Beta 3 Text Input Threading Crash
+**Issue**: NSInternalInconsistencyException when SwiftUI calls setKeyboardAppearance off main thread in text input components.
+
+**Root Cause**: macOS 26 Beta 3 regression in UIKit threading enforcement causes crashes during text field focus/keyboard appearance changes.
+
+**Production Impact**: Blocks all SYNTRA consciousness development requiring user text input for Valon/Modi processing.
+
+**Stable Workaround**: NSTextField bridge with main thread enforcement:
+```swift
+// Thread-safe text input bypassing SwiftUI threading bug
+SyntraThreadSafeTextInput(
+    text: $text,
+    isProcessing: $isProcessing
+) {
+    await syntraCore.processInput()
+}
+```
+
+**Status**: 
+- ✅ **Stable workaround implemented** using NSTextField bridge with main thread safety
+- 🔄 **TODO**: Monitor for Beta 4 release and potential SwiftUI threading fixes
+- 📝 **Impact**: Unblocks SYNTRA consciousness development on macOS 26 Beta 3
+
+**Architecture Compliance**: Preserves three-brain processing (70% Valon, 30% Modi) while fixing threading crash.
+
 ---
 
 ## iOS Native Migration Branch

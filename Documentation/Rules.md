@@ -44,4 +44,8 @@ project Rule 2: Architecture First, Boilerplate Last
 
 Rule 1: No Placeholder/Stubs
 
-“Never use placeholder, stub, or TODO code unless strictly required. Always attempt a concrete, production-quality Swift implementation—even if partial or annotated with edge cases to resolve. !!!IF ALL ELSE FAILS, ask for help and i will set up an indepth search to find an answer, flag it and we will move on!!!”
+“Never use placeholder, stub, or TODO code unless strictly required. Always attempt a concrete, production-quality Swift implementation—even if partial or annotated with edge cases to resolve. !!!IF ALL ELSE FAILS, ask for help and i will set up an indepth search to find an answer, flag it and we will move on!!!"
+
+Project Rule 6: Beta-Resilient Development
+
+"When developing on beta OS versions, always implement graceful fallbacks and workarounds that preserve core functionality while maintaining architectural integrity. Beta-specific fixes must be clearly documented and designed to be easily removable when the OS issue is resolved."
