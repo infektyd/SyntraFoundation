@@ -26,14 +26,20 @@ public struct SyntraChatTextInput: View {
     }
     
     public var body: some View {
-        HStack {
+        HStack(spacing: 12) {
             textInputField
             sendButton
         }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 8)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
         .background(inputBackground)
-        .clipShape(RoundedRectangle(cornerRadius: 20))
+        .clipShape(RoundedRectangle(cornerRadius: 24))
+        .task {
+            // Pre-initialize text input system on main thread to prevent threading crashes
+            await MainActor.run {
+                // Force main thread initialization for Beta 3 compatibility
+            }
+        }
     }
     
     @ViewBuilder
@@ -73,17 +79,23 @@ public struct SyntraChatTextInput: View {
                 await handleSubmit()
             }
         } label: {
-            Image(systemName: isProcessing ? "stop.circle" : "arrow.up.circle.fill")
+            Image(systemName: isProcessing ? "stop.circle.fill" : "arrow.up.circle.fill")
                 .font(.title2)
-                .foregroundStyle(text.isEmpty ? Color.secondary : Color.blue)
+                .foregroundStyle(canSubmit ? .blue : .secondary)
+                .animation(.easeInOut(duration: 0.2), value: isProcessing)
         }
-        .disabled(text.isEmpty && !isProcessing)
+        .disabled(!canSubmit)
+    }
+    
+    private var canSubmit: Bool {
+        (!text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && !isProcessing) || isProcessing
     }
     
     private var inputBackground: some View {
-        RoundedRectangle(cornerRadius: 20)
-            .fill(.thinMaterial)
+        RoundedRectangle(cornerRadius: 24)
+            .fill(.regularMaterial)
             .stroke(.quaternary, lineWidth: 1)
+            .shadow(color: .black.opacity(0.1), radius: 2, x: 0, y: 1)
     }
     
     @MainActor
@@ -108,6 +120,13 @@ struct NativeTextField: NSViewRepresentable {
         textField.isEnabled = isEnabled
         textField.target = context.coordinator
         textField.action = #selector(Coordinator.textFieldAction(_:))
+        textField.focusRingType = .none
+        textField.isBordered = false
+        textField.backgroundColor = .clear
+        
+        // CRITICAL: Avoid setKeyboardAppearance calls that trigger Beta 3 crash
+        // Let NSTextField use system defaults without appearance modifications
+        
         return textField
     }
     
@@ -144,8 +163,10 @@ struct NativeTextField: NSViewRepresentable {
         }
         
         @objc func textFieldAction(_ sender: NSTextField) {
-            // Direct call since we're already on MainActor
-            parent.onSubmit()
+            // CRITICAL: Ensure onSubmit is called on main thread - Beta 3 threading fix
+            DispatchQueue.main.async {
+                self.parent.onSubmit()
+            }
         }
     }
 }

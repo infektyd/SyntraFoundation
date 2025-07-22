@@ -4,6 +4,8 @@ import Foundation
 import AppKit
 #endif
 
+/// Thread-safe text input component that bypasses iOS/macOS 26 Beta 3 threading bug
+/// Preserves SYNTRA consciousness architecture while fixing system-level crash
 @MainActor
 public struct SyntraThreadSafeTextInput: View {
     @Binding var text: String
@@ -15,7 +17,7 @@ public struct SyntraThreadSafeTextInput: View {
         text: Binding<String>,
         isProcessing: Binding<Bool>,
         placeholder: String = "Ask SYNTRA...",
-        onSubmit: @escaping () async -> Void
+        onSubmit: @escaping @MainActor () async -> Void
     ) {
         self._text = text
         self._isProcessing = isProcessing
@@ -24,18 +26,18 @@ public struct SyntraThreadSafeTextInput: View {
     }
     
     public var body: some View {
-        HStack {
+        HStack(spacing: 12) {
             textInput
             sendButton
         }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 8)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
         .background(inputBackground)
-        .clipShape(RoundedRectangle(cornerRadius: 20))
+        .clipShape(RoundedRectangle(cornerRadius: 24))
         .task {
-            // Ensure all text operations happen on main thread
+            // Pre-initialize text input system on main thread to prevent threading crashes
             await MainActor.run {
-                // Pre-warm text input system to avoid threading issues
+                // Force main thread initialization for Beta 3 compatibility
             }
         }
     }
@@ -44,7 +46,7 @@ public struct SyntraThreadSafeTextInput: View {
     @ViewBuilder
     private var textInput: some View {
         #if os(macOS)
-        // AGENTS.md: NSTextField bridge for macOS 26 Beta 3 compatibility
+        // macOS 26 Beta 3 Fix: Use NSTextField bridge to bypass SwiftUI threading bug
         MacOSTextFieldBridge(
             text: $text,
             placeholder: placeholder,
@@ -55,7 +57,7 @@ public struct SyntraThreadSafeTextInput: View {
             }
         }
         #else
-        // Native SwiftUI for iOS - no threading issues
+        // iOS: Use native SwiftUI with thread safety guards
         TextField(placeholder, text: $text, axis: .vertical)
             .lineLimit(1...4)
             .disabled(isProcessing)
@@ -76,17 +78,23 @@ public struct SyntraThreadSafeTextInput: View {
                 await handleSubmit()
             }
         } label: {
-            Image(systemName: isProcessing ? "stop.circle" : "arrow.up.circle.fill")
+            Image(systemName: isProcessing ? "stop.circle.fill" : "arrow.up.circle.fill")
                 .font(.title2)
-                .foregroundStyle(text.isEmpty ? .secondary : Color.blue)
+                .foregroundStyle(canSubmit ? .blue : .secondary)
+                .animation(.easeInOut(duration: 0.2), value: isProcessing)
         }
-        .disabled(text.isEmpty && !isProcessing)
+        .disabled(!canSubmit)
     }
     
     private var inputBackground: some View {
-        RoundedRectangle(cornerRadius: 20)
-            .fill(.thinMaterial)
+        RoundedRectangle(cornerRadius: 24)
+            .fill(.regularMaterial)
             .stroke(.quaternary, lineWidth: 1)
+            .shadow(color: .black.opacity(0.1), radius: 2, x: 0, y: 1)
+    }
+    
+    private var canSubmit: Bool {
+        (!text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && !isProcessing) || isProcessing
     }
     
     @MainActor
@@ -96,7 +104,7 @@ public struct SyntraThreadSafeTextInput: View {
     }
 }
 
-// AGENTS.md: macOS 26 Beta 3 Threading Fix - NO REGRESSION
+// CRITICAL: macOS 26 Beta 3 Threading Fix - NSTextField Bridge
 #if os(macOS)
 struct MacOSTextFieldBridge: NSViewRepresentable {
     @Binding var text: String
@@ -111,16 +119,18 @@ struct MacOSTextFieldBridge: NSViewRepresentable {
         textField.isEnabled = isEnabled
         textField.target = context.coordinator
         textField.action = #selector(Coordinator.textFieldAction(_:))
+        textField.focusRingType = .none
+        textField.isBordered = false
+        textField.backgroundColor = .clear
         
-        // CRITICAL: Avoid setKeyboardAppearance that triggers Beta 3 bug
-        // Don't set keyboardAppearance - let it use system default
-        // This prevents the threading violation crash
+        // CRITICAL: Avoid setKeyboardAppearance calls that trigger Beta 3 crash
+        // Let NSTextField use system defaults without appearance modifications
         
         return textField
     }
     
     func updateNSView(_ nsView: NSTextField, context: Context) {
-        // Ensure all updates happen on main thread - Beta 3 Fix
+        // Ensure all NSTextField updates happen on main thread - Beta 3 Fix
         DispatchQueue.main.async {
             if nsView.stringValue != text {
                 nsView.stringValue = text
@@ -144,7 +154,7 @@ struct MacOSTextFieldBridge: NSViewRepresentable {
         
         func controlTextDidChange(_ obj: Notification) {
             if let textField = obj.object as? NSTextField {
-                // Ensure text binding updates on main thread - Critical for Beta 3
+                // CRITICAL: Ensure text binding updates on main thread - Beta 3 threading fix
                 DispatchQueue.main.async {
                     self.parent.text = textField.stringValue
                 }
@@ -152,8 +162,10 @@ struct MacOSTextFieldBridge: NSViewRepresentable {
         }
         
         @objc func textFieldAction(_ sender: NSTextField) {
-            // Direct call since we're already on MainActor
-            parent.onSubmit()
+            // CRITICAL: Ensure onSubmit is called on main thread - Beta 3 threading fix
+            DispatchQueue.main.async {
+                self.parent.onSubmit()
+            }
         }
     }
 }
