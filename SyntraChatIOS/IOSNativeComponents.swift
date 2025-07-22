@@ -29,7 +29,10 @@ struct MessageBubble: View {
                     .clipShape(BubbleShape(isFromUser: message.sender == .user))
                     .contextMenu {
                         Button("Copy") {
-                            UIPasteboard.general.string = message.text
+                            // CRITICAL: Ensure UIKit operations on main thread - Beta 3 threading fix
+                            DispatchQueue.main.async {
+                                UIPasteboard.general.string = message.text
+                            }
                         }
                         Button("Share") {
                             shareMessage()
@@ -83,14 +86,17 @@ struct MessageBubble: View {
     }
     
     private func shareMessage() {
-        let activityVC = UIActivityViewController(
-            activityItems: [message.text],
-            applicationActivities: nil
-        )
-        
-        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-           let rootViewController = windowScene.windows.first?.rootViewController {
-            rootViewController.present(activityVC, animated: true)
+        // CRITICAL: Ensure UIKit operations on main thread - Beta 3 threading fix
+        DispatchQueue.main.async {
+            let activityVC = UIActivityViewController(
+                activityItems: [message.text],
+                applicationActivities: nil
+            )
+            
+            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+               let rootViewController = windowScene.windows.first?.rootViewController {
+                rootViewController.present(activityVC, animated: true)
+            }
         }
     }
 }
@@ -283,7 +289,10 @@ struct SystemStatusView: View {
 extension View {
     func hideKeyboardOnTap() -> some View {
         onTapGesture {
-            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+            // CRITICAL: Ensure UIKit operations on main thread - Beta 3 threading fix
+            DispatchQueue.main.async {
+                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+            }
         }
     }
     
@@ -300,8 +309,11 @@ struct KeyboardAdaptive: ViewModifier {
             .padding(.bottom, keyboardHeight)
             .animation(.easeInOut(duration: 0.3), value: keyboardHeight)
             .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { notification in
-                if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
-                    keyboardHeight = keyboardFrame.height - (UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0)
+                // CRITICAL: Ensure UIKit operations on main thread - Beta 3 threading fix
+                DispatchQueue.main.async {
+                    if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
+                        keyboardHeight = keyboardFrame.height - (UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0)
+                    }
                 }
             }
             .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in
