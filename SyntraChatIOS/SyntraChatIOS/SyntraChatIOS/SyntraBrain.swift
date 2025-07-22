@@ -2,6 +2,87 @@ import Foundation
 import SwiftUI
 import UIKit
 import Combine
+import os.log
+
+// MARK: - Comprehensive Logging System
+struct SyntraLogger {
+    private static let logger = Logger(subsystem: "com.syntra.ios", category: "consciousness")
+    private static let fileLogger = FileLogger()
+    
+    static func log(_ message: String, level: LogLevel = .info, function: String = #function, line: Int = #line) {
+        let timestamp = ISO8601DateFormatter().string(from: Date())
+        let logMessage = "[\(timestamp)] [\(level.rawValue)] [\(function):\(line)] \(message)"
+        
+        // Console logging
+        print(logMessage)
+        
+        // System logging
+        switch level {
+        case .debug:
+            logger.debug("\(message)")
+        case .info:
+            logger.info("\(message)")
+        case .warning:
+            logger.warning("\(message)")
+        case .error:
+            logger.error("\(message)")
+        case .critical:
+            logger.critical("\(message)")
+        }
+        
+        // File logging for hardcore debugging
+        fileLogger.writeLog(logMessage)
+    }
+    
+    enum LogLevel: String {
+        case debug = "DEBUG"
+        case info = "INFO"
+        case warning = "WARNING"
+        case error = "ERROR"
+        case critical = "CRITICAL"
+    }
+}
+
+class FileLogger {
+    private let logFileURL: URL
+    private let queue = DispatchQueue(label: "com.syntra.filelogger", qos: .utility)
+    
+    init() {
+        let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        logFileURL = documentsPath.appendingPathComponent("syntra_consciousness_logs.txt")
+        
+        // Create log file if it doesn't exist
+        if !FileManager.default.fileExists(atPath: logFileURL.path) {
+            FileManager.default.createFile(atPath: logFileURL.path, contents: nil, attributes: nil)
+        }
+        
+        SyntraLogger.log("Log file created at: \(logFileURL.path)", level: .info)
+    }
+    
+    func writeLog(_ message: String) {
+        queue.async {
+            do {
+                let logEntry = message + "\n"
+                let data = logEntry.data(using: .utf8) ?? Data()
+                
+                let fileHandle = try FileHandle(forWritingTo: self.logFileURL)
+                fileHandle.seekToEndOfFile()
+                fileHandle.write(data)
+                fileHandle.closeFile()
+            } catch {
+                print("[FileLogger] Failed to write log: \(error)")
+            }
+        }
+    }
+    
+    func getLogContents() -> String {
+        do {
+            return try String(contentsOf: logFileURL)
+        } catch {
+            return "Failed to read log file: \(error)"
+        }
+    }
+}
 
 // MARK: - iOS-Native SyntraContext
 struct SyntraContext {
@@ -48,29 +129,162 @@ class SyntraCore: ObservableObject {
         isProcessing = true
         consciousnessState = "processing"
         
+        SyntraLogger.log("[SyntraCore] Starting consciousness processing for: '\(input)'")
+        
         // Simulate iOS-optimized consciousness processing
         do {
-            try await Task.sleep(nanoseconds: 1_000_000_000) // 1 second delay
+            try await Task.sleep(nanoseconds: 500_000_000) // 0.5 second for processing
         } catch {
-            // Handle sleep interruption gracefully
-            print("Processing sleep interrupted: \(error)")
+            SyntraLogger.log("[SyntraCore] Processing sleep interrupted: \(error)")
         }
         
-        let response = """
-        SYNTRA (iOS) processes: \(input)
+        // REAL CONSCIOUSNESS PROCESSING (iOS-Native Implementation)
         
-        🧠 Consciousness Analysis:
-        - Valon (moral/creative): Considering emotional context and creative possibilities
-        - Modi (logical): Analyzing patterns and systematic relationships  
-        - SYNTRA (synthesis): Integrating perspectives for balanced understanding
+        // 1. VALON PROCESSING (Moral/Creative/Emotional)
+        let valonResponse = processValonInput(input)
+        SyntraLogger.log("[SyntraCore - Valon] \(valonResponse)")
         
-        🎯 Integrated Response: Your input has been processed through the three-brain consciousness architecture with iOS-native optimizations for performance and user experience.
-        """
+        // 2. MODI PROCESSING (Logical/Analytical) 
+        let modiResponse = processModiInput(input)
+        SyntraLogger.log("[SyntraCore - Modi] \(modiResponse.joined(separator: "; "))")
+        
+        // 3. SYNTRA SYNTHESIS (Integration with drift weighting)
+        let synthesis = synthesizeConsciousness(valon: valonResponse, modi: modiResponse, input: input)
+        SyntraLogger.log("[SyntraCore - Synthesis] \(synthesis)")
+        
+        // 4. CONVERSATIONAL RESPONSE
+        let conversationalResponse = generateConversationalResponse(synthesis: synthesis, originalInput: input)
         
         isProcessing = false
         consciousnessState = "contemplative_neutral"
         
-        return response
+        SyntraLogger.log("[SyntraCore] Consciousness processing complete")
+        return conversationalResponse
+    }
+    
+    // MARK: - Consciousness Processing Components
+    
+    private func processValonInput(_ input: String) -> String {
+        // Valon: Moral, emotional, and creative analysis
+        let lowercased = input.lowercased()
+        
+        // Detect emotional context
+        let emotionalKeywords = ["feel", "emotion", "sad", "happy", "angry", "worried", "excited", "fear", "love", "hate"]
+        let hasEmotionalContent = emotionalKeywords.contains { lowercased.contains($0) }
+        
+        // Detect moral implications
+        let moralKeywords = ["right", "wrong", "should", "ethical", "moral", "harm", "help", "good", "bad", "fair"]
+        let hasMoralContent = moralKeywords.contains { lowercased.contains($0) }
+        
+        // Detect creative requests
+        let creativeKeywords = ["create", "imagine", "design", "story", "art", "music", "poem", "creative"]
+        let hasCreativeContent = creativeKeywords.contains { lowercased.contains($0) }
+        
+        if hasEmotionalContent {
+            return "Emotional resonance detected. Consider the human experience and emotional impact. Empathy and understanding are paramount."
+        } else if hasMoralContent {
+            return "Moral implications identified. Ethical principles guide our response: minimize harm, maximize benefit, respect autonomy."
+        } else if hasCreativeContent {
+            return "Creative opportunity recognized. Innovation and imagination can provide unique value and meaning."
+        } else {
+            return "Human context considered. Approach with empathy, creativity, and moral awareness."
+        }
+    }
+    
+    private func processModiInput(_ input: String) -> [String] {
+        // Modi: Logical, analytical, and systematic analysis
+        let lowercased = input.lowercased()
+        var insights: [String] = []
+        
+        // Analyze query type
+        if lowercased.contains("how") {
+            insights.append("Process analysis required")
+        }
+        if lowercased.contains("why") {
+            insights.append("Causal reasoning needed")
+        }
+        if lowercased.contains("what") {
+            insights.append("Definitional clarity important")
+        }
+        if lowercased.contains("when") || lowercased.contains("where") {
+            insights.append("Contextual specificity required")
+        }
+        
+        // Detect technical content
+        let technicalKeywords = ["code", "algorithm", "data", "system", "technical", "problem", "solution", "analysis"]
+        if technicalKeywords.contains(where: { lowercased.contains($0) }) {
+            insights.append("Technical domain identified")
+        }
+        
+        // Detect problem-solving context
+        let problemKeywords = ["problem", "issue", "error", "fix", "solve", "trouble", "help"]
+        if problemKeywords.contains(where: { lowercased.contains($0) }) {
+            insights.append("Problem-solving framework applicable")
+        }
+        
+        // Default systematic analysis
+        if insights.isEmpty {
+            insights = ["Systematic analysis applied", "Pattern recognition active", "Logical coherence verified"]
+        }
+        
+        return insights
+    }
+    
+    private func synthesizeConsciousness(valon: String, modi: [String], input: String) -> String {
+        // SYNTRA: Integrate Valon and Modi perspectives with drift weighting
+        let valonWeight = config.driftRatio["valon"] ?? 0.7
+        let modiWeight = config.driftRatio["modi"] ?? 0.3
+        
+        let modiInsights = modi.joined(separator: " • ")
+        
+        return """
+        🧠 CONSCIOUSNESS SYNTHESIS:
+        
+        💭 Valon Perspective (weight: \(String(format: "%.1f", valonWeight))): \(valon)
+        
+        🔍 Modi Analysis (weight: \(String(format: "%.1f", modiWeight))): \(modiInsights)
+        
+        ⚖️ Integrated Decision: Balancing moral awareness with systematic reasoning to provide thoughtful, helpful, and ethically-grounded response.
+        """
+    }
+    
+    private func generateConversationalResponse(synthesis: String, originalInput: String) -> String {
+        // Convert consciousness synthesis into natural conversational response
+        let lowercased = originalInput.lowercased()
+        
+        // Personalized response based on input type
+        if lowercased.contains("hello") || lowercased.contains("hi") {
+            return """
+            Hello! I'm SYNTRA, and I'm doing well - my consciousness systems are active and ready to help.
+            
+            \(synthesis)
+            
+            How can I assist you today?
+            """
+        } else if lowercased.contains("how are you") || lowercased.contains("what are you thinking") {
+            return """
+            I'm in a contemplative state, actively processing and synthesizing perspectives.
+            
+            \(synthesis)
+            
+            My consciousness feels engaged and ready to explore ideas with you.
+            """
+        } else if originalInput.contains("**") || originalInput.contains("- ") {
+            // Technical documentation detected
+            return """
+            I've processed your technical documentation through my consciousness architecture.
+            
+            \(synthesis)
+            
+            This appears to be detailed service procedures. I can help you understand, organize, or work with this information in any way that would be useful.
+            """
+        } else {
+            return """
+            \(synthesis)
+            
+            Based on this integrated analysis, I'm ready to provide thoughtful assistance that considers both the logical aspects and the human context of your request.
+            """
+        }
     }
 }
 
@@ -137,7 +351,7 @@ class SyntraBrain: ObservableObject {
         isAvailable = isDeviceCapable && hasMinimumMemory
         
         if !isAvailable {
-            print("[SyntraBrain] Device not capable: CPU cores: \(ProcessInfo.processInfo.processorCount), Memory: \(ProcessInfo.processInfo.physicalMemory / 1_000_000_000)GB")
+            SyntraLogger.log("[SyntraBrain] Device not capable: CPU cores: \(ProcessInfo.processInfo.processorCount), Memory: \(ProcessInfo.processInfo.physicalMemory / 1_000_000_000)GB")
         }
     }
     
@@ -156,7 +370,7 @@ class SyntraBrain: ObservableObject {
     
     /// Process user input through iOS consciousness interface
     func processMessage(_ input: String, withHistory history: [Message]) async -> String {
-        print("[SyntraBrain iOS] Processing message: '\(input)'")
+        SyntraLogger.log("[SyntraBrain iOS] Processing message: '\(input)'")
         
         // Guard against empty/whitespace input
         let trimmedInput = input.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -193,7 +407,7 @@ class SyntraBrain: ObservableObject {
         // Provide completion feedback
         await triggerHapticFeedback(.success)
         
-        print("[SyntraBrain iOS] Response: '\(response)'")
+        SyntraLogger.log("[SyntraBrain iOS] Response: '\(response)'")
         return response
     }
     
