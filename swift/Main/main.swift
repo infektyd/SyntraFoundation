@@ -7,7 +7,7 @@ struct SyntraSwiftCLI {
         print("SyntraSwiftCLI running...")
         
         let config = SyntraConfig()
-        let chatView = SyntraChatView(config: config)
+        _ = SyntraChatView(config: config)
         
         print("SyntraChatView initialized. Exiting.")
     }
