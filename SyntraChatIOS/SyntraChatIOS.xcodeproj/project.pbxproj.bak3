@@ -7,6 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A3280D952E2F005200E1BCC5 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3280D852E2F005200E1BCC5 /* ChatView.swift */; };
+		A3280D962E2F005200E1BCC5 /* SyntraBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3280D8E2E2F005200E1BCC5 /* SyntraBrain.swift */; };
+		A3280D972E2F005200E1BCC5 /* IOSNativeComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3280D892E2F005200E1BCC5 /* IOSNativeComponents.swift */; };
+		A3280D982E2F005200E1BCC5 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3280D8A2E2F005200E1BCC5 /* Message.swift */; };
+		A3280D992E2F005200E1BCC5 /* SyntraChatIOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3280D922E2F005200E1BCC5 /* SyntraChatIOSApp.swift */; };
+		A3280D9A2E2F005200E1BCC5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3280D872E2F005200E1BCC5 /* ContentView.swift */; };
+		A3280D9B2E2F005200E1BCC5 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3280D8D2E2F005200E1BCC5 /* SettingsView.swift */; };
+		A3280DA12E2F005200E1BCC5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A3280D842E2F005200E1BCC5 /* Assets.xcassets */; };
+		A3280DA42E2F010F00E1BCC5 /* SyntraSwift in Frameworks */ = {isa = PBXBuildFile; productRef = A3280DA32E2F010F00E1BCC5 /* SyntraSwift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -27,7 +36,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-
+		A3280D842E2F005200E1BCC5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A3280D852E2F005200E1BCC5 /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
+		A3280D872E2F005200E1BCC5 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		A3280D882E2F005200E1BCC5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A3280D892E2F005200E1BCC5 /* IOSNativeComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOSNativeComponents.swift; sourceTree = "<group>"; };
+		A3280D8A2E2F005200E1BCC5 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		A3280D8D2E2F005200E1BCC5 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		A3280D8E2E2F005200E1BCC5 /* SyntraBrain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyntraBrain.swift; sourceTree = "<group>"; };
+		A3280D902E2F005200E1BCC5 /* SyntraChatIOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SyntraChatIOS.entitlements; sourceTree = "<group>"; };
+		A3280D912E2F005200E1BCC5 /* SyntraChatIOS.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = SyntraChatIOS.xcodeproj; sourceTree = "<group>"; };
+		A3280D922E2F005200E1BCC5 /* SyntraChatIOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyntraChatIOSApp.swift; sourceTree = "<group>"; };
 		A3B5A00D2E2DF8B600E8C881 /* SyntraChatIOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SyntraChatIOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3B5A01E2E2DF8B800E8C881 /* SyntraChatIOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SyntraChatIOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3B5A0282E2DF8B800E8C881 /* SyntraChatIOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SyntraChatIOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -58,6 +77,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A3280DA42E2F010F00E1BCC5 /* SyntraSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -123,6 +143,7 @@
 			);
 			name = SyntraChatIOS;
 			packageProductDependencies = (
+				A3280DA32E2F010F00E1BCC5 /* SyntraSwift */,
 			);
 			productName = SyntraChatIOS;
 			productReference = A3B5A00D2E2DF8B600E8C881 /* SyntraChatIOS.app */;
@@ -222,6 +243,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A3280DA12E2F005200E1BCC5 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -246,6 +268,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A3280D952E2F005200E1BCC5 /* ChatView.swift in Sources */,
+				A3280D962E2F005200E1BCC5 /* SyntraBrain.swift in Sources */,
+				A3280D972E2F005200E1BCC5 /* IOSNativeComponents.swift in Sources */,
+				A3280D982E2F005200E1BCC5 /* Message.swift in Sources */,
+				A3280D992E2F005200E1BCC5 /* SyntraChatIOSApp.swift in Sources */,
+				A3280D9A2E2F005200E1BCC5 /* ContentView.swift in Sources */,
+				A3280D9B2E2F005200E1BCC5 /* SettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -285,7 +314,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = "SyntraChatIOS/SyntraChatIOS/SyntraChatIOS.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "SyntraChatIOS/SyntraChatIOS.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5BMZT525A2;
@@ -321,7 +350,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = "SyntraChatIOS/SyntraChatIOS/SyntraChatIOS.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "SyntraChatIOS/SyntraChatIOS.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5BMZT525A2;
@@ -596,7 +625,12 @@
 		};
 /* End XCConfigurationList section */
 
-
+/* Begin XCSwiftPackageProductDependency section */
+		A3280DA32E2F010F00E1BCC5 /* SyntraSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SyntraSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = A3B5A0052E2DF8B600E8C881 /* Project object */;
 }

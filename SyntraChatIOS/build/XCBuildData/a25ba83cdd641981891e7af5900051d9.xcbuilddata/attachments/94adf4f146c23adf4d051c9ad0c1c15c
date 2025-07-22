@@ -1,0 +1,109 @@
+{
+  "" : {
+    "diagnostics" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/SyntraChatIOS-primary.dia",
+    "emit-module-dependencies" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/SyntraChatIOS-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/SyntraChatIOS-primary-emit-module.dia",
+    "pch" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/SyntraChatIOS-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/SyntraChatIOS-primary.swiftdeps"
+  },
+  "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/SyntraChatIOS/SyntraChatIOS/ChatView.swift" : {
+    "const-values" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/ChatView.swiftconstvalues",
+    "dependencies" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/ChatView.d",
+    "diagnostics" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/ChatView.dia",
+    "index-unit-output-path" : "/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/ChatView.o",
+    "llvm-bc" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/ChatView.bc",
+    "object" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/ChatView.o",
+    "swift-dependencies" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/ChatView.swiftdeps",
+    "swiftmodule" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/ChatView~partial.swiftmodule"
+  },
+  "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/SyntraChatIOS/SyntraChatIOS/ContentView.swift" : {
+    "const-values" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/ContentView.swiftconstvalues",
+    "dependencies" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/ContentView.d",
+    "diagnostics" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/ContentView.dia",
+    "index-unit-output-path" : "/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/ContentView.o",
+    "llvm-bc" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/ContentView.bc",
+    "object" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/ContentView.o",
+    "swift-dependencies" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/ContentView.swiftdeps",
+    "swiftmodule" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/ContentView~partial.swiftmodule"
+  },
+  "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/SyntraChatIOS/SyntraChatIOS/FileImportView.swift" : {
+    "const-values" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/FileImportView.swiftconstvalues",
+    "dependencies" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/FileImportView.d",
+    "diagnostics" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/FileImportView.dia",
+    "index-unit-output-path" : "/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/FileImportView.o",
+    "llvm-bc" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/FileImportView.bc",
+    "object" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/FileImportView.o",
+    "swift-dependencies" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/FileImportView.swiftdeps",
+    "swiftmodule" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/FileImportView~partial.swiftmodule"
+  },
+  "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/SyntraChatIOS/SyntraChatIOS/IOSNativeComponents.swift" : {
+    "const-values" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/IOSNativeComponents.swiftconstvalues",
+    "dependencies" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/IOSNativeComponents.d",
+    "diagnostics" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/IOSNativeComponents.dia",
+    "index-unit-output-path" : "/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/IOSNativeComponents.o",
+    "llvm-bc" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/IOSNativeComponents.bc",
+    "object" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/IOSNativeComponents.o",
+    "swift-dependencies" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/IOSNativeComponents.swiftdeps",
+    "swiftmodule" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/IOSNativeComponents~partial.swiftmodule"
+  },
+  "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/SyntraChatIOS/SyntraChatIOS/Message.swift" : {
+    "const-values" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/Message.swiftconstvalues",
+    "dependencies" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/Message.d",
+    "diagnostics" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/Message.dia",
+    "index-unit-output-path" : "/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/Message.o",
+    "llvm-bc" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/Message.bc",
+    "object" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/Message.o",
+    "swift-dependencies" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/Message.swiftdeps",
+    "swiftmodule" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/Message~partial.swiftmodule"
+  },
+  "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/SyntraChatIOS/SyntraChatIOS/SettingsView.swift" : {
+    "const-values" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/SettingsView.swiftconstvalues",
+    "dependencies" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/SettingsView.d",
+    "diagnostics" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/SettingsView.dia",
+    "index-unit-output-path" : "/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/SettingsView.o",
+    "llvm-bc" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/SettingsView.bc",
+    "object" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/SettingsView.o",
+    "swift-dependencies" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/SettingsView.swiftdeps",
+    "swiftmodule" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/SettingsView~partial.swiftmodule"
+  },
+  "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/SyntraChatIOS/SyntraChatIOS/SyntraBrain.swift" : {
+    "const-values" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/SyntraBrain.swiftconstvalues",
+    "dependencies" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/SyntraBrain.d",
+    "diagnostics" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/SyntraBrain.dia",
+    "index-unit-output-path" : "/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/SyntraBrain.o",
+    "llvm-bc" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/SyntraBrain.bc",
+    "object" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/SyntraBrain.o",
+    "swift-dependencies" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/SyntraBrain.swiftdeps",
+    "swiftmodule" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/SyntraBrain~partial.swiftmodule"
+  },
+  "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/SyntraChatIOS/SyntraChatIOS/SyntraChatIOSApp.swift" : {
+    "const-values" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/SyntraChatIOSApp.swiftconstvalues",
+    "dependencies" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/SyntraChatIOSApp.d",
+    "diagnostics" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/SyntraChatIOSApp.dia",
+    "index-unit-output-path" : "/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/SyntraChatIOSApp.o",
+    "llvm-bc" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/SyntraChatIOSApp.bc",
+    "object" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/SyntraChatIOSApp.o",
+    "swift-dependencies" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/SyntraChatIOSApp.swiftdeps",
+    "swiftmodule" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/SyntraChatIOSApp~partial.swiftmodule"
+  },
+  "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/SyntraChatIOS/SyntraChatIOS/VoiceInputView.swift" : {
+    "const-values" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/VoiceInputView.swiftconstvalues",
+    "dependencies" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/VoiceInputView.d",
+    "diagnostics" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/VoiceInputView.dia",
+    "index-unit-output-path" : "/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/VoiceInputView.o",
+    "llvm-bc" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/VoiceInputView.bc",
+    "object" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/VoiceInputView.o",
+    "swift-dependencies" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/VoiceInputView.swiftdeps",
+    "swiftmodule" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/VoiceInputView~partial.swiftmodule"
+  },
+  "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/DerivedSources/GeneratedAssetSymbols.swift" : {
+    "const-values" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/GeneratedAssetSymbols.swiftconstvalues",
+    "dependencies" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/GeneratedAssetSymbols.d",
+    "diagnostics" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/GeneratedAssetSymbols.dia",
+    "index-unit-output-path" : "/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/GeneratedAssetSymbols.o",
+    "llvm-bc" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/GeneratedAssetSymbols.bc",
+    "object" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/GeneratedAssetSymbols.o",
+    "swift-dependencies" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/GeneratedAssetSymbols.swiftdeps",
+    "swiftmodule" : "/Users/hansaxelsson/SyntraFoundation/SyntraChatIOS/build/SyntraChatIOS.build/Debug-iphoneos/SyntraChatIOS.build/Objects-normal/arm64/GeneratedAssetSymbols~partial.swiftmodule"
+  }
+}

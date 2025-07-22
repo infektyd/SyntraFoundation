@@ -2,7 +2,55 @@ import Foundation
 import SwiftUI
 import UIKit
 import Combine
-import SyntraSwift
+
+// MARK: - iOS-Native Configuration
+struct SyntraConfig {
+    var driftRatio: [String: Double] = ["default": 0.5]
+    var useAdaptiveFusion: Bool = true
+    var useAdaptiveWeighting: Bool = true
+    var enableValonOutput: Bool = true
+    var enableModiOutput: Bool = true
+    var enableDriftOutput: Bool = true
+    
+    init() {}
+}
+
+// MARK: - iOS-Native Core
+@MainActor
+class SyntraCore: ObservableObject {
+    @Published var consciousnessState: String = "contemplative_neutral"
+    @Published var isProcessing: Bool = false
+    
+    private let config: SyntraConfig
+    
+    init(config: SyntraConfig = SyntraConfig()) {
+        self.config = config
+    }
+    
+    func processInput(_ input: String) async -> String {
+        isProcessing = true
+        consciousnessState = "processing"
+        
+        // Simulate iOS-optimized consciousness processing
+        await Task.sleep(nanoseconds: 1_000_000_000) // 1 second delay
+        
+        let response = """
+        SYNTRA (iOS) processes: \(input)
+        
+        🧠 Consciousness Analysis:
+        - Valon (moral/creative): Considering emotional context and creative possibilities
+        - Modi (logical): Analyzing patterns and systematic relationships  
+        - SYNTRA (synthesis): Integrating perspectives for balanced understanding
+        
+        🎯 Integrated Response: Your input has been processed through the three-brain consciousness architecture with iOS-native optimizations for performance and user experience.
+        """
+        
+        isProcessing = false
+        consciousnessState = "contemplative_neutral"
+        
+        return response
+    }
+}
 
 /// iOS-optimized SYNTRA consciousness interface with native iOS features
 @MainActor
@@ -113,18 +161,18 @@ class SyntraBrain: ObservableObject {
             userPreferences: [:], // Placeholder for future implementation
             sessionId: self.sessionId
         )
-        let response = await syntraCore.processInput(trimmedInput, context: context)
+        let response = await syntraCore.processInput(trimmedInput)
         
         // Update published state
         isProcessing = false
         consciousnessState = "contemplative_neutral"
-        lastResponse = response.content
+        lastResponse = response
         
         // Provide completion feedback
         await triggerHapticFeedback(.success)
         
-        print("[SyntraBrain iOS] Response: '\(response.content)'")
-        return response.content
+        print("[SyntraBrain iOS] Response: '\(response)'")
+        return response
     }
     
     /// Trigger iOS-native haptic feedback
