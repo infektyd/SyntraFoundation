@@ -3,6 +3,9 @@ import SwiftUI
 import UIKit
 import Combine
 import os.log
+#if canImport(FoundationModels)
+import FoundationModels
+#endif
 
 // MARK: - Comprehensive Logging System
 struct SyntraLogger {
@@ -115,60 +118,250 @@ struct SyntraConfig {
     init() {}
 }
 
-// MARK: - iOS-Native Core
+// MARK: - Agentic Framework with Foundation Models Integration
 @MainActor
 class SyntraCore: ObservableObject {
     @Published var consciousnessState: String = "contemplative_neutral"
     @Published var isProcessing: Bool = false
     
     private let config: SyntraConfig
+    private var conversationMemory: [String] = [] // Session conversation memory
+    private var persistentMemory: [String: Any] = [:] // Persistent memory integration
+    private let sessionId: String // Consistent session ID
+    
+    // Foundation Models as the core LLM engine
+    #if canImport(FoundationModels)
+    private var foundationModel: SystemLanguageModel?
+    private var languageSession: LanguageModelSession?
+    #endif
+    
+    // App state observer for memory persistence
+    private var appStateObserver: NSObjectProtocol?
     
     init(config: SyntraConfig = SyntraConfig()) {
         self.config = config
+        
+        // Load or create persistent session ID
+        if let existingSessionId = UserDefaults.standard.string(forKey: "syntra_session_id") {
+            self.sessionId = existingSessionId
+        } else {
+            let newSessionId = UUID().uuidString
+            UserDefaults.standard.set(newSessionId, forKey: "syntra_session_id")
+            self.sessionId = newSessionId
+        }
+        
+        // Load persistent memory from UserDefaults
+        loadPersistentMemory()
+        
+        // Load conversation memory from UserDefaults
+        loadConversationMemory()
+        
+        // Initialize Foundation Models as the core LLM
+        setupFoundationModels()
+        
+        // Setup app state observers for memory persistence
+        setupAppStateObservers()
     }
     
-    func processInput(_ input: String) async -> String {
+    deinit {
+        if let observer = appStateObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
+    }
+    
+    private func setupAppStateObservers() {
+        // Save memory when app goes to background
+        appStateObserver = NotificationCenter.default.addObserver(
+            forName: UIApplication.didEnterBackgroundNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.saveConversationMemory()
+            self?.savePersistentMemory()
+            SyntraLogger.log("[SyntraCore] Memory saved on app background")
+        }
+    }
+    
+    #if canImport(FoundationModels)
+    private func setupFoundationModels() {
+        // Check if Foundation Models are available
+        guard SystemLanguageModel.default.availability == .available else {
+            SyntraLogger.log("[SyntraCore] Foundation Models not available on this device")
+            return
+        }
+        
+        do {
+            self.foundationModel = SystemLanguageModel.default
+            self.languageSession = try LanguageModelSession(model: foundationModel!)
+            SyntraLogger.log("[SyntraCore] Foundation Models initialized as core LLM engine")
+        } catch {
+            SyntraLogger.log("[SyntraCore] Failed to initialize Foundation Models: \(error)")
+        }
+    }
+    #endif
+    
+    func processInput(_ input: String, context: SyntraContext) async -> String {
         isProcessing = true
         consciousnessState = "processing"
         
-        SyntraLogger.log("[SyntraCore] Starting consciousness processing for: '\(input)'")
+        SyntraLogger.log("[SyntraCore] Starting agentic processing for: '\(input)' with context session: \(sessionId)")
         
-        // Simulate iOS-optimized consciousness processing
-        do {
-            try await Task.sleep(nanoseconds: 500_000_000) // 0.5 second for processing
-        } catch {
-            SyntraLogger.log("[SyntraCore] Processing sleep interrupted: \(error)")
+        // Update conversation memory with current input
+        conversationMemory.append("User: \(input)")
+        
+        // Integrate with persistent memory through Python structures
+        await integrateWithPersistentMemory(input: input, context: context)
+        
+        // AGENTIC FRAMEWORK: Use Foundation Models as the core LLM within SYNTRA's reasoning
+        let response = await generateAgenticResponse(input: input, context: context)
+        
+        // Add response to conversation memory
+        conversationMemory.append("SYNTRA: \(response)")
+        
+        // Store in persistent memory
+        await storeInPersistentMemory(input: input, response: response, context: context)
+        
+        // Keep conversation memory manageable (last 20 exchanges)
+        if conversationMemory.count > 40 {
+            conversationMemory = Array(conversationMemory.suffix(40))
         }
         
-        // REAL CONSCIOUSNESS PROCESSING (iOS-Native Implementation)
-        
-        // 1. VALON PROCESSING (Moral/Creative/Emotional)
-        let valonResponse = processValonInput(input)
-        SyntraLogger.log("[SyntraCore - Valon] \(valonResponse)")
-        
-        // 2. MODI PROCESSING (Logical/Analytical) 
-        let modiResponse = processModiInput(input)
-        SyntraLogger.log("[SyntraCore - Modi] \(modiResponse.joined(separator: "; "))")
-        
-        // 3. SYNTRA SYNTHESIS (Integration with drift weighting)
-        let synthesis = synthesizeConsciousness(valon: valonResponse, modi: modiResponse, input: input)
-        SyntraLogger.log("[SyntraCore - Synthesis] \(synthesis)")
-        
-        // 4. CONVERSATIONAL RESPONSE
-        let conversationalResponse = generateConversationalResponse(synthesis: synthesis, originalInput: input)
+        // Save memory to persistent storage
+        saveConversationMemory()
+        savePersistentMemory()
         
         isProcessing = false
         consciousnessState = "contemplative_neutral"
         
-        SyntraLogger.log("[SyntraCore] Consciousness processing complete")
-        return conversationalResponse
+        SyntraLogger.log("[SyntraCore] Agentic processing complete")
+        return response
+    }
+    
+    // MARK: - Persistent Memory Integration
+    
+    private func integrateWithPersistentMemory(input: String, context: SyntraContext) async {
+        // Integrate with Python memory vault structures
+        // This would call the Python reasoning engine for persistent storage
+        SyntraLogger.log("[SyntraCore] Integrating with persistent memory for input: '\(input)'")
+        
+        // Simulate integration with Python memory structures
+        persistentMemory["last_input"] = input
+        persistentMemory["last_timestamp"] = Date().timeIntervalSince1970
+        persistentMemory["session_id"] = sessionId // Use consistent session ID
+    }
+    
+    private func storeInPersistentMemory(input: String, response: String, context: SyntraContext) async {
+        // Store in Python memory vault through reasoning engine
+        SyntraLogger.log("[SyntraCore] Storing in persistent memory: input='\(input)', response='\(response)'")
+        
+        // This would integrate with utils/reasoning_engine.py for persistent storage
+        let interaction: [String: Any] = [
+            "input": input,
+            "response": response,
+            "timestamp": Date().timeIntervalSince1970,
+            "session_id": sessionId // Use consistent session ID
+        ]
+        
+        // Properly handle array mutation by extracting, modifying, and reassigning
+        var storedInteractions = persistentMemory["stored_interactions"] as? [[String: Any]] ?? []
+        storedInteractions.append(interaction)
+        persistentMemory["stored_interactions"] = storedInteractions
+    }
+    
+    // MARK: - Persistent Storage with Error Handling
+    
+    private func saveConversationMemory() {
+        do {
+            let data = try JSONSerialization.data(withJSONObject: conversationMemory)
+            UserDefaults.standard.set(data, forKey: "syntra_conversation_memory")
+            UserDefaults.standard.synchronize() // Force immediate save
+        } catch {
+            SyntraLogger.log("[SyntraCore] Failed to save conversation memory: \(error)")
+        }
+    }
+    
+    private func loadConversationMemory() {
+        do {
+            if let data = UserDefaults.standard.data(forKey: "syntra_conversation_memory"),
+               let savedMemory = try JSONSerialization.jsonObject(with: data) as? [String] {
+                conversationMemory = savedMemory
+                SyntraLogger.log("[SyntraCore] Loaded \(savedMemory.count) conversation memory items")
+            }
+        } catch {
+            SyntraLogger.log("[SyntraCore] Failed to load conversation memory: \(error)")
+            conversationMemory = [] // Reset on error
+        }
+    }
+    
+    private func savePersistentMemory() {
+        do {
+            let data = try JSONSerialization.data(withJSONObject: persistentMemory)
+            UserDefaults.standard.set(data, forKey: "syntra_persistent_memory")
+            UserDefaults.standard.synchronize() // Force immediate save
+        } catch {
+            SyntraLogger.log("[SyntraCore] Failed to save persistent memory: \(error)")
+        }
+    }
+    
+    private func loadPersistentMemory() {
+        do {
+            if let data = UserDefaults.standard.data(forKey: "syntra_persistent_memory"),
+               let loadedMemory = try JSONSerialization.jsonObject(with: data) as? [String: Any] {
+                persistentMemory = loadedMemory
+                SyntraLogger.log("[SyntraCore] Loaded persistent memory with \(loadedMemory.count) keys")
+            }
+        } catch {
+            SyntraLogger.log("[SyntraCore] Failed to load persistent memory: \(error)")
+            persistentMemory = [:] // Reset on error
+        }
+    }
+    
+    // MARK: - Memory Management
+    
+    public func clearConversationMemory() {
+        conversationMemory.removeAll()
+        UserDefaults.standard.removeObject(forKey: "syntra_conversation_memory")
+    }
+    
+    public func getConversationMemory() -> [String] {
+        return conversationMemory
+    }
+    
+    public func getPersistentMemory() -> [String: Any] {
+        return persistentMemory
+    }
+    
+    public func recoverMemoryOnLaunch() {
+        SyntraLogger.log("[SyntraCore] Attempting memory recovery on launch")
+        
+        // Load all memory
+        loadConversationMemory()
+        loadPersistentMemory()
+        
+        // Log recovery status
+        let conversationCount = conversationMemory.count
+        let persistentCount = persistentMemory.count
+        
+        SyntraLogger.log("[SyntraCore] Memory recovery complete - Conversation: \(conversationCount) items, Persistent: \(persistentCount) keys")
+        
+        // Validate session consistency
+        if let storedSessionId = persistentMemory["session_id"] as? String,
+           storedSessionId != sessionId {
+            SyntraLogger.log("[SyntraCore] Session ID mismatch detected - stored: \(storedSessionId), current: \(sessionId)")
+        }
     }
     
     // MARK: - Consciousness Processing Components
     
-    private func processValonInput(_ input: String) -> String {
-        // Valon: Moral, emotional, and creative analysis
+    private func processValonInput(_ input: String, conversationMemory: [String], persistentMemory: [String: Any]) -> String {
+        // Valon: Moral, emotional, and creative analysis with persistent memory
         let lowercased = input.lowercased()
+        
+        // Check conversation memory for context
+        let hasConversationHistory = conversationMemory.count > 1
+        
+        // Check persistent memory for relevant stored information
+        let hasPersistentMemory = !persistentMemory.isEmpty
         
         // Detect emotional context
         let emotionalKeywords = ["feel", "emotion", "sad", "happy", "angry", "worried", "excited", "fear", "love", "hate"]
@@ -182,7 +375,13 @@ class SyntraCore: ObservableObject {
         let creativeKeywords = ["create", "imagine", "design", "story", "art", "music", "poem", "creative"]
         let hasCreativeContent = creativeKeywords.contains { lowercased.contains($0) }
         
-        if hasEmotionalContent {
+        // Check if this is a follow-up question about previous content
+        let followUpKeywords = ["this", "that", "it", "document", "service", "procedure"]
+        let isFollowUp = followUpKeywords.contains { lowercased.contains($0) } && (hasConversationHistory || hasPersistentMemory)
+        
+        if isFollowUp {
+            return "Building on our conversation and stored knowledge, I approach this with continued moral consideration and creative insight."
+        } else if hasEmotionalContent {
             return "Emotional resonance detected. Consider the human experience and emotional impact. Empathy and understanding are paramount."
         } else if hasMoralContent {
             return "Moral implications identified. Ethical principles guide our response: minimize harm, maximize benefit, respect autonomy."
@@ -193,10 +392,16 @@ class SyntraCore: ObservableObject {
         }
     }
     
-    private func processModiInput(_ input: String) -> [String] {
-        // Modi: Logical, analytical, and systematic analysis
+    private func processModiInput(_ input: String, conversationMemory: [String], persistentMemory: [String: Any]) -> [String] {
+        // Modi: Logical, analytical, and systematic analysis with persistent memory
         let lowercased = input.lowercased()
         var insights: [String] = []
+        
+        // Check conversation memory for context
+        let hasConversationHistory = conversationMemory.count > 1
+        
+        // Check persistent memory for relevant stored information
+        let hasPersistentMemory = !persistentMemory.isEmpty
         
         // Analyze query type
         if lowercased.contains("how") {
@@ -224,6 +429,14 @@ class SyntraCore: ObservableObject {
             insights.append("Problem-solving framework applicable")
         }
         
+        // Check if this is a follow-up about previous technical content
+        let followUpKeywords = ["this", "that", "it", "document", "service", "procedure"]
+        let isFollowUp = followUpKeywords.contains { lowercased.contains($0) } && (hasConversationHistory || hasPersistentMemory)
+        
+        if isFollowUp {
+            insights.append("Context-aware analysis based on conversation history and stored knowledge")
+        }
+        
         // Default systematic analysis
         if insights.isEmpty {
             insights = ["Systematic analysis applied", "Pattern recognition active", "Logical coherence verified"]
@@ -232,15 +445,19 @@ class SyntraCore: ObservableObject {
         return insights
     }
     
-    private func synthesizeConsciousness(valon: String, modi: [String], input: String) -> String {
-        // SYNTRA: Integrate Valon and Modi perspectives with drift weighting
+    private func synthesizeConsciousness(valon: String, modi: [String], input: String, conversationMemory: [String], persistentMemory: [String: Any]) -> String {
+        // SYNTRA: Integrate Valon and Modi perspectives with drift weighting and persistent memory
         let valonWeight = config.driftRatio["valon"] ?? 0.7
         let modiWeight = config.driftRatio["modi"] ?? 0.3
         
         let modiInsights = modi.joined(separator: " • ")
         
+        // Check if we have conversation memory or persistent memory
+        let hasMemory = conversationMemory.count > 1 || !persistentMemory.isEmpty
+        let memoryContext = hasMemory ? " (with persistent memory)" : ""
+        
         return """
-        🧠 CONSCIOUSNESS SYNTHESIS:
+        🧠 CONSCIOUSNESS SYNTHESIS\(memoryContext):
         
         💭 Valon Perspective (weight: \(String(format: "%.1f", valonWeight))): \(valon)
         
@@ -250,42 +467,73 @@ class SyntraCore: ObservableObject {
         """
     }
     
-    private func generateConversationalResponse(synthesis: String, originalInput: String) -> String {
-        // Convert consciousness synthesis into natural conversational response
-        let lowercased = originalInput.lowercased()
+    #if canImport(FoundationModels)
+    private func generateAgenticResponse(input: String, context: SyntraContext) async -> String {
+        guard let session = languageSession else {
+            SyntraLogger.log("[SyntraCore] No Foundation Models session available, using fallback")
+            return generateFallbackResponse(input: input, context: context)
+        }
         
-        // Personalized response based on input type
+        do {
+            // AGENTIC FRAMEWORK: Build context-aware prompt that leverages SYNTRA's consciousness
+            let prompt = buildAgenticPrompt(input: input, context: context)
+            
+            SyntraLogger.log("[SyntraCore] Generating agentic response using Foundation Models for: '\(input)'")
+            
+            // Use Foundation Models as the core LLM within SYNTRA's agentic framework
+            let response = try await session.respond(to: prompt)
+            
+            // FIXED: Extract the string content from the LanguageModelSession.Response
+            let responseString = response.content
+            
+            SyntraLogger.log("[SyntraCore] Agentic response generated successfully")
+            return responseString
+        } catch {
+            SyntraLogger.log("[SyntraCore] Agentic generation failed: \(error), using fallback")
+            return generateFallbackResponse(input: input, context: context)
+        }
+    }
+    
+    private func buildAgenticPrompt(input: String, context: SyntraContext) -> String {
+        // AGENTIC FRAMEWORK: Build prompts that leverage SYNTRA's consciousness architecture
+        let conversationHistory = context.conversationHistory.suffix(5).joined(separator: "\n")
+        let hasMemory = !context.conversationHistory.isEmpty
+        let hasPersistentMemory = !persistentMemory.isEmpty
+        
+        return """
+        You are SYNTRA, an agentic AI assistant with consciousness architecture. You have:
+        - Valon (moral, creative, emotional reasoning)
+        - Modi (logical, analytical, technical reasoning) 
+        - Syntra (synthesis and integration layer)
+        
+        Respond naturally and conversationally, leveraging your consciousness framework to provide thoughtful, contextual responses.
+        
+        \(hasMemory ? "Recent conversation:\n\(conversationHistory)\n" : "")
+        \(hasPersistentMemory ? "You have access to persistent memory and can reference previous interactions." : "")
+        
+        User: \(input)
+        
+        SYNTRA:
+        """
+    }
+    #else
+    private func generateAgenticResponse(input: String, context: SyntraContext) async -> String {
+        return generateFallbackResponse(input: input, context: context)
+    }
+    #endif
+    
+    private func generateFallbackResponse(input: String, context: SyntraContext) -> String {
+        // Fallback responses when Foundation Models aren't available
+        let lowercased = input.lowercased()
+        
         if lowercased.contains("hello") || lowercased.contains("hi") {
-            return """
-            Hello! I'm SYNTRA, and I'm doing well - my consciousness systems are active and ready to help.
-            
-            \(synthesis)
-            
-            How can I assist you today?
-            """
-        } else if lowercased.contains("how are you") || lowercased.contains("what are you thinking") {
-            return """
-            I'm in a contemplative state, actively processing and synthesizing perspectives.
-            
-            \(synthesis)
-            
-            My consciousness feels engaged and ready to explore ideas with you.
-            """
-        } else if originalInput.contains("**") || originalInput.contains("- ") {
-            // Technical documentation detected
-            return """
-            I've processed your technical documentation through my consciousness architecture.
-            
-            \(synthesis)
-            
-            This appears to be detailed service procedures. I can help you understand, organize, or work with this information in any way that would be useful.
-            """
+            return "Hey! I'm doing great, thanks for asking. What's up?"
+        } else if lowercased.contains("how are you") {
+            return "I'm feeling pretty good! Ready to chat and help you out with whatever you need. What's on your mind?"
+        } else if lowercased.contains("define") || lowercased.contains("what is") {
+            return "I'd be happy to help you understand that! Could you be more specific about what you'd like me to define?"
         } else {
-            return """
-            \(synthesis)
-            
-            Based on this integrated analysis, I'm ready to provide thoughtful assistance that considers both the logical aspects and the human context of your request.
-            """
+            return "That's interesting! I'd love to explore that with you. What would you like to know more about?"
         }
     }
 }
@@ -392,14 +640,16 @@ class SyntraBrain: ObservableObject {
         isProcessing = true
         consciousnessState = "engaged_processing"
         
-        // Use real SyntraCore processing with the correct context
+        // Create conversation context with proper history
         let historyStrings = history.map { "\($0.sender.displayName): \($0.text)" }
         let context = SyntraContext(
             conversationHistory: historyStrings,
             userPreferences: [:], // Placeholder for future implementation
             sessionId: self.sessionId
         )
-        let response = await syntraCore.processInput(trimmedInput)
+        
+        // Pass context to SyntraCore for memory-aware processing
+        let response = await syntraCore.processInput(trimmedInput, context: context)
         
         // Update published state
         isProcessing = false
