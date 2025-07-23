@@ -2,8 +2,28 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        // Use the local, native ChatView which correctly uses our SyntraBrain.
-        // This makes the UI code we've been fixing part of the active application.
-        ChatView()
+        TabView {
+            // Main chat interface
+            ChatView()
+                .tabItem {
+                    Image(systemName: "message.fill")
+                    Text("Chat")
+                }
+            
+            // Real-time backend log viewer
+            LogViewerView()
+                .tabItem {
+                    Image(systemName: "doc.text.fill")
+                    Text("Backend Logs")
+                }
+            
+            // Settings (if SettingsView exists)
+            SettingsView()
+                .tabItem {
+                    Image(systemName: "gear")
+                    Text("Settings")
+                }
+        }
+        .accentColor(.blue)
     }
 } 
