@@ -1,9 +1,12 @@
 import SwiftUI
+import Combine
 
 struct ChatView: View {
     @StateObject private var brain = SyntraBrain()
     @State private var inputText: String = ""
     @State private var showingSettings = false
+    @State private var showingVoiceInput = false
+    @State private var showingFileImport = false
     
     var body: some View {
         VStack(spacing: 0) {
@@ -66,9 +69,29 @@ struct ChatView: View {
                 }
             }
             
-            // Input area
+            // Input area with enhanced functionality
             VStack(spacing: 8) {
                 HStack(spacing: 12) {
+                    // File import button
+                    Button(action: {
+                        showingFileImport = true
+                    }) {
+                        Image(systemName: "doc.badge.plus")
+                            .font(.title2)
+                            .foregroundColor(.blue)
+                    }
+                    .disabled(brain.isProcessing)
+                    
+                    // Voice input button
+                    Button(action: {
+                        showingVoiceInput = true
+                    }) {
+                        Image(systemName: "mic.circle")
+                            .font(.title2)
+                            .foregroundColor(.blue)
+                    }
+                    .disabled(brain.isProcessing)
+                    
                     TextField("Message SYNTRA...", text: $inputText)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .disabled(brain.isProcessing)
@@ -95,6 +118,42 @@ struct ChatView: View {
         }
         .sheet(isPresented: $showingSettings) {
             SettingsView()
+        }
+        .sheet(isPresented: $showingVoiceInput) {
+            NavigationView {
+                VoiceInputView(text: $inputText)
+                    .navigationTitle("Voice Input")
+                    .navigationBarTitleDisplayMode(.inline)
+                    .toolbar {
+                        ToolbarItem(placement: .navigationBarLeading) {
+                            Button("Cancel") {
+                                showingVoiceInput = false
+                            }
+                        }
+                        
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            Button("Use Text") {
+                                showingVoiceInput = false
+                                // Input text is already bound, so it will appear in the text field
+                            }
+                            .disabled(inputText.isEmpty)
+                        }
+                    }
+            }
+        }
+        .sheet(isPresented: $showingFileImport) {
+            NavigationView {
+                FileImportContentView(inputText: $inputText, isPresented: $showingFileImport)
+                    .navigationTitle("Import File")
+                    .navigationBarTitleDisplayMode(.inline)
+                    .toolbar {
+                        ToolbarItem(placement: .navigationBarLeading) {
+                            Button("Cancel") {
+                                showingFileImport = false
+                            }
+                        }
+                    }
+            }
         }
         .onAppear {
             setupInitialState()
@@ -135,6 +194,64 @@ struct ChatView: View {
         return Message(sender: sender, text: syntraMessage.content)
     }
 }
+
+// MARK: - File Import Content View
+struct FileImportContentView: View {
+    @Binding var inputText: String
+    @Binding var isPresented: Bool
+    @StateObject private var fileImporter = FileImportManager()
+    
+    var body: some View {
+        VStack(spacing: 20) {
+            FileImportView()
+                .environmentObject(fileImporter)
+            
+            if !fileImporter.importedText.isEmpty {
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("Preview:")
+                        .font(.headline)
+                    
+                    ScrollView {
+                        Text(fileImporter.importedText)
+                            .padding()
+                            .background(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .fill(.thinMaterial)
+                            )
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    .frame(maxHeight: 200)
+                    
+                    HStack {
+                        Button("Use Content") {
+                            inputText = fileImporter.importedText
+                            isPresented = false
+                        }
+                        .buttonStyle(.borderedProminent)
+                        
+                        Spacer()
+                        
+                        Button("Append to Text") {
+                            if inputText.isEmpty {
+                                inputText = fileImporter.importedText
+                            } else {
+                                inputText += "\n\n" + fileImporter.importedText
+                            }
+                            isPresented = false
+                        }
+                        .buttonStyle(.bordered)
+                    }
+                }
+                .padding()
+            }
+            
+            Spacer()
+        }
+        .padding()
+    }
+}
+
+
 
 // MARK: - Preview
 
