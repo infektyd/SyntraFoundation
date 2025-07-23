@@ -94,12 +94,12 @@ class FileLogger {
 // MARK: - iOS-Native SyntraContext
 struct SyntraContext: Sendable {
     let conversationHistory: [String]
-    let userPreferences: [String: Any]
+    let userPreferences: [String: String]
     let sessionId: String
     
     init(
         conversationHistory: [String],
-        userPreferences: [String: Any],
+        userPreferences: [String: String] = [:],
         sessionId: String
     ) {
         self.conversationHistory = conversationHistory
@@ -131,7 +131,8 @@ class SyntraCore: ObservableObject {
     private let config: SyntraConfig
     private var conversationMemory: [String] = []
     private var persistentMemory: [String: Any] = [:]
-    private let sessionId: String
+    // FIXED: Make sessionId internal so it can be accessed from SyntraBrain
+    internal let sessionId: String
     
     // Foundation Models (works offline on device)
     #if canImport(FoundationModels)
@@ -217,7 +218,7 @@ class SyntraCore: ObservableObject {
             queue: .main
         ) { [weak self] _ in
             Task { @MainActor in
-                self?.saveAllData()
+                await self?.saveAllData()
             }
         }
     }
@@ -234,7 +235,8 @@ class SyntraCore: ObservableObject {
         loadPersistentMemory()
     }
     
-    private func saveAllData() {
+    // FIXED: Make saveAllData async to fix main actor isolation
+    private func saveAllData() async {
         saveConversationMemory()
         savePersistentMemory()
         offlineStorage.syncToDisk()
@@ -308,11 +310,9 @@ class SyntraCore: ObservableObject {
             // Build agentic prompt using SYNTRA's consciousness architecture
             let prompt = buildAgenticPrompt(input: input, context: context)
             
-            // Generate response using Foundation Models
-            let response = try await session.generateResponse(prompt)
-            
-            // FIXED: Extract text from LanguageModelSession.Response
-            let responseText = response.text
+            // FIXED: Use correct Foundation Models API
+            let response = try await session.respond(to: prompt)
+            let responseText = response.content
             
             SyntraLogger.log("[SyntraCore] Agentic response generated successfully")
             return responseText
@@ -392,7 +392,10 @@ class SyntraCore: ObservableObject {
         if let observer = appStateObserver {
             NotificationCenter.default.removeObserver(observer)
         }
-        saveAllData()
+        // FIXED: Use Task for async cleanup
+        Task { @MainActor in
+            await saveAllData()
+        }
     }
 }
 
@@ -459,9 +462,9 @@ class SyntraBrain: ObservableObject {
         // Process through SYNTRA's agentic framework
         let response = await syntraCore.processInput(message, context: context)
         
-        // Add to messages
-        let userMessage = SyntraMessage(sender: "User", content: message, role: .user)
-        let syntraMessage = SyntraMessage(sender: "SYNTRA", content: response, role: .assistant)
+        // FIXED: Add missing useCase parameter with default value
+        let userMessage = SyntraMessage(sender: "User", content: message, role: .user, consciousnessInfluences: [:])
+        let syntraMessage = SyntraMessage(sender: "SYNTRA", content: response, role: .assistant, consciousnessInfluences: [:])
         
         messages.append(userMessage)
         messages.append(syntraMessage)
@@ -492,9 +495,4 @@ struct SyntraMessage: Identifiable, Sendable {
         self.role = role
         self.consciousnessInfluences = consciousnessInfluences
     }
-}
-
-// Extension to access sessionId - FIXED: Remove duplicate declaration
-extension SyntraCore {
-    var sessionId: String { return sessionId }
 } 
