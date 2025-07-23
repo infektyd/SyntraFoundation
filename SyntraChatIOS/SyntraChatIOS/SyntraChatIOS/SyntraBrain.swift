@@ -8,14 +8,22 @@ import Network
 import FoundationModels
 #endif
 
-// MARK: - Comprehensive Logging System
+// MARK: - Enhanced Logging System with Real-Time Viewer Integration
 struct SyntraLogger {
     private static let logger = Logger(subsystem: "com.syntra.ios", category: "consciousness")
     private static let fileLogger = FileLogger()
     
-    static func log(_ message: String, level: LogLevel = .info, function: String = #function, line: Int = #line) {
+    static func log(
+        _ message: String, 
+        level: SyntraLogLevel = .info, 
+        category: String = "General",
+        details: String? = nil,
+        function: String = #function, 
+        line: Int = #line
+    ) {
         let timestamp = ISO8601DateFormatter().string(from: Date())
-        let logMessage = "[\(timestamp)] [\(level.rawValue)] [\(function):\(line)] \(message)"
+        let sourceLocation = "\(function):\(line)"
+        let logMessage = "[\(timestamp)] [\(level.rawValue)] [\(category)] \(message)"
         
         // Console logging (always safe)
         print(logMessage)
@@ -36,9 +44,46 @@ struct SyntraLogger {
         
         // File logging (safe async)
         fileLogger.writeLog(logMessage)
+        
+        // Broadcast to real-time log viewer
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(
+                name: .syntraLogGenerated,
+                object: nil,
+                userInfo: [
+                    "message": message,
+                    "level": level.rawValue,
+                    "category": category,
+                    "details": details as Any,
+                    "location": sourceLocation,
+                    "timestamp": Date()
+                ]
+            )
+        }
     }
     
-    enum LogLevel: String, Sendable {
+    // Specialized logging methods for different SYNTRA components
+    static func logFoundationModels(_ message: String, level: SyntraLogLevel = .info, details: String? = nil) {
+        log(message, level: level, category: "FoundationModels", details: details)
+    }
+    
+    static func logConsciousness(_ message: String, level: SyntraLogLevel = .info, details: String? = nil) {
+        log(message, level: level, category: "Consciousness", details: details)
+    }
+    
+    static func logMemory(_ message: String, level: SyntraLogLevel = .info, details: String? = nil) {
+        log(message, level: level, category: "Memory", details: details)
+    }
+    
+    static func logNetwork(_ message: String, level: SyntraLogLevel = .info, details: String? = nil) {
+        log(message, level: level, category: "Network", details: details)
+    }
+    
+    static func logUI(_ message: String, level: SyntraLogLevel = .info, details: String? = nil) {
+        log(message, level: level, category: "UI", details: details)
+    }
+    
+    enum SyntraLogLevel: String, Sendable {
         case debug = "DEBUG"
         case info = "INFO"
         case warning = "WARNING"
@@ -184,17 +229,38 @@ class SyntraCore: ObservableObject {
         #if canImport(FoundationModels)
         Task {
             do {
-                // Initialize Foundation Models (works offline)
-                foundationModel = try await SystemLanguageModel()
+                SyntraLogger.logFoundationModels("Initializing Apple Foundation Models for on-device processing...")
+                
+                // FIXED: Add required useCase parameter for SystemLanguageModel
+                foundationModel = try await SystemLanguageModel(useCase: .general)
                 languageSession = try await foundationModel?.createSession()
                 
-                SyntraLogger.log("[SyntraCore] Foundation Models initialized as core LLM engine")
+                SyntraLogger.logFoundationModels(
+                    "Foundation Models successfully initialized as core LLM engine",
+                    details: "Using on-device processing with .general use case"
+                )
+                
+                // Log model capabilities if available
+                if let model = foundationModel {
+                    SyntraLogger.logFoundationModels(
+                        "Model details available",
+                        details: "Foundation model instance created successfully"
+                    )
+                }
             } catch {
-                SyntraLogger.log("[SyntraCore] Foundation Models initialization failed: \(error)", level: .warning)
+                SyntraLogger.logFoundationModels(
+                    "Foundation Models initialization failed",
+                    level: .error,
+                    details: "Error: \(error.localizedDescription)"
+                )
             }
         }
         #else
-        SyntraLogger.log("[SyntraCore] Foundation Models not available, using fallback")
+        SyntraLogger.logFoundationModels(
+            "Foundation Models not available on this device",
+            level: .warning,
+            details: "Falling back to simple response generation"
+        )
         #endif
     }
     
@@ -299,10 +365,17 @@ class SyntraCore: ObservableObject {
     
     // MARK: - Foundation Models Integration
     private func generateAgenticResponse(input: String, context: SyntraContext) async -> String {
-        SyntraLogger.log("[SyntraCore] Generating agentic response using Foundation Models for: '\(input)'")
+        SyntraLogger.logConsciousness(
+            "Starting consciousness processing with Foundation Models",
+            details: "Input: '\(input)' | Session: \(context.sessionId)"
+        )
         
         #if canImport(FoundationModels)
         guard let session = languageSession else {
+            SyntraLogger.logFoundationModels(
+                "No active language session available, using fallback",
+                level: .warning
+            )
             return generateFallbackResponse(input: input, context: context)
         }
         
@@ -310,17 +383,39 @@ class SyntraCore: ObservableObject {
             // Build agentic prompt using SYNTRA's consciousness architecture
             let prompt = buildAgenticPrompt(input: input, context: context)
             
+            SyntraLogger.logFoundationModels(
+                "Sending prompt to Foundation Models",
+                details: "Prompt length: \(prompt.count) characters"
+            )
+            
             // FIXED: Use correct Foundation Models API
             let response = try await session.respond(to: prompt)
             let responseText = response.content
             
-            SyntraLogger.log("[SyntraCore] Agentic response generated successfully")
+            SyntraLogger.logFoundationModels(
+                "Foundation Models response received",
+                details: "Response length: \(responseText.count) characters"
+            )
+            
+            SyntraLogger.logConsciousness(
+                "Consciousness processing complete",
+                details: "Generated response: '\(responseText.prefix(100))...'"
+            )
+            
             return responseText
         } catch {
-            SyntraLogger.log("[SyntraCore] Foundation Models error: \(error)", level: .error)
+            SyntraLogger.logFoundationModels(
+                "Foundation Models API error occurred",
+                level: .error,
+                details: "Error: \(error.localizedDescription)"
+            )
             return generateFallbackResponse(input: input, context: context)
         }
         #else
+        SyntraLogger.logFoundationModels(
+            "Foundation Models not compiled, using fallback response",
+            level: .warning
+        )
         return generateFallbackResponse(input: input, context: context)
         #endif
     }
