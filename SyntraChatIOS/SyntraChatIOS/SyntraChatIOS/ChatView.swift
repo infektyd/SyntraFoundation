@@ -2,7 +2,6 @@ import SwiftUI
 
 struct ChatView: View {
     @StateObject private var brain = SyntraBrain()
-    @State private var messages: [Message] = []
     @State private var inputText: String = ""
     @State private var showingSettings = false
     
@@ -11,10 +10,10 @@ struct ChatView: View {
             // Header with status
             HStack {
                 Circle()
-                    .fill(brain.isAvailable ? .green : .red)
+                    .fill(brain.isProcessing ? .orange : .green)
                     .frame(width: 12, height: 12)
                 
-                Text(brain.statusMessage)
+                Text(brain.isProcessing ? "SYNTRA thinking..." : "SYNTRA ready")
                     .font(.caption)
                     .foregroundColor(.secondary)
                 
@@ -29,7 +28,7 @@ struct ChatView: View {
             .background(Color(UIColor.systemGray6))
             
             // Messages area
-            if messages.isEmpty {
+            if brain.messages.isEmpty {
                 VStack {
                     Image(systemName: "brain.head.profile")
                         .font(.system(size: 64))
@@ -40,60 +39,59 @@ struct ChatView: View {
                         .font(.title)
                         .fontWeight(.bold)
                     
-                    Text(brain.isAvailable ? "Ready to chat!" : "Device requirements not met")
+                    Text("Ready to chat!")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                         .padding()
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
-                // Messages list
-                ScrollView {
-                    LazyVStack {
-                        ForEach(messages) { message in
-                            HStack {
-                                if message.sender == .user {
-                                    Spacer()
-                                }
-                                
-                                Text(message.text)
-                                    .padding()
-                                    .background(message.sender == .user ? Color.blue : Color.gray.opacity(0.3))
-                                    .foregroundColor(message.sender == .user ? .white : .primary)
-                                    .cornerRadius(12)
-                                    .frame(maxWidth: 280, alignment: message.sender == .user ? .trailing : .leading)
-                                
-                                if message.sender == .syntra {
-                                    Spacer()
-                                }
+                ScrollViewReader { proxy in
+                    ScrollView {
+                        LazyVStack(spacing: 12) {
+                            ForEach(brain.messages) { message in
+                                MessageBubble(message: convertToMessage(message))
+                                    .id(message.id)
                             }
-                            .padding(.horizontal)
+                        }
+                        .padding()
+                    }
+                    .onChange(of: brain.messages.count) { _ in
+                        if let lastMessage = brain.messages.last {
+                            withAnimation(.easeOut(duration: 0.3)) {
+                                proxy.scrollTo(lastMessage.id, anchor: .bottom)
+                            }
                         }
                     }
                 }
             }
             
-            // Input area - Bypass iOS 26 Beta 3 threading crashes
-            VStack(spacing: 16) {
-                // Voice input
-                VoiceInputView(text: $inputText)
-                
-                // File import
-                FileImportView(importedText: $inputText)
-                
-                // Send button
-                Button("Send to SYNTRA") {
-                    sendMessage()
+            // Input area
+            VStack(spacing: 8) {
+                HStack(spacing: 12) {
+                    TextField("Message SYNTRA...", text: $inputText)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .disabled(brain.isProcessing)
+                        .onSubmit {
+                            sendMessage()
+                        }
+                    
+                    Button(action: sendMessage) {
+                        Image(systemName: "arrow.up.circle.fill")
+                            .font(.title2)
+                            .foregroundColor(inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || brain.isProcessing ? .gray : .blue)
+                    }
+                    .disabled(inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || brain.isProcessing)
                 }
-                .disabled(inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || !brain.isAvailable)
                 .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(.blue)
+                .background(Color(UIColor.systemBackground))
+                .overlay(
+                    Rectangle()
+                        .frame(height: 0.5)
+                        .foregroundColor(Color(UIColor.separator)),
+                    alignment: .top
                 )
-                .foregroundColor(.white)
             }
-            .padding()
         }
         .sheet(isPresented: $showingSettings) {
             SettingsView()
@@ -103,51 +101,38 @@ struct ChatView: View {
         }
     }
     
-    // MARK: - Private Methods
+    // MARK: - Helper Methods
     
     private func setupInitialState() {
-        if messages.isEmpty {
+        if brain.messages.isEmpty {
             addWelcomeMessage()
         }
     }
     
     private func addWelcomeMessage() {
-        let welcomeText: String
-        
-        if brain.isAvailable {
-            welcomeText = "Hello! I am SYNTRA, ready to assist you."
-        } else {
-            welcomeText = "⚠️ SYNTRA requires a more powerful device. Current: \(ProcessInfo.processInfo.processorCount) cores"
+        Task {
+            await brain.processMessage("Hello", withHistory: [])
         }
-        
-        messages.append(.syntra(welcomeText))
     }
     
     private func sendMessage() {
         let userMessage = inputText.trimmingCharacters(in: .whitespacesAndNewlines)
         
         guard !userMessage.isEmpty else { return }
-        guard brain.isAvailable else {
-            messages.append(.error("SYNTRA consciousness is not available on this device."))
-            return
-        }
+        guard !brain.isProcessing else { return }
         
-        // Add user message
-        let userMsg = Message.user(userMessage)
-        messages.append(userMsg)
         inputText = ""
         
-        // Create a snapshot of the history to send to the brain
-        let historySnapshot = messages
-        
-        // Get SYNTRA response
+        // Process message through SYNTRA
         Task {
-            let response = await brain.processMessage(userMessage, withHistory: historySnapshot)
-            
-            await MainActor.run {
-                messages.append(.syntra(response))
-            }
+            await brain.processMessage(userMessage, withHistory: brain.messages)
         }
+    }
+    
+    // Convert SyntraMessage to Message for UI compatibility
+    private func convertToMessage(_ syntraMessage: SyntraMessage) -> Message {
+        let sender: MessageSender = syntraMessage.role == .user ? .user : .syntra
+        return Message(sender: sender, text: syntraMessage.content)
     }
 }
 
