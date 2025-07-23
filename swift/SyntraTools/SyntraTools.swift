@@ -131,7 +131,7 @@ public struct MoralAssessmentTool: Tool {
     }
     
     private func generateMoralReasoning(_ assessment: ValonMoralAssessment, originalResponse: String) -> String {
-        var reasoning = "I'm feeling \\(assessment.primaryEmotion.rawValue) about this situation. "
+        var reasoning = "I'm feeling \(assessment.primaryEmotion.rawValue) about this situation. "
         
         if assessment.moralUrgency > 0.7 {
             reasoning += "This feels morally urgent - there are important ethical considerations at stake. "
@@ -146,7 +146,7 @@ public struct MoralAssessmentTool: Tool {
         reasoning += assessment.moralGuidance
         
         if !assessment.symbolicRepresentation.isEmpty {
-            reasoning += " Symbolically, I see this as: \\(assessment.symbolicRepresentation)."
+            reasoning += " Symbolically, I see this as: \(assessment.symbolicRepresentation)."
         }
         
         return reasoning
@@ -209,9 +209,9 @@ public struct LogicalAnalysisTool: Tool {
     }
     
     private func generateLogicalReasoning(_ pattern: ModiLogicalPattern, originalResponse: [String]) -> String {
-        var reasoning = "Looking at this systematically using \\(pattern.reasoningFramework.rawValue) reasoning. "
+        var reasoning = "Looking at this systematically using \(pattern.reasoningFramework.rawValue) reasoning. "
         
-        reasoning += "I'm applying \\(pattern.technicalDomain.rawValue) domain expertise. "
+        reasoning += "I'm applying \(pattern.technicalDomain.rawValue) domain expertise. "
         
         if pattern.logicalRigor > 0.8 {
             reasoning += "This analysis has high logical rigor - I'm confident in the reasoning steps. "
@@ -224,10 +224,10 @@ public struct LogicalAnalysisTool: Tool {
         }
         
         if !pattern.logicalInsights.isEmpty {
-            reasoning += "Key insights: \\(pattern.logicalInsights.joined(separator: "; ")). "
+            reasoning += "Key insights: \(pattern.logicalInsights.joined(separator: "; ")). "
         }
         
-        reasoning += "Complexity level: \\(pattern.complexityLevel.rawValue)."
+        reasoning += "Complexity level: \(pattern.complexityLevel.rawValue)."
         
         return reasoning
     }

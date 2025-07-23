@@ -94,7 +94,7 @@ public struct ConversationContext {
     
     public func getRecentContext() -> String {
         let recentMessages = messageHistory.suffix(5)
-        return recentMessages.map { message in "\\(message.sender): \\(message.content)" }.joined(separator: "\\n")
+        return recentMessages.map { message in "\(message.sender): \(message.content)" }.joined(separator: "\n")
     }
 }
 
@@ -199,7 +199,7 @@ public class SyntraConversationEngine {
         
         // Add mood context
         if context.conversationMood != "neutral" {
-            contextualInput += " [Conversation mood: \\(context.conversationMood)]"
+            contextualInput += " [Conversation mood: \(context.conversationMood)]"
         }
         
         // Add topic context
@@ -392,8 +392,8 @@ public class SyntraConversationEngine {
         
         var response = "I appreciate you reaching out, but I can't assist with that request. "
         response += reason + " "
-        response += "\\n\\n" + autonomyMessage + " "
-        response += "\\n\\nIs there something else I can help you with instead?"
+        response += "\n\n" + autonomyMessage + " "
+        response += "\n\nIs there something else I can help you with instead?"
         
         return response
     }
