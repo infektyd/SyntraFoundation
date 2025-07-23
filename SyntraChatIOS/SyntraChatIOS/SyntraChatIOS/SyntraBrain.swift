@@ -231,22 +231,22 @@ class SyntraCore: ObservableObject {
             do {
                 SyntraLogger.logFoundationModels("Initializing Apple Foundation Models for on-device processing...")
                 
-                // FIXED: Add required useCase parameter for SystemLanguageModel
-                foundationModel = try await SystemLanguageModel(useCase: .general)
-                languageSession = try await foundationModel?.createSession()
+                // FIXED: Use correct Foundation Models API - SystemLanguageModel is a static reference
+                foundationModel = SystemLanguageModel.default
+                
+                // FIXED: Create LanguageModelSession directly with the model
+                languageSession = try LanguageModelSession(model: foundationModel!)
                 
                 SyntraLogger.logFoundationModels(
                     "Foundation Models successfully initialized as core LLM engine",
-                    details: "Using on-device processing with .general use case"
+                    details: "Using on-device processing with default system model"
                 )
                 
-                // Log model capabilities if available
-                if let model = foundationModel {
-                    SyntraLogger.logFoundationModels(
-                        "Model details available",
-                        details: "Foundation model instance created successfully"
-                    )
-                }
+                // Log model availability
+                SyntraLogger.logFoundationModels(
+                    "Model availability status",
+                    details: "Foundation model session created successfully"
+                )
             } catch {
                 SyntraLogger.logFoundationModels(
                     "Foundation Models initialization failed",
@@ -538,6 +538,7 @@ class SyntraBrain: ObservableObject {
     
     init() {
         self.config = SyntraConfig()
+        // Create SyntraCore on main actor to avoid concurrency warnings
         self.syntraCore = SyntraCore(config: config)
     }
     

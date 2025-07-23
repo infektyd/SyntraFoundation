@@ -1,5 +1,6 @@
 import SwiftUI
 import Foundation
+import Combine
 
 // MARK: - Real-Time Log Viewer for SYNTRA Backend Activity
 struct LogViewerView: View {
@@ -277,6 +278,7 @@ struct LogExportView: View {
 }
 
 // MARK: - Log Management System
+@MainActor
 class LogManager: ObservableObject {
     static let shared = LogManager()
     
