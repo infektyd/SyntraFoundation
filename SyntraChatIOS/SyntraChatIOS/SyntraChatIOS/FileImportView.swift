@@ -1,14 +1,13 @@
 import SwiftUI
+import Combine
 import UniformTypeIdentifiers
 
 /// File import component that bypasses iOS/macOS 26 Beta 3 threading crashes
 /// Allows importing .md and .txt files instead of using TextField for input
 @MainActor
 struct FileImportView: View {
+    @EnvironmentObject var fileImporter: FileImportManager
     @State private var showFileImporter = false
-    @State private var importedText = ""
-    @State private var importedFileName = ""
-    @State private var importError: String?
     
     var body: some View {
         VStack(spacing: 16) {
@@ -27,18 +26,18 @@ struct FileImportView: View {
             }
             
             // Success display
-            if !importedFileName.isEmpty {
+            if !fileImporter.importedFileName.isEmpty {
                 HStack {
                     Image(systemName: "checkmark.circle.fill")
                         .foregroundColor(.green)
-                    Text("Imported: \(importedFileName)")
+                    Text("Imported: \(fileImporter.importedFileName)")
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
             }
             
             // Error display
-            if let error = importError {
+            if let error = fileImporter.importError {
                 HStack {
                     Image(systemName: "exclamationmark.triangle.fill")
                         .foregroundColor(.red)
@@ -49,14 +48,14 @@ struct FileImportView: View {
             }
             
             // Imported content preview
-            if !importedText.isEmpty {
+            if !fileImporter.importedText.isEmpty {
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Imported Content:")
                         .font(.caption)
                         .foregroundColor(.secondary)
                     
                     ScrollView {
-                        Text(importedText)
+                        Text(fileImporter.importedText)
                             .padding()
                             .background(
                                 RoundedRectangle(cornerRadius: 8)
@@ -85,13 +84,13 @@ struct FileImportView: View {
             do {
                 let urls = try result.get()
                 guard let url = urls.first else {
-                    importError = "No file selected"
+                    fileImporter.importError = "No file selected"
                     return
                 }
                 
                 // Start accessing the security-scoped resource
                 guard url.startAccessingSecurityScopedResource() else {
-                    importError = "Failed to access file"
+                    fileImporter.importError = "Failed to access file"
                     return
                 }
                 
@@ -102,20 +101,20 @@ struct FileImportView: View {
                 // FIXED: Use newer Data(contentsOf:options:) API for iOS 18 compatibility
                 let data = try Data(contentsOf: url, options: [])
                 guard let text = String(data: data, encoding: .utf8) else {
-                    importError = "Failed to read file as text"
+                    fileImporter.importError = "Failed to read file as text"
                     return
                 }
                 
                 // Update imported content
-                importedText = text
-                importedFileName = url.lastPathComponent
-                importError = nil
+                fileImporter.importedText = text
+                fileImporter.importedFileName = url.lastPathComponent
+                fileImporter.importError = nil
                 
                 print("[FileImportView] Successfully imported: \(url.lastPathComponent)")
                 print("[FileImportView] Content length: \(text.count) characters")
                 
             } catch {
-                importError = "Import failed: \(error.localizedDescription)"
+                fileImporter.importError = "Import failed: \(error.localizedDescription)"
                 print("[FileImportView] Import error: \(error)")
             }
         }
@@ -123,6 +122,20 @@ struct FileImportView: View {
     
     /// Clear imported content
     func clearImportedContent() {
+        fileImporter.importedText = ""
+        fileImporter.importedFileName = ""
+        fileImporter.importError = nil
+    }
+}
+
+// MARK: - File Import Manager
+@MainActor
+class FileImportManager: ObservableObject {
+    @Published var importedText: String = ""
+    @Published var importedFileName: String = ""
+    @Published var importError: String?
+    
+    func clearContent() {
         importedText = ""
         importedFileName = ""
         importError = nil
