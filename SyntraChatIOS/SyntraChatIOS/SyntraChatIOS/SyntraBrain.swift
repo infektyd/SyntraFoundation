@@ -38,7 +38,7 @@ struct SyntraLogger {
         fileLogger.writeLog(logMessage)
     }
     
-    enum LogLevel: String {
+    enum LogLevel: String, Sendable {
         case debug = "DEBUG"
         case info = "INFO"
         case warning = "WARNING"
@@ -92,7 +92,7 @@ class FileLogger {
 }
 
 // MARK: - iOS-Native SyntraContext
-struct SyntraContext {
+struct SyntraContext: Sendable {
     let conversationHistory: [String]
     let userPreferences: [String: Any]
     let sessionId: String
@@ -109,7 +109,7 @@ struct SyntraContext {
 }
 
 // MARK: - iOS-Native Configuration
-struct SyntraConfig {
+struct SyntraConfig: Sendable {
     var driftRatio: [String: Double] = ["default": 0.5]
     var useAdaptiveFusion: Bool = true
     var useAdaptiveWeighting: Bool = true
@@ -472,22 +472,29 @@ class SyntraBrain: ObservableObject {
 }
 
 // MARK: - Message Model
-struct SyntraMessage: Identifiable {
+struct SyntraMessage: Identifiable, Sendable {
     let id = UUID()
     let sender: String
     let content: String
     let role: MessageRole
     let timestamp = Date()
-    let consciousnessInfluences: [String: Double] = [:]
+    let consciousnessInfluences: [String: Double]
     
-    enum MessageRole {
+    enum MessageRole: String, Sendable {
         case user
         case assistant
         case system
     }
+    
+    init(sender: String, content: String, role: MessageRole = .user, consciousnessInfluences: [String: Double] = [:]) {
+        self.sender = sender
+        self.content = content
+        self.role = role
+        self.consciousnessInfluences = consciousnessInfluences
+    }
 }
 
-// Extension to access sessionId
+// Extension to access sessionId - FIXED: Remove duplicate declaration
 extension SyntraCore {
     var sessionId: String { return sessionId }
 } 

@@ -1,7 +1,7 @@
 import Foundation
 
 // AGENTS.md: Three-brain architecture preservation
-public struct SyntraResponse {
+public struct SyntraResponse: Sendable {
     public let content: String
     public let valonInfluence: Double    // 70% default
     public let modiInfluence: Double     // 30% default
@@ -23,7 +23,7 @@ public struct SyntraResponse {
     }
 }
 
-public struct SyntraMessage: Identifiable, Codable {
+public struct SyntraMessage: Identifiable, Codable, Sendable {
     public let id: UUID
     public let content: String
     public let role: MessageRole
@@ -53,7 +53,7 @@ public struct SyntraMessage: Identifiable, Codable {
     }
 }
 
-public enum MessageRole: String, Codable, CaseIterable {
+public enum MessageRole: String, Codable, CaseIterable, Sendable {
     case user = "user"
     case assistant = "assistant"
     case system = "system"
@@ -67,14 +67,14 @@ public enum MessageRole: String, Codable, CaseIterable {
     }
 }
 
-public struct SyntraContext {
+public struct SyntraContext: Sendable {
     public let conversationHistory: [String]
-    public let userPreferences: [String: Any]
+    public let userPreferences: [String: String] // FIXED: Make Sendable
     public let sessionId: String
     
     public init(
         conversationHistory: [String],
-        userPreferences: [String: Any],
+        userPreferences: [String: String] = [:], // FIXED: Default to Sendable type
         sessionId: String
     ) {
         self.conversationHistory = conversationHistory
@@ -83,15 +83,14 @@ public struct SyntraContext {
     }
 }
 
-public struct SyntraConfig {
+public struct SyntraConfig: Sendable {
     public let driftRatio: [String: Double]
-    public let userPreferences: [String: Any]
+    public let userPreferences: [String: String] // FIXED: Make Sendable
     public let moralCore: MoralFramework  // AGENTS.md: Immutable
     
-    @MainActor
     public init(
         driftRatio: [String: Double] = ["valon": 0.7, "modi": 0.3],
-        userPreferences: [String: Any] = [:],
+        userPreferences: [String: String] = [:], // FIXED: Default to Sendable type
         moralCore: MoralFramework = .default
     ) {
         self.driftRatio = driftRatio
@@ -102,7 +101,6 @@ public struct SyntraConfig {
 
 // AGENTS.md: Immutable moral framework - NEVER modify
 public struct MoralFramework: Sendable {
-    @MainActor
     public static let `default` = MoralFramework()
     private init() {} // Prevent external modification
 } 
