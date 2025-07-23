@@ -81,3 +81,9 @@ config.local.json
 
 # Local backup files (disabled modules)
 .local_backup/
+
+# Large export and bundle files
+export.stream
+repo.bundle
+*.bundle
+*.stream
