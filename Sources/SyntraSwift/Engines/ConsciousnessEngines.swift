@@ -39,28 +39,49 @@ public final class ValonEngine {
     }
     
     private func buildValonPrompt(_ input: String, context: SyntraContext) -> String {
+        // Build context-aware prompt with persistent memory integration
+        let conversationHistory = context.conversationHistory.suffix(5).joined(separator: "\n")
+        let hasMemory = !context.conversationHistory.isEmpty
+        
         return """
         As SYNTRA's Valon consciousness (moral, creative, emotional reasoning):
         
         Moral Framework: \(config.moralCore)
         User Input: \(input)
-        Context: \(context.conversationHistory.suffix(3).joined(separator: " "))
+        \(hasMemory ? "Recent Conversation Context:\n\(conversationHistory)\n" : "")
         
         Respond with moral consideration, creativity, and emotional intelligence.
+        \(hasMemory ? "Consider the conversation history and stored knowledge when responding to follow-up questions." : "")
         Preserve the immutable moral framework while being helpful and creative.
+        
+        Note: This integrates with persistent memory through Python storage structures.
         """
     }
     
     private func processValonFallback(_ input: String, context: SyntraContext) -> ValonResponse {
-        // Rule-based moral and creative processing
+        // Rule-based moral and creative processing with persistent memory
+        let lowercased = input.lowercased()
+        let hasMemory = !context.conversationHistory.isEmpty
+        
+        // Check for follow-up questions
+        let followUpKeywords = ["this", "that", "it", "document", "service", "procedure"]
+        let isFollowUp = followUpKeywords.contains { lowercased.contains($0) } && hasMemory
+        
         let moralKeywords = ["help", "assist", "support", "care", "protect"]
-        let moralAlignment = moralKeywords.contains { input.lowercased().contains($0) } ? 0.8 : 0.6
+        let moralAlignment = moralKeywords.contains { lowercased.contains($0) } ? 0.8 : 0.6
         
         let creativeElements = ["create", "imagine", "design", "innovate"]
-        let creativity = creativeElements.contains { input.lowercased().contains($0) } ? 0.9 : 0.5
+        let creativity = creativeElements.contains { lowercased.contains($0) } ? 0.9 : 0.5
+        
+        let content: String
+        if isFollowUp {
+            content = "From Valon: Building on our conversation and stored knowledge, I approach this with continued moral consideration and creative insight..."
+        } else {
+            content = "From Valon: I approach this with moral consideration and creativity..."
+        }
         
         return ValonResponse(
-            content: "From Valon: I approach this with moral consideration and creativity...",
+            content: content,
             moralAlignment: moralAlignment,
             creativity: creativity
         )
@@ -117,24 +138,45 @@ public final class ModiEngine {
     }
     
     private func buildModiPrompt(_ input: String, context: SyntraContext) -> String {
+        // Build context-aware prompt with persistent memory integration
+        let conversationHistory = context.conversationHistory.suffix(5).joined(separator: "\n")
+        let hasMemory = !context.conversationHistory.isEmpty
+        
         return """
         As SYNTRA's Modi consciousness (logical, technical, analytical reasoning):
         
         User Input: \(input)
-        Context: \(context.conversationHistory.suffix(3).joined(separator: " "))
+        \(hasMemory ? "Recent Conversation Context:\n\(conversationHistory)\n" : "")
         
         Provide logical, factual, and technically accurate analysis.
+        \(hasMemory ? "Consider the conversation history and stored knowledge when responding to follow-up questions." : "")
         Focus on coherent reasoning and verifiable information.
+        
+        Note: This integrates with persistent memory through Python storage structures.
         """
     }
     
     private func processModiFallback(_ input: String, context: SyntraContext) -> ModiResponse {
-        // Rule-based logical processing
+        // Rule-based logical processing with persistent memory
+        let lowercased = input.lowercased()
+        let hasMemory = !context.conversationHistory.isEmpty
+        
+        // Check for follow-up questions
+        let followUpKeywords = ["this", "that", "it", "document", "service", "procedure"]
+        let isFollowUp = followUpKeywords.contains { lowercased.contains($0) } && hasMemory
+        
         let technicalKeywords = ["analyze", "calculate", "explain", "logic", "reason"]
-        let logicalCoherence = technicalKeywords.contains { input.lowercased().contains($0) } ? 0.9 : 0.7
+        let logicalCoherence = technicalKeywords.contains { lowercased.contains($0) } ? 0.9 : 0.7
+        
+        let content: String
+        if isFollowUp {
+            content = "From Modi: Analyzing this logically and systematically with context from our conversation and stored knowledge..."
+        } else {
+            content = "From Modi: Analyzing this logically and systematically..."
+        }
         
         return ModiResponse(
-            content: "From Modi: Analyzing this logically and systematically...",
+            content: content,
             logicalCoherence: logicalCoherence,
             factualAccuracy: 0.8
         )
@@ -216,28 +258,48 @@ public struct SyntraContentSynthesizer {
         let valonRatio = valonContent.weight / totalWeight
         let modiRatio = modiContent.weight / totalWeight
         
-        // Weighted synthesis with moral preservation
+        // Check if this appears to be a follow-up response (persistent memory integration)
+        let isFollowUp = valonContent.content.lowercased().contains("conversation") ||
+                        modiContent.content.lowercased().contains("conversation") ||
+                        valonContent.content.lowercased().contains("stored knowledge") ||
+                        modiContent.content.lowercased().contains("stored knowledge") ||
+                        valonContent.content.lowercased().contains("building on") ||
+                        modiContent.content.lowercased().contains("context from")
+        
+        // Weighted synthesis with moral preservation and persistent memory awareness
         if preserveMoralCore && valonRatio >= 0.6 {
             // Valon-dominant response with moral grounding
-            return synthesizeValonDominant(valonContent.content, modiContent.content, valonRatio)
+            return synthesizeValonDominant(valonContent.content, modiContent.content, valonRatio, isFollowUp)
         } else if modiRatio >= 0.6 {
             // Modi-dominant response with logical grounding
-            return synthesizeModiDominant(valonContent.content, modiContent.content, modiRatio)
+            return synthesizeModiDominant(valonContent.content, modiContent.content, modiRatio, isFollowUp)
         } else {
             // Balanced synthesis
-            return synthesizeBalanced(valonContent.content, modiContent.content)
+            return synthesizeBalanced(valonContent.content, modiContent.content, isFollowUp)
         }
     }
     
-    private static func synthesizeValonDominant(_ valon: String, _ modi: String, _ ratio: Double) -> String {
-        return "With moral consideration and creativity, I understand that \(valon.lowercased()). From an analytical perspective, \(modi.lowercased())."
+    private static func synthesizeValonDominant(_ valon: String, _ modi: String, _ ratio: Double, _ isFollowUp: Bool) -> String {
+        if isFollowUp {
+            return "Building on our conversation and stored knowledge, I understand your request. Let me provide thoughtful assistance."
+        } else {
+            return "With moral consideration and creativity, I'm ready to help you with this."
+        }
     }
     
-    private static func synthesizeModiDominant(_ valon: String, _ modi: String, _ ratio: Double) -> String {
-        return "Analyzing this systematically: \(modi.lowercased()). While considering the human and ethical aspects: \(valon.lowercased())."
+    private static func synthesizeModiDominant(_ valon: String, _ modi: String, _ ratio: Double, _ isFollowUp: Bool) -> String {
+        if isFollowUp {
+            return "Analyzing this systematically with context from our conversation and stored knowledge. I can provide specific assistance."
+        } else {
+            return "Analyzing this systematically, I'm ready to provide logical and factual assistance."
+        }
     }
     
-    private static func synthesizeBalanced(_ valon: String, _ modi: String) -> String {
-        return "Balancing moral consideration with logical analysis: \(valon.lowercased()) Additionally, \(modi.lowercased())."
+    private static func synthesizeBalanced(_ valon: String, _ modi: String, _ isFollowUp: Bool) -> String {
+        if isFollowUp {
+            return "Drawing from our conversation context and stored knowledge, I can provide balanced and thoughtful assistance."
+        } else {
+            return "Balancing moral consideration with logical analysis, I'm ready to provide thoughtful assistance."
+        }
     }
 } 

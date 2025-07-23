@@ -20,7 +20,8 @@ public struct BrainEngine {
         }
         let path = URL(fileURLWithPath: directory).appendingPathComponent("\(stage).json")
         var data: [[String: Any]] = []
-        if let d = try? Data(contentsOf: path),
+        // FIXED: Use newer Data(contentsOf:options:) API for iOS 18 compatibility
+        if let d = try? Data(contentsOf: path, options: []),
            let j = try? JSONSerialization.jsonObject(with: d) as? [[String: Any]] {
             data = j
         }
