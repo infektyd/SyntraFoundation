@@ -260,10 +260,10 @@ struct SystemStatusView: View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Circle()
-                    .fill(brain.isAvailable ? .green : .red)
+                    .fill(!brain.isProcessing ? .green : .orange)
                     .frame(width: 8, height: 8)
                 
-                Text(brain.statusMessage)
+                Text(brain.isProcessing ? "Processing..." : "Ready")
                     .font(.caption)
                     .foregroundColor(.secondary)
                 
@@ -275,7 +275,7 @@ struct SystemStatusView: View {
                 }
             }
             
-            if !brain.isAvailable {
+            if brain.isProcessing {
                 Text("Device requirements: 4+ CPU cores, 4GB+ RAM")
                     .font(.caption2)
                     .foregroundColor(.orange)
