@@ -16,7 +16,7 @@ public struct MemoryEngine {
         }
         let path = URL(fileURLWithPath: directory).appendingPathComponent("\(stage).json")
         var data: [[String: Any]] = []
-        if let d = try? Data(contentsOf: path),
+        if let d = try? Data(contentsOf: path, options: []),
            let j = try? JSONSerialization.jsonObject(with: d) as? [[String: Any]] {
             data = j
         }

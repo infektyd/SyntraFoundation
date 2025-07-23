@@ -127,18 +127,32 @@ struct VoiceInputView: View {
                 }
             }
             
-            // Configure audio input
+            // FIXED: Configure audio input with proper format
             let inputNode = audioEngine.inputNode
-            let recordingFormat = inputNode.outputFormat(forBus: 0)
-            inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { buffer, _ in
+            let bus = 0
+            
+            // CRITICAL FIX: Use inputFormat instead of outputFormat for inputNode
+            let recordingFormat = inputNode.inputFormat(forBus: bus)
+            
+            // Validate format before installing tap
+            print("Audio format - SampleRate: \(recordingFormat.sampleRate), Channels: \(recordingFormat.channelCount)")
+            
+            // Ensure format is valid before installing tap
+            guard recordingFormat.sampleRate > 0 && recordingFormat.channelCount > 0 else {
+                print("Invalid audio format detected - cannot install tap")
+                return
+            }
+            
+            inputNode.installTap(onBus: bus, bufferSize: 1024, format: recordingFormat) { buffer, _ in
                 recognitionRequest.append(buffer)
             }
             
-            // Start audio engine
+            // Start audio engine with proper error handling
             do {
                 audioEngine.prepare()
                 try audioEngine.start()
                 isRecording = true
+                print("Audio engine started successfully")
             } catch {
                 print("Failed to start audio engine: \(error)")
                 stopRecording()

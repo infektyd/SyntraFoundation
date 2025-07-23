@@ -5,31 +5,28 @@ import UniformTypeIdentifiers
 /// Allows importing .md and .txt files instead of using TextField for input
 @MainActor
 struct FileImportView: View {
-    @Binding var importedText: String
     @State private var showFileImporter = false
-    @State private var importedFileName: String = ""
+    @State private var importedText = ""
+    @State private var importedFileName = ""
     @State private var importError: String?
     
     var body: some View {
         VStack(spacing: 16) {
-            // File import button
-            Button(action: { showFileImporter = true }) {
+            // Import button
+            Button(action: {
+                showFileImporter = true
+            }) {
                 HStack {
-                    Image(systemName: "doc.text.fill")
-                        .font(.title2)
-                    Text("Import .md or .txt File")
-                        .font(.headline)
+                    Image(systemName: "doc.badge.plus")
+                    Text("Import File")
                 }
-                .foregroundColor(.blue)
                 .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(.regularMaterial)
-                        .stroke(.blue, lineWidth: 2)
-                )
+                .background(Color.blue)
+                .foregroundColor(.white)
+                .cornerRadius(8)
             }
             
-            // Import status
+            // Success display
             if !importedFileName.isEmpty {
                 HStack {
                     Image(systemName: "checkmark.circle.fill")
@@ -102,8 +99,8 @@ struct FileImportView: View {
                     url.stopAccessingSecurityScopedResource()
                 }
                 
-                // Read file contents
-                let data = try Data(contentsOf: url)
+                // FIXED: Use newer Data(contentsOf:options:) API for iOS 18 compatibility
+                let data = try Data(contentsOf: url, options: [])
                 guard let text = String(data: data, encoding: .utf8) else {
                     importError = "Failed to read file as text"
                     return
