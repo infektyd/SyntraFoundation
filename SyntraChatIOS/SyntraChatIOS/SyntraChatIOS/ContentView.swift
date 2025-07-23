@@ -10,6 +10,13 @@ struct ContentView: View {
                     Text("Chat")
                 }
             
+            // Memory Vault Viewer - Real-time storage monitoring
+            MemoryVaultViewer()
+                .tabItem {
+                    Image(systemName: "memorychip")
+                    Text("Memory Vault")
+                }
+            
             // Real-time backend log viewer
             LogViewerView()
                 .tabItem {
