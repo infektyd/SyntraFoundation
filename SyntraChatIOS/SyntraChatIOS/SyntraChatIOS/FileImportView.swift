@@ -1,6 +1,7 @@
 import SwiftUI
 import Combine
 import UniformTypeIdentifiers
+import PDFKit
 
 /// File import component that bypasses iOS/macOS 26 Beta 3 threading crashes
 /// Allows importing .md and .txt files instead of using TextField for input
@@ -69,7 +70,7 @@ struct FileImportView: View {
         }
         .fileImporter(
             isPresented: $showFileImporter,
-            allowedContentTypes: [.plainText, .init(filenameExtension: "md")!],
+            allowedContentTypes: [.plainText, .init(filenameExtension: "md")!, .pdf],
             allowsMultipleSelection: false
         ) { result in
             handleFileImport(result)
@@ -98,25 +99,80 @@ struct FileImportView: View {
                     url.stopAccessingSecurityScopedResource()
                 }
                 
-                // FIXED: Use newer Data(contentsOf:options:) API for iOS 18 compatibility
-                let data = try Data(contentsOf: url, options: [])
-                guard let text = String(data: data, encoding: .utf8) else {
-                    fileImporter.importError = "Failed to read file as text"
-                    return
+                // Handle different file types
+                if url.pathExtension.lowercased() == "pdf" {
+                    await handlePDFImport(url)
+                } else {
+                    await handleTextFileImport(url)
                 }
-                
-                // Update imported content
-                fileImporter.importedText = text
-                fileImporter.importedFileName = url.lastPathComponent
-                fileImporter.importError = nil
-                
-                print("[FileImportView] Successfully imported: \(url.lastPathComponent)")
-                print("[FileImportView] Content length: \(text.count) characters")
                 
             } catch {
                 fileImporter.importError = "Import failed: \(error.localizedDescription)"
                 print("[FileImportView] Import error: \(error)")
             }
+        }
+    }
+    
+    private func handleTextFileImport(_ url: URL) async {
+        do {
+            let data = try Data(contentsOf: url, options: [])
+            guard let text = String(data: data, encoding: .utf8) else {
+                fileImporter.importError = "Failed to read file as text"
+                return
+            }
+            
+            // Update imported content
+            fileImporter.importedText = text
+            fileImporter.importedFileName = url.lastPathComponent
+            fileImporter.importError = nil
+            
+            print("[FileImportView] Successfully imported text file: \(url.lastPathComponent)")
+            print("[FileImportView] Content length: \(text.count) characters")
+            
+        } catch {
+            fileImporter.importError = "Failed to read text file: \(error.localizedDescription)"
+        }
+    }
+    
+    private func handlePDFImport(_ url: URL) async {
+        do {
+            // Use our new Swift PDF processor
+            let result = try await PDFProcessor.processPDF(
+                path: url.path,
+                provider: .apple,
+                mode: .balanced
+            )
+            
+            // Format the processed content for display
+            let processedContent = """
+            📄 PDF Processed: \(url.lastPathComponent)
+            
+            📊 Summary:
+            - Original text length: \(result.originalText.count) characters
+            - Chunks processed: \(result.chunks.count)
+            - Processing mode: \(result.processingMode)
+            
+            📝 Key Insights:
+            \(result.insights["valon"] ?? "No Valon insights available")
+            
+            🔧 Technical Analysis:
+            \(result.insights["modi"] ?? "No Modi analysis available")
+            
+            📋 Full Summary:
+            \(result.summaries.joined(separator: "\n\n"))
+            """
+            
+            // Update imported content
+            fileImporter.importedText = processedContent
+            fileImporter.importedFileName = url.lastPathComponent
+            fileImporter.importError = nil
+            
+            print("[FileImportView] Successfully processed PDF: \(url.lastPathComponent)")
+            print("[FileImportView] Processed content length: \(processedContent.count) characters")
+            
+        } catch {
+            fileImporter.importError = "PDF processing failed: \(error.localizedDescription)"
+            print("[FileImportView] PDF processing error: \(error)")
         }
     }
     
