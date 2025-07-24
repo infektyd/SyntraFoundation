@@ -5,6 +5,7 @@ import AVFoundation
 /// Modern voice-to-text input using enhanced SFSpeechRecognizer
 /// Improved architecture with async/await and better error handling
 /// Now supports natural accumulative text input (append instead of replace)
+/// ROBUST: Added debouncing and comprehensive error handling to prevent crashes
 @MainActor
 struct VoiceInputView: View {
     @Binding var text: String
@@ -18,6 +19,13 @@ struct VoiceInputView: View {
     @State private var audioEngine = AVAudioEngine()
     @State private var hasPermission = false
     @State private var sessionStartTime = Date()
+    
+    // ROBUST: Debouncing and state management
+    @State private var isProcessingRequest = false
+    @State private var debounceTimer: Timer?
+    @State private var lastButtonPressTime = Date()
+    @State private var errorMessage: String?
+    @State private var showError = false
     
     // Track available text for the Use Text button
     private var hasAvailableText: Bool {
@@ -57,29 +65,15 @@ struct VoiceInputView: View {
                 .scaleEffect(isRecording ? 1.05 : 1.0) // Visual feedback when pressed
                 .animation(.easeInOut(duration: 0.1), value: isRecording)
             }
-            .disabled(!isSpeechRecognitionAvailable())
+            .disabled(!isSpeechRecognitionAvailable() || isProcessingRequest)
             .simultaneousGesture(
                 // Hold-to-talk gesture: press to start, release to stop
                 DragGesture(minimumDistance: 0)
                     .onChanged { _ in
-                        if !isRecording && isSpeechRecognitionAvailable() {
-                            // Haptic feedback for press confirmation
-                            let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
-                            impactFeedback.impactOccurred()
-                            
-                            SyntraLogger.logUI("User pressed hold-to-talk button")
-                            startRecording()
-                        }
+                        handleButtonPress()
                     }
                     .onEnded { _ in
-                        if isRecording {
-                            // Light haptic feedback for release
-                            let impactFeedback = UIImpactFeedbackGenerator(style: .light)
-                            impactFeedback.impactOccurred()
-                            
-                            SyntraLogger.logUI("User released hold-to-talk button")
-                            stopRecording()
-                        }
+                        handleButtonRelease()
                     }
             )
             
@@ -96,6 +90,35 @@ struct VoiceInputView: View {
                         .font(.caption2)
                         .foregroundColor(.orange)
                 }
+            }
+            
+            // ROBUST: Error display
+            if showError, let error = errorMessage {
+                HStack {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .foregroundColor(.orange)
+                    Text(error)
+                        .font(.caption)
+                        .foregroundColor(.orange)
+                }
+                .padding(.horizontal)
+                .background(
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(.orange.opacity(0.1))
+                )
+            }
+            
+            // Use Text button for accumulated content
+            if hasAvailableText {
+                Button("Use Text") {
+                    text = combinedText
+                    // Clear accumulated text after use
+                    accumulatedText = ""
+                    finalResult = ""
+                    partialResult = ""
+                }
+                .buttonStyle(.borderedProminent)
+                .controlSize(.large)
             }
             
             // Live transcription display with improved wrapping
@@ -171,14 +194,16 @@ struct VoiceInputView: View {
             Spacer()
         }
         .onAppear {
-            requestSpeechPermission()
+            Task {
+                await checkSpeechRecognitionPermission()
+            }
             // Initialize accumulated text with current binding value
             if !text.isEmpty && accumulatedText.isEmpty {
                 accumulatedText = text
             }
         }
         .onDisappear {
-            stopRecording()
+            stopRecordingSafely()
         }
     }
     
@@ -189,17 +214,15 @@ struct VoiceInputView: View {
         return recognizer.isAvailable && hasPermission
     }
     
-    private func requestSpeechPermission() {
+    private func checkSpeechRecognitionPermission() async {
         SyntraLogger.logUI("Requesting speech recognition permission...")
-        Task {
-            do {
-                let authStatus = await SFSpeechRecognizer.requestAuthorization()
-                await MainActor.run {
-                    hasPermission = authStatus == .authorized
-                    SyntraLogger.logUI("Speech recognition permission result: \(authStatus == .authorized ? "granted" : "denied")")
-                }
-                print("[VoiceInputView] Speech recognition permission: \(authStatus.rawValue)")
+        do {
+            let authStatus = await SFSpeechRecognizer.requestAuthorization()
+            await MainActor.run {
+                hasPermission = authStatus == .authorized
+                SyntraLogger.logUI("Speech recognition permission result: \(authStatus == .authorized ? "granted" : "denied")")
             }
+            print("[VoiceInputView] Speech recognition permission: \(authStatus.rawValue)")
         }
     }
     
@@ -221,138 +244,143 @@ struct VoiceInputView: View {
         print("[VoiceInputView] Cleared all accumulated text")
     }
     
-    private func startRecording() {
-        sessionStartTime = Date()
-        SyntraLogger.logUI("Starting enhanced speech recognition session...")
-        Task {
-            do {
-                try await startSpeechRecognition()
-            } catch {
-                SyntraLogger.logUI("Failed to start voice recording", level: .error, details: error.localizedDescription)
-                print("[VoiceInputView] Failed to start recording: \(error)")
-                await MainActor.run {
-                    isRecording = false
+    // ROBUST: Debounced button press handling
+    private func handleButtonPress() {
+        let now = Date()
+        let timeSinceLastPress = now.timeIntervalSince(lastButtonPressTime)
+        
+        // Debounce: ignore presses within 500ms of each other
+        guard timeSinceLastPress > 0.5 else {
+            SyntraLogger.logUI("Button press debounced", details: "Time since last: \(String(format: "%.2f", timeSinceLastPress))s")
+            return
+        }
+        
+        lastButtonPressTime = now
+        
+        // Cancel any existing debounce timer
+        debounceTimer?.invalidate()
+        
+        // Set new debounce timer
+        debounceTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: false) { _ in
+            if !isRecording && isSpeechRecognitionAvailable() && !isProcessingRequest {
+                // Haptic feedback for press confirmation
+                let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+                impactFeedback.impactOccurred()
+                
+                SyntraLogger.logUI("User pressed hold-to-talk button (debounced)")
+                
+                // Start recording in a separate task
+                Task { @MainActor in
+                    await startRecordingSafely()
                 }
             }
         }
     }
     
-    private func startSpeechRecognition() async throws {
-        guard let speechRecognizer = speechRecognizer,
-              speechRecognizer.isAvailable else {
-            SyntraLogger.logUI("Speech recognizer unavailable", level: .error)
-            throw SpeechRecognitionError.recognizerUnavailable
+    // ROBUST: Safe button release handling
+    private func handleButtonRelease() {
+        debounceTimer?.invalidate()
+        
+        if isRecording && !isProcessingRequest {
+            // Light haptic feedback for release
+            let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+            impactFeedback.impactOccurred()
+            
+            SyntraLogger.logUI("User released hold-to-talk button")
+            Task { @MainActor in
+                await stopRecordingSafely()
+            }
+        }
+    }
+    
+    // ROBUST: Safe recording start with comprehensive error handling
+    private func startRecordingSafely() async {
+        guard !isProcessingRequest else {
+            SyntraLogger.logUI("Recording request ignored - already processing", level: .warning)
+            return
         }
         
-        SyntraLogger.logUI("Configuring speech recognition session with on-device processing...")
+        isProcessingRequest = true
+        showError = false
+        errorMessage = nil
         
-        // Clear current session results (but keep accumulated text)
-        finalResult = ""
-        partialResult = ""
-        
-        // Configure audio session
-        let audioSession = AVAudioSession.sharedInstance()
-        try audioSession.setCategory(.record, mode: .measurement, options: .duckOthers)
-        try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
-        
-        // Create recognition request
-        recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
-        guard let recognitionRequest = recognitionRequest else {
-            SyntraLogger.logUI("Failed to create speech recognition request", level: .error)
-            throw SpeechRecognitionError.requestCreationFailed
-        }
-        
-        recognitionRequest.shouldReportPartialResults = true
-        
-        // Enhanced configuration for better accuracy
-        if #available(iOS 16.0, *) {
-            recognitionRequest.addsPunctuation = true
-            recognitionRequest.requiresOnDeviceRecognition = true // Privacy-first
-            SyntraLogger.logUI("Enabled on-device speech processing with punctuation")
-        }
-        
-        await MainActor.run {
-            // Start recognition task with enhanced result handling
+        do {
+            // Check audio session
+            try await configureAudioSession()
+            
+            // Check speech recognition availability
+            guard let speechRecognizer = speechRecognizer, speechRecognizer.isAvailable else {
+                throw SpeechRecognitionError.recognizerUnavailable
+            }
+            
+            // Create recognition request
+            recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
+            guard let recognitionRequest = recognitionRequest else {
+                throw SpeechRecognitionError.requestCreationFailed
+            }
+            
+            // Configure request
+            recognitionRequest.shouldReportPartialResults = true
+            recognitionRequest.requiresOnDeviceRecognition = false
+            
+            // ROBUST: Ensure audio engine is in clean state
+            if audioEngine.isRunning {
+                audioEngine.stop()
+                audioEngine.inputNode.removeTap(onBus: 0)
+            }
+            
+            // Reset audio engine
+            audioEngine = AVAudioEngine()
+            
+            // Setup audio engine with proper error handling
+            let inputNode = audioEngine.inputNode
+            let recordingFormat = inputNode.outputFormat(forBus: 0)
+            
+            // Enhanced buffer size for better performance
+            let bufferSize: AVAudioFrameCount = 1024
+            
+            // ROBUST: Install tap with proper error handling
+            inputNode.installTap(onBus: 0, bufferSize: bufferSize, format: recordingFormat) { buffer, _ in
+                recognitionRequest.append(buffer)
+            }
+            
+            // Prepare and start audio engine
+            audioEngine.prepare()
+            try audioEngine.start()
+            
+            // Start recognition task
             recognitionTask = speechRecognizer.recognitionTask(with: recognitionRequest) { result, error in
                 Task { @MainActor in
-                    if let result = result {
-                        let transcription = result.bestTranscription.formattedString
-                        
-                        if result.isFinal {
-                            // Final result - accumulate with previous text
-                            if !transcription.isEmpty {
-                                // Add to accumulated text with proper spacing
-                                if !self.accumulatedText.isEmpty {
-                                    self.accumulatedText += " " + transcription
-                                } else {
-                                    self.accumulatedText = transcription
-                                }
-                                SyntraLogger.logUI("Speech recognition final result", details: "Accumulated: \(self.accumulatedText)")
-                                print("[VoiceInputView] Accumulated text: \(self.accumulatedText)")
-                            }
-                            
-                            self.finalResult = ""
-                            self.partialResult = ""
-                            
-                            // Update the bound text with accumulated content
-                            self.text = self.accumulatedText
-                            
-                            print("[VoiceInputView] Final result accumulated: \(transcription)")
-                            self.stopRecording()
-                        } else {
-                            // Partial result for immediate feedback
-                            self.partialResult = transcription
-                            
-                            // Update bound text with accumulated + current partial
-                            let combinedText = self.accumulatedText.isEmpty ? transcription : 
-                                self.accumulatedText + " " + transcription
-                            self.text = combinedText
-                            
-                            // Log partial results occasionally to show activity
-                            if transcription.split(separator: " ").count % 5 == 0 {
-                                SyntraLogger.logUI("Speech recognition in progress", details: "Current: \(transcription)")
-                            }
-                            
-                            print("[VoiceInputView] Partial result: \(transcription)")
-                        }
-                    }
-                    
-                    if let error = error {
-                        SyntraLogger.logUI("Speech recognition error", level: .error, details: error.localizedDescription)
-                        print("[VoiceInputView] Recognition error: \(error)")
-                        self.stopRecording()
-                    }
+                    await handleRecognitionResult(result: result, error: error)
                 }
             }
-        }
-        
-        // Setup audio engine with optimized configuration
-        let inputNode = audioEngine.inputNode
-        let recordingFormat = inputNode.outputFormat(forBus: 0)
-        
-        // Enhanced buffer size for better performance
-        let bufferSize: AVAudioFrameCount = 1024
-        
-        inputNode.installTap(onBus: 0, bufferSize: bufferSize, format: recordingFormat) { buffer, _ in
-            recognitionRequest.append(buffer)
-        }
-        
-        // Start audio engine
-        audioEngine.prepare()
-        try audioEngine.start()
-        
-        await MainActor.run {
+            
+            // Update UI state
             isRecording = true
+            sessionStartTime = Date()
+            
+            SyntraLogger.logUI("Speech recognition session active", details: "Using accumulative mode with \(bufferSize) buffer size")
+            print("[VoiceInputView] Enhanced speech recognition started (accumulative mode)")
+            
+        } catch {
+            await handleRecordingError(error)
         }
         
-        SyntraLogger.logUI("Speech recognition session active", details: "Using accumulative mode with \(bufferSize) buffer size")
-        print("[VoiceInputView] Enhanced speech recognition started (accumulative mode)")
+        isProcessingRequest = false
     }
     
-    private func stopRecording() {
+    // ROBUST: Safe recording stop
+    private func stopRecordingSafely() async {
+        guard !isProcessingRequest else {
+            SyntraLogger.logUI("Stop request ignored - already processing", level: .warning)
+            return
+        }
+        
+        isProcessingRequest = true
+        
         let sessionDuration = Date().timeIntervalSince(sessionStartTime)
         
-        // Stop audio engine
+        // Stop audio engine safely
         if audioEngine.isRunning {
             audioEngine.stop()
             audioEngine.inputNode.removeTap(onBus: 0)
@@ -379,6 +407,88 @@ struct VoiceInputView: View {
         recognitionTask = nil
         
         print("[VoiceInputView] Speech recognition stopped (session lasted \(Date().timeIntervalSince(sessionStartTime)) seconds)")
+        
+        isProcessingRequest = false
+    }
+    
+    // ROBUST: Audio session configuration
+    private func configureAudioSession() async throws {
+        let audioSession = AVAudioSession.sharedInstance()
+        
+        do {
+            try audioSession.setCategory(.record, mode: .measurement, options: .duckOthers)
+            try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
+        } catch {
+            throw SpeechRecognitionError.audioEngineError
+        }
+    }
+    
+    // ROBUST: Comprehensive error handling
+    private func handleRecordingError(_ error: Error) async {
+        SyntraLogger.logUI("Speech recognition error", level: .error, details: error.localizedDescription)
+        print("[VoiceInputView] Recording error: \(error)")
+        
+        // Reset audio engine state
+        if audioEngine.isRunning {
+            audioEngine.stop()
+            audioEngine.inputNode.removeTap(onBus: 0)
+        }
+        
+        // Update UI with error
+        errorMessage = error.localizedDescription
+        showError = true
+        isRecording = false
+        isProcessingRequest = false
+        
+        // Auto-hide error after 5 seconds
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+            showError = false
+            errorMessage = nil
+        }
+    }
+    
+    // ROBUST: Enhanced recognition result handling
+    private func handleRecognitionResult(result: SFSpeechRecognitionResult?, error: Error?) async {
+        if let result = result {
+            let transcription = result.bestTranscription.formattedString
+            
+            if result.isFinal {
+                // Final result - accumulate and stop
+                if !transcription.isEmpty {
+                    if accumulatedText.isEmpty {
+                        accumulatedText = transcription
+                    } else {
+                        accumulatedText += " " + transcription
+                    }
+                }
+                
+                finalResult = transcription
+                SyntraLogger.logUI("Speech recognition final result", details: "Transcription: \(transcription)")
+                print("[VoiceInputView] Final result accumulated: \(transcription)")
+                await stopRecordingSafely()
+            } else {
+                // Partial result for immediate feedback
+                partialResult = transcription
+                
+                // Update bound text with accumulated + current partial
+                let combinedText = accumulatedText.isEmpty ? transcription : 
+                    accumulatedText + " " + transcription
+                text = combinedText
+                
+                // Log partial results occasionally to show activity
+                if transcription.split(separator: " ").count % 5 == 0 {
+                    SyntraLogger.logUI("Speech recognition in progress", details: "Current: \(transcription)")
+                }
+                
+                print("[VoiceInputView] Partial result: \(transcription)")
+            }
+        }
+        
+        if let error = error {
+            SyntraLogger.logUI("Speech recognition error", level: .error, details: error.localizedDescription)
+            print("[VoiceInputView] Recognition error: \(error)")
+            await stopRecordingSafely()
+        }
     }
 }
 

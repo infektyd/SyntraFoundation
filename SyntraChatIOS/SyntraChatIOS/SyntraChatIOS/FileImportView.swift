@@ -81,7 +81,7 @@ struct FileImportView: View {
     
     private func handleFileImport(_ result: Result<[URL], Error>) {
         // CRITICAL: Ensure file operations on main thread - Beta 3 threading fix
-        DispatchQueue.main.async {
+        Task { @MainActor in
             do {
                 let urls = try result.get()
                 guard let url = urls.first else {
@@ -136,30 +136,32 @@ struct FileImportView: View {
     
     private func handlePDFImport(_ url: URL) async {
         do {
-            // Use our new Swift PDF processor
-            let result = try await PDFProcessor.processPDF(
-                path: url.path,
-                provider: .apple,
-                mode: .balanced
-            )
+            // Simple PDF text extraction for now
+            guard let document = PDFDocument(url: url) else {
+                fileImporter.importError = "Failed to load PDF document"
+                return
+            }
             
-            // Format the processed content for display
+            var extractedText = ""
+            for i in 0..<document.pageCount {
+                if let page = document.page(at: i),
+                   let pageText = page.string {
+                    extractedText += pageText + "\n\n"
+                }
+            }
+            
             let processedContent = """
             📄 PDF Processed: \(url.lastPathComponent)
             
             📊 Summary:
-            - Original text length: \(result.originalText.count) characters
-            - Chunks processed: \(result.chunks.count)
-            - Processing mode: \(result.processingMode)
+            - Original text length: \(extractedText.count) characters
+            - Pages processed: \(document.pageCount)
+            - Processing: Basic text extraction
             
-            📝 Key Insights:
-            \(result.insights["valon"] ?? "No Valon insights available")
+            📝 Content Preview:
+            \(String(extractedText.prefix(1000)))...
             
-            🔧 Technical Analysis:
-            \(result.insights["modi"] ?? "No Modi analysis available")
-            
-            📋 Full Summary:
-            \(result.summaries.joined(separator: "\n\n"))
+            [Note: Full PDF processing with Apple Foundation Models will be available in a future update]
             """
             
             // Update imported content

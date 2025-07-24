@@ -1,5 +1,5 @@
 # GEMINI API KEY - PUT YOUR KEY HERE
-GEMINI_API_KEY = "AIzaSyAtyAlUJiZ_f_eQLsihW4oGKwA1rlnRDSI"
+GEMINI_API_KEY = ""
 
 # PROCESSING MODE - Choose your preference
 PROCESSING_MODE = "balanced"  # Options: "comprehensive", "balanced", "rapid"
