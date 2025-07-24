@@ -7,6 +7,198 @@ import PDFKit
 import FoundationModels
 #endif
 
+// MARK: - PDF Processor for iOS App
+public struct PDFProcessor {
+    
+
+    
+
+    
+    // MARK: - Processing Result
+    public struct ProcessingResult: Sendable {
+        public let originalText: String
+        public let chunks: [String]
+        public let summaries: [String]
+        public let insights: [String: String]
+        public let provider: String
+        public let processingMode: String
+        public let timestamp: Date
+        public let metadata: [String: String]
+        
+        public init(originalText: String, chunks: [String], summaries: [String], insights: [String: String], provider: String, processingMode: String, timestamp: Date, metadata: [String: String]) {
+            self.originalText = originalText
+            self.chunks = chunks
+            self.summaries = summaries
+            self.insights = insights
+            self.provider = provider
+            self.processingMode = processingMode
+            self.timestamp = timestamp
+            self.metadata = metadata
+        }
+    }
+    
+    // MARK: - Main Processing Function
+    public static func processPDF(
+        path: String,
+        provider: LLMProvider = .apple,
+        mode: ProcessingMode = .balanced
+    ) async throws -> ProcessingResult {
+        
+        // Step 1: Extract text from PDF
+        let extractedText = try extractTextFromPDF(path: path)
+        
+        // Step 2: Chunk text based on processing mode
+        let chunks = chunkText(extractedText, maxChunkSize: mode.chunkSize, overlap: mode.overlap)
+        
+        // Step 3: Process with chosen LLM
+        let processor = LLMProcessor(provider: provider)
+        let summaries = try await processor.processchunks(chunks)
+        
+        // Step 4: VALON/MODI processing
+        let insights = await processWithSyntraConsciousness(summaries)
+        
+        // Step 5: Create result
+        let result = ProcessingResult(
+            originalText: extractedText,
+            chunks: chunks,
+            summaries: summaries,
+            insights: insights,
+            provider: provider.rawValue,
+            processingMode: mode.rawValue,
+            timestamp: Date(),
+            metadata: [
+                "chunk_count": String(chunks.count),
+                "summary_count": String(summaries.count),
+                "mode_description": mode.description
+            ]
+        )
+        
+        return result
+    }
+    
+    // MARK: - PDF Text Extraction
+    private static func extractTextFromPDF(path: String) throws -> String {
+        let fileURL: URL
+        if path.hasPrefix("/") {
+            fileURL = URL(fileURLWithPath: path)
+        } else {
+            let currentDirectory = FileManager.default.currentDirectoryPath
+            fileURL = URL(fileURLWithPath: currentDirectory).appendingPathComponent(path)
+        }
+        
+        guard let document = PDFDocument(url: fileURL) else {
+            throw PDFError.cannotLoadDocument
+        }
+        
+        var extractedText = ""
+        for i in 0..<document.pageCount {
+            if let page = document.page(at: i),
+               let pageText = page.string {
+                extractedText += pageText + "\n\n"
+            }
+        }
+        
+        return extractedText.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+    
+    // MARK: - Text Chunking
+    private static func chunkText(_ text: String, maxChunkSize: Int, overlap: Int) -> [String] {
+        var chunks: [String] = []
+        let words = text.components(separatedBy: .whitespaces)
+        var currentChunk = ""
+        var currentSize = 0
+        
+        for word in words {
+            if currentSize + word.count > maxChunkSize && !currentChunk.isEmpty {
+                chunks.append(currentChunk.trimmingCharacters(in: .whitespaces))
+                
+                let overlapWords = currentChunk.components(separatedBy: .whitespaces).suffix(overlap/10)
+                currentChunk = overlapWords.joined(separator: " ") + " "
+                currentSize = currentChunk.count
+            }
+            
+            currentChunk += word + " "
+            currentSize += word.count + 1
+        }
+        
+        if !currentChunk.isEmpty {
+            chunks.append(currentChunk.trimmingCharacters(in: .whitespaces))
+        }
+        
+        return chunks
+    }
+    
+    // MARK: - LLM Processing (Consciousness)
+    private static func processWithSyntraConsciousness(_ summaries: [String]) async -> [String: String] {
+        // Simplified consciousness processing for now
+        var insights: [String: String] = [:]
+        
+        // VALON processing (70% moral/emotional)
+        let valonPrompt = """
+        Analyze this content from a moral and emotional perspective (VALON consciousness):
+        
+        \(summaries.joined(separator: "\n\n"))
+        
+        Provide insights about:
+        - Moral implications
+        - Emotional resonance
+        - Ethical considerations
+        - Human impact
+        """
+        
+        if #available(macOS 26.0, *) {
+            insights["valon"] = await processWithFoundationModels(valonPrompt)
+        } else {
+            insights["valon"] = "[Foundation Models not available on this macOS version]"
+        }
+        
+        // MODI processing (30% logical/technical)
+        let modiPrompt = """
+        Analyze this content from a logical and technical perspective (MODI consciousness):
+        
+        \(summaries.joined(separator: "\n\n"))
+        
+        Provide insights about:
+        - Technical patterns
+        - Logical structure
+        - Analytical observations
+        - Systematic understanding
+        """
+        
+        if #available(macOS 26.0, *) {
+            insights["modi"] = await processWithFoundationModels(modiPrompt)
+        } else {
+            insights["modi"] = "[Foundation Models not available on this macOS version]"
+        }
+        
+        return insights
+    }
+    
+    // MARK: - Foundation Models Integration
+    @available(macOS 26.0, *)
+    private static func processWithFoundationModels(_ prompt: String) async -> String {
+        #if canImport(FoundationModels)
+        do {
+            let model = SystemLanguageModel.default
+            
+            guard model.availability == .available else {
+                return "[Foundation Models not available on this device]"
+            }
+            
+            let session = try LanguageModelSession(model: model)
+            let response = try await session.respond(to: prompt)
+            
+            return response.content
+            
+        } catch {
+            return "[Foundation Models error: \(error.localizedDescription)]"
+        }
+        #else
+        return "[Foundation Models not available]"
+        #endif
+    }
+}
+
 // MARK: - Public CLI Interface
 public struct SyntraCLI {
     public static func run(with arguments: [String] = CommandLine.arguments) async {
