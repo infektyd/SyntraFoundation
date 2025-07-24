@@ -543,30 +543,39 @@ class SyntraBrain: ObservableObject {
     }
     
     func processMessage(_ message: String, withHistory history: [SyntraMessage] = []) async {
-        SyntraLogger.log("[SyntraBrain iOS] Processing message: '\(message)'")
+        SyntraLogger.logConsciousness("[SyntraBrain iOS] Starting consciousness processing", details: "Input: '\(message.prefix(100))'")
+        SyntraLogger.logUI("SYNTRA brain state transition: idle → processing")
         
         isProcessing = true
         
         // Create context with conversation history
         let conversationHistory = history.map { "\($0.sender): \($0.content)" }
+        SyntraLogger.logMemory("Loading conversation context", details: "History entries: \(conversationHistory.count)")
+        
         let context = SyntraContext(
             conversationHistory: conversationHistory,
             userPreferences: [:],
             sessionId: syntraCore.sessionId
         )
         
+        SyntraLogger.logConsciousness("Context prepared for three-brain processing", details: "Session: \(context.sessionId)")
+        
         // Process through SYNTRA's agentic framework
+        SyntraLogger.logConsciousness("Engaging Valon (70%) + Modi (30%) synthesis...")
         let response = await syntraCore.processInput(message, context: context)
+        SyntraLogger.logConsciousness("Three-brain synthesis complete", details: "Response length: \(response.count) characters")
         
         // FIXED: Add missing useCase parameter with default value
         let userMessage = SyntraMessage(sender: "User", content: message, role: .user, consciousnessInfluences: [:])
         let syntraMessage = SyntraMessage(sender: "SYNTRA", content: response, role: .assistant, consciousnessInfluences: [:])
         
+        SyntraLogger.logMemory("Storing interaction in conversation memory")
         messages.append(userMessage)
         messages.append(syntraMessage)
         
         isProcessing = false
-        SyntraLogger.log("[SyntraBrain iOS] Response: '\(response)'")
+        SyntraLogger.logUI("SYNTRA brain state transition: processing → ready")
+        SyntraLogger.logConsciousness("[SyntraBrain iOS] Consciousness cycle complete", details: "Generated response: '\(response.prefix(100))'")
     }
 }
 

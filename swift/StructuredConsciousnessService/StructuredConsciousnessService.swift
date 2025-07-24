@@ -98,7 +98,7 @@ public class StructuredConsciousnessService {
             // Parse response into structured ValonMoralAssessment
             return try parseValonAssessment(from: responseContent, input: input)
         } catch {
-            throw StructuredGenerationError.generationFailed("Valon assessment generation failed: \\(error.localizedDescription)")
+            throw StructuredGenerationError.generationFailed("Valon assessment generation failed: \(error.localizedDescription)")
         }
     }
     
@@ -195,7 +195,7 @@ public class StructuredConsciousnessService {
         conversationContext: String? = nil
     ) async throws -> SyntraConversationalResponse {
         
-        let contextPrompt = conversationContext != nil ? "\\nConversation Context: \\(conversationContext!)" : ""
+        let contextPrompt = conversationContext != nil ? "\nConversation Context: \(conversationContext!)" : ""
         
         let prompt = """
         Generate a natural conversational response based on this consciousness synthesis:
@@ -688,7 +688,7 @@ public class StructuredConsciousnessService {
         let contentLower = content.lowercased()
         for symbol in symbols {
             if contentLower.contains(symbol) {
-                return "A \\(symbol) representing moral guidance"
+                return "A \(symbol) representing moral guidance"
             }
         }
         
@@ -703,7 +703,7 @@ public class StructuredConsciousnessService {
         
         let contentLower = content.lowercased()
         for (_, weight) in weightIndicators {
-            if contentLower.contains("\\(indicator) important") || contentLower.contains("\\(indicator) significant") {
+            if contentLower.contains("\(indicator) important") || contentLower.contains("\(indicator) significant") {
                 return weight
             }
         }
@@ -722,7 +722,7 @@ public class StructuredConsciousnessService {
         
         for pattern in concernPatterns {
             if contentLower.contains(pattern) {
-                concerns.append("Identified \\(pattern) requiring moral consideration")
+                concerns.append("Identified \(pattern) requiring moral consideration")
             }
         }
         
@@ -838,7 +838,7 @@ public class StructuredConsciousnessService {
     }
     
     private func extractReasoningSteps(from content: String) -> [String] {
-        let sentences = content.components(separatedBy: CharacterSet(charactersIn: ".!?\\n"))
+        let sentences = content.components(separatedBy: CharacterSet(charactersIn: ".!?\n"))
         var steps: [String] = []
         
         for sentence in sentences {
@@ -933,7 +933,7 @@ public class StructuredConsciousnessService {
     }
     
     private func extractRecommendedSteps(from content: String) -> [String] {
-        let sentences = content.components(separatedBy: CharacterSet(charactersIn: ".!?\\n"))
+        let sentences = content.components(separatedBy: CharacterSet(charactersIn: ".!?\n"))
         var recommendations: [String] = []
         
         let recommendationKeywords = ["recommend", "suggest", "should", "ought", "consider", "try"]
@@ -1070,7 +1070,7 @@ public class StructuredConsciousnessService {
         
         for indicator in conflictIndicators {
             if contentLower.contains(indicator) {
-                conflicts.append("\\(indicator.capitalized) identified in consciousness integration")
+                conflicts.append("\(indicator.capitalized) identified in consciousness integration")
             }
         }
         
@@ -1188,7 +1188,7 @@ public class StructuredConsciousnessService {
     
     private func extractNaturalResponse(from content: String, fallback: String) -> String {
         // Extract the most natural conversational part
-        let paragraphs = content.components(separatedBy: "\\n\\n")
+        let paragraphs = content.components(separatedBy: "\n\n")
         
         for paragraph in paragraphs {
             let trimmed = paragraph.trimmingCharacters(in: .whitespacesAndNewlines)
