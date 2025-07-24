@@ -15,32 +15,28 @@ struct CrashSafeTextDisplay: View {
     }
     
     var body: some View {
-        // Use HStack with individual characters to completely avoid Text input mechanisms
-        // This prevents any cursor interaction that could trigger setKeyboardAppearance crashes
-        HStack(alignment: .top, spacing: 0) {
-            ForEach(Array(text.enumerated()), id: \.offset) { index, character in
-                // Each character is a separate view to prevent text selection
-                Text(String(character))
-                    .foregroundColor(color)
-                    .font(isPartial ? .body.italic() : .body)
-                    .allowsHitTesting(false)
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        // Completely ignore all taps
-                    }
+        // Use regular Text with proper wrapping while maintaining crash safety
+        Text(text)
+            .foregroundColor(color)
+            .font(isPartial ? .body.italic() : .body)
+            .multilineTextAlignment(.leading)
+            .fixedSize(horizontal: false, vertical: true) // Allow vertical expansion, constrain horizontal
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .allowsHitTesting(false) // Prevent all touch interaction
+            .textSelection(.disabled) // Explicitly disable text selection
+            .contentShape(Rectangle())
+            .onTapGesture {
+                // Completely ignore all taps to prevent focus
             }
-        }
-        .allowsHitTesting(false)
-        .contentShape(Rectangle())
-        .onTapGesture {
-            // Completely ignore all taps
-        }
-        .background(
-            // Invisible background to catch any stray touches
-            Rectangle()
-                .fill(Color.clear)
-                .allowsHitTesting(false)
-        )
+            .onLongPressGesture(minimumDuration: 0) {
+                // Completely ignore long press to prevent text selection
+            }
+            .gesture(
+                // Override all gestures to prevent text interaction
+                DragGesture()
+                    .onChanged { _ in }
+                    .onEnded { _ in }
+            )
     }
 }
 
@@ -67,7 +63,7 @@ struct EnhancedCrashSafeTextDisplay: View {
                 .fill(.ultraThinMaterial)
                 .overlay(
                     RoundedRectangle(cornerRadius: 8)
-                        .stroke(.red.opacity(0.3), lineWidth: 1)
+                        .stroke(.purple.opacity(0.3), lineWidth: 1)
                 )
         )
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -76,5 +72,14 @@ struct EnhancedCrashSafeTextDisplay: View {
         .onTapGesture {
             // Completely ignore all taps
         }
+        .onLongPressGesture(minimumDuration: 0) {
+            // Completely ignore long press
+        }
+        .gesture(
+            // Override all gestures to prevent interaction
+            DragGesture()
+                .onChanged { _ in }
+                .onEnded { _ in }
+        )
     }
 } 

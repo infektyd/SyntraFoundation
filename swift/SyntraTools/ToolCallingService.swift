@@ -77,7 +77,7 @@ public class SyntraToolCallingService {
         // Enhance input with conversation context
         var enhancedInput = input
         if let context = conversationContext {
-            enhancedInput += "\\n\\nConversation context: \\(context)"
+            enhancedInput += "\n\nConversation context: \(context)"
         }
         
         // Process through tool-enabled session
@@ -98,7 +98,7 @@ public class SyntraToolCallingService {
     }
     
     public func chatWithTools(_ userMessage: String, conversationHistory: [String] = []) async throws -> ToolBasedChatResult {
-        let conversationContext = conversationHistory.isEmpty ? nil : conversationHistory.joined(separator: "\\n")
+        let conversationContext = conversationHistory.isEmpty ? nil : conversationHistory.joined(separator: "\n")
         
         let result = try await processWithTools(userMessage, conversationContext: conversationContext)
         
@@ -124,7 +124,7 @@ public class SyntraToolCallingService {
         }
         
         let complexPrompt = """
-        Complex scenario requiring deep analysis: \\(scenario)
+        Complex scenario requiring deep analysis: \(scenario)
         
         Please use multiple tools to thoroughly analyze this situation:
         1. First assess any moral implications

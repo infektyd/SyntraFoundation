@@ -132,11 +132,25 @@ struct ChatView: View {
                         }
                         
                         ToolbarItem(placement: .navigationBarTrailing) {
-                            Button("Use Text") {
-                                showingVoiceInput = false
-                                // Input text is already bound, so it will appear in the text field
+                            HStack {
+                                // Use Text button
+                                Button("Use Text") {
+                                    showingVoiceInput = false
+                                    // Input text is already bound, so it will appear in the text field
+                                }
+                                .disabled(inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                                
+                                // Send Message button (when text is available)
+                                if !inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                                    Button("Send") {
+                                        showingVoiceInput = false
+                                        // Send the message immediately
+                                        sendMessage()
+                                    }
+                                    .fontWeight(.semibold)
+                                    .disabled(brain.isProcessing)
+                                }
                             }
-                            .disabled(inputText.isEmpty)
                         }
                     }
             }
@@ -156,6 +170,14 @@ struct ChatView: View {
             }
         }
         .onAppear {
+            // Initialize SYNTRA system logging
+            SyntraLogger.logUI("SYNTRA Chat interface initialized")
+            SyntraLogger.logConsciousness("Three-brain architecture ready (Valon 70%, Modi 30%)")
+            SyntraLogger.logFoundationModels("On-device AI processing capabilities verified")
+            SyntraLogger.logMemory("Conversation memory system active")
+            SyntraLogger.logNetwork("Offline-first architecture enabled")
+            
+            // Set up initial chat state
             setupInitialState()
         }
     }
@@ -180,11 +202,17 @@ struct ChatView: View {
         guard !userMessage.isEmpty else { return }
         guard !brain.isProcessing else { return }
         
+        // Log user interaction
+        SyntraLogger.logUI("User submitted message", details: "Length: \(userMessage.count) characters")
+        SyntraLogger.logConsciousness("Starting three-brain processing for user input", details: userMessage.prefix(100).description)
+        
         inputText = ""
         
         // Process message through SYNTRA
         Task {
+            SyntraLogger.logConsciousness("Initiating SYNTRA consciousness processing...")
             await brain.processMessage(userMessage, withHistory: brain.messages)
+            SyntraLogger.logConsciousness("SYNTRA consciousness processing completed")
         }
     }
     

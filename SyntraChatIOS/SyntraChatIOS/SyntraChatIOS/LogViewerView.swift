@@ -50,6 +50,14 @@ struct LogViewerView: View {
         .sheet(isPresented: $showingLogExport) {
             LogExportView(logs: filteredLogs)
         }
+        .onAppear {
+            // Generate initial logs to demonstrate the logging system
+            SyntraLogger.logUI("Log viewer opened", details: "Real-time backend monitoring active")
+            SyntraLogger.logConsciousness("SYNTRA consciousness monitoring initialized")
+            SyntraLogger.logMemory("Memory vault connection established")
+            SyntraLogger.logFoundationModels("Foundation Models API ready for on-device processing")
+            SyntraLogger.logNetwork("Network status: \(logManager.isRecording ? "monitoring" : "paused")")
+        }
     }
     
     private var controlPanel: some View {

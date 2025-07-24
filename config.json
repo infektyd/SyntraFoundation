@@ -2,6 +2,8 @@
   "openai_api_key": "lm-studio",
   "openai_api_base": "http://localhost:1234/v1",
   "openai_model": "phi-3-mini-4k-instruct",
+  "gemini_api_key": "AIzaSyAtyAlUJiZ_f_eQLsihW4oGKwA1rlnRDSI",
+  "gemini_model": "gemini-1.5-pro",
   "elevenlabs_api_key": "YOUR_ELEVENLABS_API_KEY",
   "use_mistral_for_valon": true,
   "preferred_voice": "auto",
