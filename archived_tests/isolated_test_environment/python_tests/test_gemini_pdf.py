@@ -1,5 +1,5 @@
 # GEMINI API KEY - PUT YOUR KEY HERE
-GEMINI_API_KEY = "AIzaSyAtyAlUJiZ_f_eQLsihW4oGKwA1rlnRDSI"
+GEMINI_API_KEY = ""
 
 import requests
 import json
