@@ -4,6 +4,59 @@ import BrainEngine
 import SyntraConfig
 import ConsciousnessStructures
 
+// MARK: - Performance Logging System
+public struct SyntraPerformanceLogger {
+    private static var startTimes: [String: Date] = [:]
+    private static var stageLogs: [String: [String: Any]] = [:]
+    
+    static func startTiming(_ stage: String) {
+        startTimes[stage] = Date()
+        print("[TIMING] 🚀 Started: \(stage)")
+    }
+    
+    static func endTiming(_ stage: String, details: String = "") {
+        guard let startTime = startTimes[stage] else {
+            print("[TIMING] ⚠️ No start time found for: \(stage)")
+            return
+        }
+        
+        let duration = Date().timeIntervalSince(startTime)
+        let durationMs = Int(duration * 1000)
+        
+        let logEntry: [String: Any] = [
+            "stage": stage,
+            "duration_ms": durationMs,
+            "details": details,
+            "timestamp": ISO8601DateFormatter().string(from: Date())
+        ]
+        
+        stageLogs[stage] = logEntry
+        print("[TIMING] ✅ Completed: \(stage) (\(durationMs)ms) \(details)")
+        
+        // Remove from active timings
+        startTimes.removeValue(forKey: stage)
+    }
+    
+    static func logStage(_ stage: String, message: String, data: Any? = nil) {
+        print("[FLOW] 📍 \(stage): \(message)")
+        if let data = data {
+            print("[FLOW] 📊 Data: \(data)")
+        }
+    }
+    
+    static func logError(_ stage: String, error: String) {
+        print("[ERROR] ❌ \(stage): \(error)")
+    }
+    
+    static func getPerformanceReport() -> [String: Any] {
+        return [
+            "stage_logs": stageLogs,
+            "active_stages": Array(startTimes.keys),
+            "total_stages": stageLogs.count
+        ]
+    }
+}
+
 // Temporary implementation of missing types - to be replaced with full StructuredConsciousnessService
 public struct SyntraConversationalResponse {
     public let response: String
@@ -121,37 +174,63 @@ public class SyntraConversationEngine {
     
     // Main chat function - this is what users interact with
     public func chat(_ userMessage: String) async -> String {
+        SyntraPerformanceLogger.startTiming("total_chat_processing")
+        SyntraPerformanceLogger.logStage("chat_start", message: "Received user message", data: userMessage.prefix(100))
         
         // Record user message
+        SyntraPerformanceLogger.startTiming("message_recording")
         let userMsg = ConversationMessage(sender: "user", content: userMessage)
         context.addMessage(userMsg)
+        SyntraPerformanceLogger.endTiming("message_recording")
         
         // Check for special conversation patterns
+        SyntraPerformanceLogger.startTiming("special_pattern_check")
         if let specialResponse = handleSpecialPatterns(userMessage) {
+            SyntraPerformanceLogger.logStage("special_pattern", message: "Found special pattern, returning early")
             let syntraMsg = ConversationMessage(sender: "syntra", content: specialResponse)
             context.addMessage(syntraMsg)
+            SyntraPerformanceLogger.endTiming("special_pattern_check")
+            SyntraPerformanceLogger.endTiming("total_chat_processing", details: "Early return via special pattern")
             return specialResponse
         }
+        SyntraPerformanceLogger.endTiming("special_pattern_check")
         
         // Process through full cognitive system with conversation context
+        SyntraPerformanceLogger.startTiming("context_building")
         let contextualInput = buildContextualInput(userMessage)
+        SyntraPerformanceLogger.endTiming("context_building", details: "Built contextual input")
+        
+        SyntraPerformanceLogger.startTiming("cognitive_processing")
+        SyntraPerformanceLogger.logStage("cognitive_start", message: "Starting three-brain processing")
         let cognitiveResult = await processThroughBrainsWithMemory(contextualInput)
+        SyntraPerformanceLogger.logStage("cognitive_complete", message: "Three-brain processing complete", data: cognitiveResult.keys)
+        SyntraPerformanceLogger.endTiming("cognitive_processing", details: "Valon/Modi/Core synthesis")
         
         // Check moral autonomy - can SYNTRA refuse this request?
+        SyntraPerformanceLogger.startTiming("moral_autonomy_check")
         let autonomyCheck = checkMoralAutonomy(userMessage)
         if let refusal = handleMoralRefusal(autonomyCheck) {
+            SyntraPerformanceLogger.logStage("moral_refusal", message: "SYNTRA refused request on moral grounds")
             let syntraMsg = ConversationMessage(sender: "syntra", content: refusal, cognitiveData: cognitiveResult)
             context.addMessage(syntraMsg)
+            SyntraPerformanceLogger.endTiming("moral_autonomy_check")
+            SyntraPerformanceLogger.endTiming("total_chat_processing", details: "Moral refusal")
             return refusal
         }
+        SyntraPerformanceLogger.endTiming("moral_autonomy_check")
         
         // Convert cognitive processing to natural conversation
+        SyntraPerformanceLogger.startTiming("natural_language_conversion")
         let naturalResponse = convertToNaturalLanguage(cognitiveResult, userMessage: userMessage)
+        SyntraPerformanceLogger.endTiming("natural_language_conversion", details: "Converted to natural response")
         
         // Record SYNTRA's response
+        SyntraPerformanceLogger.startTiming("response_recording")
         let syntraMsg = ConversationMessage(sender: "syntra", content: naturalResponse, cognitiveData: cognitiveResult)
         context.addMessage(syntraMsg)
+        SyntraPerformanceLogger.endTiming("response_recording")
         
+        SyntraPerformanceLogger.endTiming("total_chat_processing", details: "Full processing complete")
         return naturalResponse
     }
     
@@ -414,6 +493,11 @@ public class SyntraConversationEngine {
     public func clearContext() {
         context = ConversationContext()
     }
+    
+    // Get performance report for debugging
+    public func getPerformanceReport() -> [String: Any] {
+        return SyntraPerformanceLogger.getPerformanceReport()
+    }
 }
 
 // Global conversation engine - using MainActor for concurrency safety
@@ -440,6 +524,13 @@ public func getSyntraConversationHistory() -> [[String: Any]] {
 @MainActor
 public func clearSyntraConversation() {
     globalConversationEngine.clearContext()
+}
+
+// Get performance report for debugging
+@available(macOS 26.0, *)
+@MainActor
+public func getSyntraPerformanceReport() -> [String: Any] {
+    return globalConversationEngine.getPerformanceReport()
 }
 
 // Duplicate removed - function already defined above

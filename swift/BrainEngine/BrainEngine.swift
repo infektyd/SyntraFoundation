@@ -56,23 +56,37 @@ public struct BrainEngine {
     }
 
     public static func processThroughBrains(_ input: String) async -> [String: Any] {
+        SyntraPerformanceLogger.startTiming("brain_engine_total")
+        SyntraPerformanceLogger.logStage("brain_engine_start", message: "Starting three-brain processing", data: input.prefix(100))
+        
         // Enhanced processing with inter-brain communication
+        SyntraPerformanceLogger.startTiming("internal_dialogue")
         let dialogue = Self.conductInternalDialogue(input)
+        SyntraPerformanceLogger.logStage("internal_dialogue_complete", message: "Internal dialogue completed", data: dialogue.keys)
+        SyntraPerformanceLogger.endTiming("internal_dialogue", details: "Valon-Modi communication")
         
         // Use the informed responses for final synthesis
+        SyntraPerformanceLogger.startTiming("response_extraction")
         let finalValon = dialogue["valon_informed"] as? String ?? dialogue["valon_initial"] as? String ?? "neutral"
         let finalModi = dialogue["modi_informed"] as? [String] ?? dialogue["modi_initial"] as? [String] ?? ["baseline_analysis"]
+        SyntraPerformanceLogger.endTiming("response_extraction", details: "Extracted final responses")
         
+        SyntraPerformanceLogger.startTiming("logging_stages")
         Self.logStage(stage: "valon_stage", output: dialogue["valon_initial"] ?? "unknown", directory: "entropy_logs")
         Self.logStage(stage: "valon_informed_stage", output: finalValon, directory: "entropy_logs")
         Self.logStage(stage: "modi_stage", output: dialogue["modi_initial"] ?? "unknown", directory: "entropy_logs")
         Self.logStage(stage: "modi_informed_stage", output: finalModi, directory: "entropy_logs")
+        SyntraPerformanceLogger.endTiming("logging_stages", details: "Logged to entropy_logs")
         
         // Use the enhanced SYNTRA consciousness synthesis
+        SyntraPerformanceLogger.startTiming("consciousness_synthesis")
         let consciousness = Self.syntra_consciousness_synthesis(finalValon, finalModi)
+        SyntraPerformanceLogger.logStage("consciousness_synthesis_complete", message: "Consciousness synthesis finished", data: consciousness.keys)
         Self.logStage(stage: "consciousness_synthesis", output: consciousness, directory: "entropy_logs")
+        SyntraPerformanceLogger.endTiming("consciousness_synthesis", details: "SYNTRA core synthesis")
         
         // Enhanced result with consciousness state
+        SyntraPerformanceLogger.startTiming("result_assembly")
         var result: [String: Any] = [
             "valon": finalValon,
             "modi": finalModi,
@@ -84,20 +98,24 @@ public struct BrainEngine {
         
         // Legacy compatibility
         result["drift"] = consciousness
+        SyntraPerformanceLogger.endTiming("result_assembly", details: "Assembled final result")
         
         // Apple LLM integration for enhanced reasoning (disabled for macOS "26.0" compatibility)
-        if let cfg = try? Self.loadConfigLocal(), cfg.useAppleLLM == true {
-            let syntraDecision = consciousness["syntra_decision"] as? String ?? "processing"
-            let enhancedPrompt = "SYNTRA consciousness state: \(syntraDecision). Original input: \(input). Provide enhanced reasoning."
-            if #available(macOS 26.0, *) {
-                let apple = await Self.queryAppleLLMSync(enhancedPrompt)
-                result["appleLLM"] = apple
-                Self.logStage(stage: "apple_enhanced_reasoning", output: apple, directory: "entropy_logs")
+        SyntraPerformanceLogger.startTiming("apple_llm_integration")
+        if #available(macOS 26.0, *) {
+            // Enhanced reasoning with Apple Foundation Models
+            if let appleReasoning = await Self.enhancedReasoningWithAppleLLM(input, result) {
+                result["apple_enhanced_reasoning"] = appleReasoning
+                SyntraPerformanceLogger.logStage("apple_llm_success", message: "Apple LLM enhanced reasoning applied")
             } else {
-                result["appleLLM"] = "Apple LLM requires macOS 26.0+"
+                SyntraPerformanceLogger.logStage("apple_llm_unavailable", message: "Apple LLM not available, using standard processing")
             }
+        } else {
+            SyntraPerformanceLogger.logStage("apple_llm_unsupported", message: "Apple LLM not supported on this macOS version")
         }
+        SyntraPerformanceLogger.endTiming("apple_llm_integration", details: "Apple LLM processing")
         
+        SyntraPerformanceLogger.endTiming("brain_engine_total", details: "Three-brain processing complete")
         return result
     }
 
