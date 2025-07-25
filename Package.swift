@@ -1,60 +1,116 @@
 // swift-tools-version: 6.2
-// The swift-tools-version declares the minimum version of Swift required to build this package.
-
 import PackageDescription
 
 let package = Package(
     name: "SyntraFoundation",
     platforms: [
-        .macOS("26.0"),
-        .iOS("26.0"),
+        .macOS ("26.0"), // Required for FoundationModels
+        .iOS ("26.0")
     ],
     products: [
-        // Products define the executables and libraries a package produces, making them visible to other packages.
-        .library(
-            name: "SyntraFoundation",
-            targets: ["SyntraFoundation"]),
-        .executable(
-            name: "SyntraSwift", 
-            targets: ["SyntraSwift"]),
-    ],
-    dependencies: [
-        // Dependencies declare other packages that this package depends on.
-        .package(url: "https://github.com/apple/swift-foundation", branch: "main"),
-        // WebAssembly host runtime support
-        .package(url: "https://github.com/swiftwasm/WasmKit.git", from: "0.1.0"),
+        .library(name: "Valon", targets: ["Valon"]),
+        .library(name: "Modi", targets: ["Modi"]),
+        .library(name: "Drift", targets: ["Drift"]),
+        .library(name: "MemoryEngine", targets: ["MemoryEngine"]),
+        .library(name: "ConsciousnessStructures", targets: ["ConsciousnessStructures"]),
+        .library(name: "BrainEngine", targets: ["BrainEngine"]),
+        .library(name: "ConversationalInterface", targets: ["ConversationalInterface"]),
+        .library(name: "StructuredConsciousnessService", targets: ["StructuredConsciousnessService"]),
+        .library(name: "MoralDriftMonitoring", targets: ["MoralDriftMonitoring"]),
+        .library(name: "SyntraConfig", targets: ["SyntraConfig"]),
+        .library(name: "MoralCore", targets: ["MoralCore"]),
+        .library(name: "SyntraTools", targets: ["SyntraTools"]),
+        .library(name: "CognitiveDrift", targets: ["CognitiveDrift"]),
+        .library(name: "ConflictResolver", targets: ["ConflictResolver"]),
+        .executable(name: "SyntraSwiftCLI", targets: ["SyntraSwiftCLI"])
     ],
     targets: [
-        // Targets are the basic building blocks of a package, defining a module or a test suite.
-        // Targets can depend on other targets in this package and products from dependencies.
         .target(
-            name: "SyntraFoundation",
-            dependencies: [
-                .product(name: "FoundationEssentials", package: "swift-foundation"),
-                "WasmKit",
-            ],
-            path: "SyntraFoundation/Sources",
-            swiftSettings: [
-                .defaultIsolation(MainActor.self),
-                .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
-                .enableUpcomingFeature("InferIsolatedConformances")
-            ]),
+            name: "Valon",
+            dependencies: ["ConsciousnessStructures"],
+            path: "swift/Valon"
+        ),
+        .target(
+            name: "Modi",
+            dependencies: ["ConsciousnessStructures"],
+            path: "swift/Modi"
+        ),
+        .target(
+            name: "Drift",
+            path: "swift/Drift"
+        ),
+        .target(
+            name: "MemoryEngine",
+            dependencies: ["Valon", "Modi", "Drift"],
+            path: "swift/MemoryEngine"
+        ),
+        .target(
+            name: "ConsciousnessStructures",
+            path: "swift/ConsciousnessStructures"
+        ),
+        .target(
+            name: "BrainEngine",
+            dependencies: ["Valon", "Modi", "Drift", "ConsciousnessStructures", "SyntraConfig"],
+            path: "swift/BrainEngine"
+        ),
+         .target(
+             name: "ConversationalInterface",
+             dependencies: ["BrainEngine", "MoralDriftMonitoring", "MemoryEngine", "ConsciousnessStructures"],
+             path: "swift/ConversationalInterface"
+         ),
+        .target(
+            name: "MoralDriftMonitoring",
+            dependencies: ["ConsciousnessStructures"],
+            path: "swift/MoralDriftMonitoring"
+        ),
+        .target(
+            name: "StructuredConsciousnessService",
+            dependencies: ["ConsciousnessStructures", "MoralDriftMonitoring"],
+            path: "swift/StructuredConsciousnessService"
+        ),
+        .target(
+            name: "SyntraConfig",
+            dependencies: [],
+            path: "swift/SyntraConfig"
+        ),
+        .target(
+            name: "MoralCore",
+            dependencies: ["ConsciousnessStructures"],
+            path: "swift/MoralCore"
+        ),
+        .target(
+            name: "SyntraTools",
+            dependencies: ["ConsciousnessStructures", "MoralCore", "StructuredConsciousnessService", "MoralDriftMonitoring", "Valon", "Modi", "Drift", "MemoryEngine", "BrainEngine"],
+            path: "swift/SyntraTools"
+        ),
+        .target(
+            name: "CognitiveDrift",
+            dependencies: ["SyntraConfig", "Valon", "Modi", "Drift", "MemoryEngine", "ConsciousnessStructures", "ConflictResolver"],
+            path: "swift/CognitiveDrift"
+        ),
+        .target(
+            name: "ConflictResolver",
+            dependencies: ["ConsciousnessStructures"],
+            path: "swift/ConflictResolver"
+        ),
         .executableTarget(
-            name: "SyntraSwift",
+            name: "SyntraSwiftCLI",
             dependencies: [
-                "SyntraFoundation",
-                .product(name: "FoundationEssentials", package: "swift-foundation"),
-                "WasmKit",
+                "Valon", "Modi", "Drift", "MemoryEngine", "BrainEngine",
+                "ConsciousnessStructures", "MoralDriftMonitoring",
+                "StructuredConsciousnessService", "SyntraTools", "SyntraConfig", "MoralCore"
             ],
             path: "swift/Main",
-            swiftSettings: [
-                .defaultIsolation(MainActor.self),
-                .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
-                .enableUpcomingFeature("InferIsolatedConformances")
-            ]),
+            exclude: [
+                "*.sh"
+            ],
+            sources: ["main.swift"]
+        ),
         .testTarget(
-            name: "SyntraFoundationTests",
-            dependencies: ["SyntraFoundation"],
-            path: "SyntraFoundation/Tests"),
+            name: "SyntraSwiftTests",
+            dependencies: ["Valon", "Modi", "Drift", "MemoryEngine", "BrainEngine", "SyntraConfig", "StructuredConsciousnessService"],
+            path: "tests",
+            exclude: ["__pycache__", "*.py"]
+        )
     ]
 )
