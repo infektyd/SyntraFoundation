@@ -132,7 +132,7 @@ struct LogViewerView: View {
                 }
             }
             .listStyle(PlainListStyle())
-            .onChange(of: filteredLogs.count) { _ in
+            .onChange(of: filteredLogs.count) { oldValue, newValue in
                 if isAutoScrollEnabled && !filteredLogs.isEmpty {
                     withAnimation(.easeOut(duration: 0.3)) {
                         proxy.scrollTo(filteredLogs.last?.id, anchor: .bottom)
@@ -236,6 +236,7 @@ struct LogExportView: View {
     let logs: [LogEntry]
     @Environment(\.presentationMode) var presentationMode
     @State private var exportText = ""
+    @State private var showingShareSheet = false
     
     var body: some View {
         NavigationView {
@@ -255,13 +256,16 @@ struct LogExportView: View {
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Share") {
-                        shareLogText()
+                        showingShareSheet = true
                     }
                 }
             }
         }
         .onAppear {
             generateExportText()
+        }
+        .sheet(isPresented: $showingShareSheet) {
+            ShareSheet(items: [exportText])
         }
     }
     
@@ -271,18 +275,17 @@ struct LogExportView: View {
             return "[\(timestamp)] [\(entry.level.rawValue)] [\(entry.category)] \(entry.message)"
         }.joined(separator: "\n")
     }
+}
+
+// MARK: - Share Sheet for Log Export
+struct ShareSheet: UIViewControllerRepresentable {
+    let items: [Any]
     
-    private func shareLogText() {
-        let activityVC = UIActivityViewController(
-            activityItems: [exportText],
-            applicationActivities: nil
-        )
-        
-        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-           let window = windowScene.windows.first {
-            window.rootViewController?.present(activityVC, animated: true)
-        }
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        UIActivityViewController(activityItems: items, applicationActivities: nil)
     }
+    
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
 }
 
 // MARK: - Log Management System
@@ -308,7 +311,23 @@ class LogManager: ObservableObject {
             queue: .main
         ) { [weak self] notification in
             if let logInfo = notification.userInfo {
-                self?.addLog(from: logInfo)
+                // Extract Sendable values before Task
+                let message = logInfo["message"] as? String ?? "Unknown log"
+                let levelString = logInfo["level"] as? String ?? "info"
+                let category = logInfo["category"] as? String ?? "General"
+                let details = logInfo["details"] as? String
+                let location = logInfo["location"] as? String
+                let level = LogLevel(rawValue: levelString) ?? .info
+                
+                Task { @MainActor [weak self] in
+                    self?.addLog(
+                        message: message,
+                        level: level,
+                        category: category,
+                        details: details,
+                        sourceLocation: location
+                    )
+                }
             }
         }
     }
@@ -340,24 +359,6 @@ class LogManager: ObservableObject {
                 }
             }
         }
-    }
-    
-    private func addLog(from logInfo: [AnyHashable: Any]) {
-        let message = logInfo["message"] as? String ?? "Unknown log"
-        let levelString = logInfo["level"] as? String ?? "info"
-        let category = logInfo["category"] as? String ?? "General"
-        let details = logInfo["details"] as? String
-        let location = logInfo["location"] as? String
-        
-        let level = LogLevel(rawValue: levelString) ?? .info
-        
-        addLog(
-            message: message,
-            level: level,
-            category: category,
-            details: details,
-            sourceLocation: location
-        )
     }
     
     func clearLogs() {

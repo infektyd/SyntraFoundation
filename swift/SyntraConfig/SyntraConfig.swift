@@ -1,5 +1,27 @@
 import Foundation
 
+public struct VoiceConfig: Codable {
+    public var usePTT: Bool?
+    public var useSpeechAnalyzer: Bool?
+    public var pttChannel: String?
+    public var enableVoiceInput: Bool?
+    public var voiceTimeoutSeconds: Int?
+    public var useHapticFeedback: Bool?
+    public var fallbackToSFSpeech: Bool?
+    
+    public init() {}
+    
+    enum CodingKeys: String, CodingKey {
+        case usePTT = "use_ptt"
+        case useSpeechAnalyzer = "use_speech_analyzer"
+        case pttChannel = "ptt_channel"
+        case enableVoiceInput = "enable_voice_input"
+        case voiceTimeoutSeconds = "voice_timeout_seconds"
+        case useHapticFeedback = "use_haptic_feedback"
+        case fallbackToSFSpeech = "fallback_to_sfspeech"
+    }
+}
+
 public struct SyntraConfig: Codable {
     public var openaiApiKey: String?
     public var openaiApiBase: String?
@@ -10,6 +32,7 @@ public struct SyntraConfig: Codable {
     public var useAppleLLM: Bool?
     public var useMistralForValon: Bool?
     public var preferredVoice: String?
+    public var voice: VoiceConfig?
     public var driftRatio: [String: Double]?
     /// Whether to use trainable FusionMLP instead of static averaging
     public var useAdaptiveFusion: Bool?
@@ -36,6 +59,7 @@ public struct SyntraConfig: Codable {
         case useAppleLLM = "use_apple_llm"
         case useMistralForValon = "use_mistral_for_valon"
         case preferredVoice = "preferred_voice"
+        case voice = "voice"
         case driftRatio = "drift_ratio"
         case useAdaptiveFusion = "use_adaptive_fusion"
         case useAdaptiveWeighting = "use_adaptive_weighting"

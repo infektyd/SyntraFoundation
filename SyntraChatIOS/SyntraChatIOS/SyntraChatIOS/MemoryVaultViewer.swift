@@ -54,7 +54,11 @@ struct MemoryVaultViewer: View {
                                 isSelected: selectedCategory == category
                             ) {
                                 selectedCategory = category
-                                memoryMonitor.refreshFiles(for: category)
+                                Task {
+                                    await MainActor.run {
+                                        memoryMonitor.refreshFiles(for: category)
+                                    }
+                                }
                             }
                         }
                     }
@@ -326,7 +330,7 @@ struct FileDetailView: View {
                 }
             }
             .sheet(isPresented: $showingShare) {
-                ShareSheet(items: [file.content])
+                MemoryShareSheet(items: [file.content])
             }
         }
     }
@@ -371,8 +375,8 @@ struct EmptyStateView: View {
     }
 }
 
-// MARK: - Share Sheet
-struct ShareSheet: UIViewControllerRepresentable {
+// MARK: - Share Sheet for Memory Export
+private struct MemoryShareSheet: UIViewControllerRepresentable {
     let items: [Any]
     
     func makeUIViewController(context: Context) -> UIActivityViewController {
@@ -429,7 +433,9 @@ class MemoryVaultMonitor: ObservableObject {
     
     func startMonitoring() {
         timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { _ in
-            self.refreshFiles()
+            Task { @MainActor in
+                self.refreshFiles()
+            }
         }
         refreshFiles()
     }

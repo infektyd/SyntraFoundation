@@ -7,6 +7,15 @@
   "elevenlabs_api_key": "YOUR_ELEVENLABS_API_KEY",
   "use_mistral_for_valon": true,
   "preferred_voice": "auto",
+  "voice": {
+    "use_ptt": true,
+    "use_speech_analyzer": true,
+    "ptt_channel": "Syntra",
+    "enable_voice_input": true,
+    "voice_timeout_seconds": 30,
+    "use_haptic_feedback": true,
+    "fallback_to_sfspeech": true
+  },
   "drift_ratio": {
     "valon": 0.7,
     "modi": 0.3
