@@ -1,5 +1,5 @@
-// SYNTRA PDF Processor - Native Swift Implementation
-// Replaces Python pdf_ingestor.py with native Swift + Foundation Models
+// SYNTRA CLI Test - LLM Agnostic PDF Processing
+// Replicates Python pdf_ingestor.py functionality using Swift + any LLM
 
 import Foundation
 import PDFKit
@@ -7,208 +7,12 @@ import PDFKit
 import FoundationModels
 #endif
 
-// MARK: - PDF Processor for iOS App
-public struct PDFProcessor {
-    
-
-    
-
-    
-    // MARK: - Processing Result
-    public struct ProcessingResult: Sendable {
-        public let originalText: String
-        public let chunks: [String]
-        public let summaries: [String]
-        public let insights: [String: String]
-        public let provider: String
-        public let processingMode: String
-        public let timestamp: Date
-        public let metadata: [String: String]
-        
-        public init(originalText: String, chunks: [String], summaries: [String], insights: [String: String], provider: String, processingMode: String, timestamp: Date, metadata: [String: String]) {
-            self.originalText = originalText
-            self.chunks = chunks
-            self.summaries = summaries
-            self.insights = insights
-            self.provider = provider
-            self.processingMode = processingMode
-            self.timestamp = timestamp
-            self.metadata = metadata
-        }
-    }
-    
-    // MARK: - Main Processing Function
-    public static func processPDF(
-        path: String,
-        provider: LLMProvider = .apple,
-        mode: ProcessingMode = .balanced
-    ) async throws -> ProcessingResult {
-        
-        // Step 1: Extract text from PDF
-        let extractedText = try extractTextFromPDF(path: path)
-        
-        // Step 2: Chunk text based on processing mode
-        let chunks = chunkText(extractedText, maxChunkSize: mode.chunkSize, overlap: mode.overlap)
-        
-        // Step 3: Process with chosen LLM
-        let processor = LLMProcessor(provider: provider)
-        let summaries = try await processor.processchunks(chunks)
-        
-        // Step 4: VALON/MODI processing
-        let insights = await processWithSyntraConsciousness(summaries)
-        
-        // Step 5: Create result
-        let result = ProcessingResult(
-            originalText: extractedText,
-            chunks: chunks,
-            summaries: summaries,
-            insights: insights,
-            provider: provider.rawValue,
-            processingMode: mode.rawValue,
-            timestamp: Date(),
-            metadata: [
-                "chunk_count": String(chunks.count),
-                "summary_count": String(summaries.count),
-                "mode_description": mode.description
-            ]
-        )
-        
-        return result
-    }
-    
-    // MARK: - PDF Text Extraction
-    private static func extractTextFromPDF(path: String) throws -> String {
-        let fileURL: URL
-        if path.hasPrefix("/") {
-            fileURL = URL(fileURLWithPath: path)
-        } else {
-            let currentDirectory = FileManager.default.currentDirectoryPath
-            fileURL = URL(fileURLWithPath: currentDirectory).appendingPathComponent(path)
-        }
-        
-        guard let document = PDFDocument(url: fileURL) else {
-            throw PDFError.cannotLoadDocument
-        }
-        
-        var extractedText = ""
-        for i in 0..<document.pageCount {
-            if let page = document.page(at: i),
-               let pageText = page.string {
-                extractedText += pageText + "\n\n"
-            }
-        }
-        
-        return extractedText.trimmingCharacters(in: .whitespacesAndNewlines)
-    }
-    
-    // MARK: - Text Chunking
-    private static func chunkText(_ text: String, maxChunkSize: Int, overlap: Int) -> [String] {
-        var chunks: [String] = []
-        let words = text.components(separatedBy: .whitespaces)
-        var currentChunk = ""
-        var currentSize = 0
-        
-        for word in words {
-            if currentSize + word.count > maxChunkSize && !currentChunk.isEmpty {
-                chunks.append(currentChunk.trimmingCharacters(in: .whitespaces))
-                
-                let overlapWords = currentChunk.components(separatedBy: .whitespaces).suffix(overlap/10)
-                currentChunk = overlapWords.joined(separator: " ") + " "
-                currentSize = currentChunk.count
-            }
-            
-            currentChunk += word + " "
-            currentSize += word.count + 1
-        }
-        
-        if !currentChunk.isEmpty {
-            chunks.append(currentChunk.trimmingCharacters(in: .whitespaces))
-        }
-        
-        return chunks
-    }
-    
-    // MARK: - LLM Processing (Consciousness)
-    private static func processWithSyntraConsciousness(_ summaries: [String]) async -> [String: String] {
-        // Simplified consciousness processing for now
-        var insights: [String: String] = [:]
-        
-        // VALON processing (70% moral/emotional)
-        let valonPrompt = """
-        Analyze this content from a moral and emotional perspective (VALON consciousness):
-        
-        \(summaries.joined(separator: "\n\n"))
-        
-        Provide insights about:
-        - Moral implications
-        - Emotional resonance
-        - Ethical considerations
-        - Human impact
-        """
-        
-        if #available(macOS 26.0, *) {
-            insights["valon"] = await processWithFoundationModels(valonPrompt)
-        } else {
-            insights["valon"] = "[Foundation Models not available on this macOS version]"
-        }
-        
-        // MODI processing (30% logical/technical)
-        let modiPrompt = """
-        Analyze this content from a logical and technical perspective (MODI consciousness):
-        
-        \(summaries.joined(separator: "\n\n"))
-        
-        Provide insights about:
-        - Technical patterns
-        - Logical structure
-        - Analytical observations
-        - Systematic understanding
-        """
-        
-        if #available(macOS 26.0, *) {
-            insights["modi"] = await processWithFoundationModels(modiPrompt)
-        } else {
-            insights["modi"] = "[Foundation Models not available on this macOS version]"
-        }
-        
-        return insights
-    }
-    
-    // MARK: - Foundation Models Integration
-    @available(macOS 26.0, *)
-    private static func processWithFoundationModels(_ prompt: String) async -> String {
-        #if canImport(FoundationModels)
-        do {
-            let model = SystemLanguageModel.default
-            
-            guard model.availability == .available else {
-                return "[Foundation Models not available on this device]"
-            }
-            
-            let session = try LanguageModelSession(model: model)
-            let response = try await session.respond(to: prompt)
-            
-            return response.content
-            
-        } catch {
-            return "[Foundation Models error: \(error.localizedDescription)]"
-        }
-        #else
-        return "[Foundation Models not available]"
-        #endif
-    }
-}
-
 // MARK: - Public CLI Interface
 public struct SyntraCLI {
     public static func run(with arguments: [String] = CommandLine.arguments) async {
         guard arguments.count > 1 else {
-            print("Usage: syntra-cli <pdf-file-path> [--provider apple|openai|gemini] [--mode comprehensive|balanced|rapid]")
-            print("Example: syntra-cli document.pdf --provider apple --mode comprehensive")
-            print("Processing Modes:")
-            print("  comprehensive: Deep analysis, larger chunks (slower)")
-            print("  balanced: Balanced speed/quality (default)")
-            print("  rapid: Quick scan, smaller chunks (faster)")
+            print("Usage: syntra-cli <pdf-file-path> [--provider apple|openai|gemini]")
+            print("Example: syntra-cli document.pdf --provider apple")
             exit(1)
         }
         
@@ -225,13 +29,8 @@ public struct SyntraCLI {
             let extractedText = try extractTextFromPDF(path: pdfPath)
             print("✅ Extracted \(extractedText.count) characters from PDF")
             
-                // Step 2: Chunk text based on processing mode
-    let processingMode: ProcessingMode = parseProcessingMode(from: arguments)
-    let chunks = chunkText(extractedText, maxChunkSize: processingMode.chunkSize, overlap: processingMode.overlap)
-    
-    print("📊 Processing Mode: \(processingMode.description)")
-    print("📊 Chunk Size: \(processingMode.chunkSize) characters")
-    print("📊 Overlap: \(processingMode.overlap) characters")
+            // Step 2: Chunk text (like Python version)
+            let chunks = chunkText(extractedText, maxChunkSize: 2000, overlap: 200)
             print("✅ Created \(chunks.count) text chunks")
             
             // Step 3: Process with chosen LLM
@@ -270,15 +69,6 @@ public struct SyntraCLI {
         }
         return .apple // Default to Apple Foundation Models
     }
-    
-    static func parseProcessingMode(from arguments: [String]) -> ProcessingMode {
-        if let modeFlag = arguments.firstIndex(of: "--mode"),
-           arguments.count > modeFlag + 1 {
-            let modeStr = arguments[modeFlag + 1]
-            return ProcessingMode(rawValue: modeStr) ?? .balanced
-        }
-        return .balanced // Default to balanced processing
-    }
 }
 
 // MARK: - LLM Provider Abstraction
@@ -295,39 +85,6 @@ public enum LLMProvider: String, CaseIterable, Sendable {
         }
     }
 }
-
-// MARK: - Processing Modes
-public enum ProcessingMode: String, CaseIterable {
-    case comprehensive = "comprehensive"  // Deep analysis, larger chunks
-    case balanced = "balanced"           // Balanced speed/quality
-    case rapid = "rapid"                // Fast processing, smaller chunks
-    
-    var chunkSize: Int {
-        switch self {
-        case .comprehensive: return 15000
-        case .balanced: return 8000
-        case .rapid: return 4000
-        }
-    }
-    
-    var overlap: Int {
-        switch self {
-        case .comprehensive: return 300
-        case .balanced: return 500
-        case .rapid: return 200
-        }
-    }
-    
-    var description: String {
-        switch self {
-        case .comprehensive: return "Deep Analysis (Comprehensive)"
-        case .balanced: return "Balanced Processing"
-        case .rapid: return "Quick Scan (Rapid)"
-        }
-    }
-}
-
-// MARK: - Main Processing Function
 
 // MARK: - PDF Processing
 func extractTextFromPDF(path: String) throws -> String {
@@ -423,11 +180,7 @@ public struct LLMProcessor {
     func processWithLLM(prompt: String) async throws -> String {
         switch provider {
         case .apple:
-            if #available(macOS 26.0, *) {
-                return try await processWithAppleFoundationModels(prompt)
-            } else {
-                return "[Apple Foundation Models requires macOS 26.0+]"
-            }
+            return try await processWithAppleFoundationModels(prompt)
         case .openai:
             return try await processWithOpenAI(prompt)
         case .gemini:
@@ -435,58 +188,10 @@ public struct LLMProcessor {
         }
     }
     
-    // MARK: - OpenAI Processing
-    private func processWithOpenAI(_ prompt: String) async throws -> String {
-        // TODO: Implement OpenAI API integration
-        // For now, return a placeholder response
-        return """
-        📄 OpenAI PDF Processing Result
-        
-        ⚠️ OpenAI integration not yet implemented.
-        
-        Input prompt: \(prompt.prefix(100))...
-        
-        This would normally process through OpenAI's GPT models.
-        """
-    }
-    
-    // MARK: - Gemini Processing  
-    private func processWithGemini(_ prompt: String) async throws -> String {
-        // TODO: Implement Gemini API integration
-        // For now, return a placeholder response
-        return """
-        📄 Gemini PDF Processing Result
-        
-        ⚠️ Gemini integration not yet implemented.
-        
-        Input prompt: \(prompt.prefix(100))...
-        
-        This would normally process through Google's Gemini models.
-        """
-    }
-    
-    @available(macOS 26.0, *)
     private func processWithAppleFoundationModels(_ prompt: String) async throws -> String {
-        #if canImport(FoundationModels)
-        do {
-            let model = SystemLanguageModel.default
-            
-            guard model.availability == .available else {
-                print("⚠️ Apple Foundation Models not available on this device")
-                return "[Apple Foundation Models not available]"
-            }
-            
-            let session = try LanguageModelSession(model: model)
-            let response = try await session.respond(to: prompt)
-            
-            return response.content
-            
-        } catch {
-            print("❌ Apple Foundation Models error: \(error.localizedDescription)")
-            return "[Apple Foundation Models error: \(error.localizedDescription)]"
-        }
-        #else
-        print("⚠️ FoundationModels not available, using structured mock response")
+        // Apple Foundation Models will be available in future iOS/macOS versions
+        // For now, provide a structured mock response that demonstrates the concept
+        print("⚠️ Apple Foundation Models not yet available, using structured mock response")
         
         // Generate a realistic mock response for testing
         let chunkPreview = String(prompt.prefix(100))
@@ -497,7 +202,6 @@ public struct LLMProcessor {
         Emotional tone: Neutral to informative.
         Logical structure: Sequential steps with conditional branches.
         """
-        #endif
     }
 }
 

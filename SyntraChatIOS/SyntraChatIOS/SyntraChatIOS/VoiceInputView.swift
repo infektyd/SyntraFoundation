@@ -26,6 +26,10 @@ struct VoiceInputView: View {
     @State private var lastButtonPressTime = Date()
     @State private var errorMessage: String?
     @State private var showError = false
+    @State private var recordingStartTime: Date?
+    @State private var minimumRecordingDuration: Double = 0.5 // Minimum recording time
+    @State private var speechDetectionTimeout: Double = 10.0 // Max recording time
+    @State private var speechDetectionTimer: Timer?
     
     // Track available text for the Use Text button
     private var hasAvailableText: Bool {
@@ -77,18 +81,25 @@ struct VoiceInputView: View {
                     }
             )
             
-            // Real-time status indicator
+            // Real-time status indicator with enhanced feedback
             if isRecording {
-                HStack {
-                    ProgressView()
-                        .scaleEffect(0.8)
-                    Text("Listening with Enhanced Speech Recognition...")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+                VStack(spacing: 8) {
+                    HStack {
+                        ProgressView()
+                            .scaleEffect(0.8)
+                        Text("Listening with Enhanced Speech Recognition...")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                        
+                        Text("• Release to finish")
+                            .font(.caption2)
+                            .foregroundColor(.orange)
+                    }
                     
-                    Text("• Release to finish")
-                        .font(.caption2)
-                        .foregroundColor(.orange)
+                    // Recording duration indicator
+                    if let startTime = recordingStartTime {
+                        RecordingDurationView(startTime: startTime, minimumDuration: minimumRecordingDuration)
+                    }
                 }
             }
             
@@ -203,7 +214,13 @@ struct VoiceInputView: View {
             }
         }
         .onDisappear {
-            stopRecordingSafely()
+            // Clean up all timers
+            speechDetectionTimer?.invalidate()
+            debounceTimer?.invalidate()
+            
+            Task {
+                await stopRecordingSafely()
+            }
         }
     }
     
@@ -244,13 +261,13 @@ struct VoiceInputView: View {
         print("[VoiceInputView] Cleared all accumulated text")
     }
     
-    // ROBUST: Debounced button press handling
+    // ROBUST: Improved button press handling with reduced debouncing
     private func handleButtonPress() {
         let now = Date()
         let timeSinceLastPress = now.timeIntervalSince(lastButtonPressTime)
         
-        // Debounce: ignore presses within 500ms of each other
-        guard timeSinceLastPress > 0.5 else {
+        // Reduced debounce: ignore presses within 200ms (was 500ms - too aggressive)
+        guard timeSinceLastPress > 0.2 else {
             SyntraLogger.logUI("Button press debounced", details: "Time since last: \(String(format: "%.2f", timeSinceLastPress))s")
             return
         }
@@ -260,35 +277,48 @@ struct VoiceInputView: View {
         // Cancel any existing debounce timer
         debounceTimer?.invalidate()
         
-        // Set new debounce timer
-        debounceTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: false) { _ in
-            if !isRecording && isSpeechRecognitionAvailable() && !isProcessingRequest {
-                // Haptic feedback for press confirmation
-                let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
-                impactFeedback.impactOccurred()
-                
-                SyntraLogger.logUI("User pressed hold-to-talk button (debounced)")
-                
-                // Start recording in a separate task
-                Task { @MainActor in
-                    await startRecordingSafely()
-                }
+        // Immediate response - no additional debounce timer
+        if !isRecording && isSpeechRecognitionAvailable() && !isProcessingRequest {
+            // Haptic feedback for press confirmation
+            let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+            impactFeedback.impactOccurred()
+            
+            SyntraLogger.logUI("User pressed hold-to-talk button (improved)")
+            
+            // Start recording immediately
+            Task { @MainActor in
+                await startRecordingSafely()
             }
         }
     }
     
-    // ROBUST: Safe button release handling
+    // ROBUST: Enhanced button release handling with minimum recording time
     private func handleButtonRelease() {
         debounceTimer?.invalidate()
+        speechDetectionTimer?.invalidate()
         
         if isRecording && !isProcessingRequest {
-            // Light haptic feedback for release
-            let impactFeedback = UIImpactFeedbackGenerator(style: .light)
-            impactFeedback.impactOccurred()
+            // Check minimum recording duration
+            let recordingDuration = recordingStartTime.map { Date().timeIntervalSince($0) } ?? 0
             
-            SyntraLogger.logUI("User released hold-to-talk button")
-            Task { @MainActor in
-                await stopRecordingSafely()
+            if recordingDuration < minimumRecordingDuration {
+                SyntraLogger.logUI("Recording too short, extending to minimum duration", details: "Duration: \(String(format: "%.2f", recordingDuration))s")
+                
+                // Extend recording to minimum duration
+                DispatchQueue.main.asyncAfter(deadline: .now() + (minimumRecordingDuration - recordingDuration)) {
+                    Task { @MainActor in
+                        await self.stopRecordingSafely()
+                    }
+                }
+            } else {
+                // Light haptic feedback for release
+                let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+                impactFeedback.impactOccurred()
+                
+                SyntraLogger.logUI("User released hold-to-talk button", details: "Duration: \(String(format: "%.2f", recordingDuration))s")
+                Task { @MainActor in
+                    await stopRecordingSafely()
+                }
             }
         }
     }
@@ -358,8 +388,17 @@ struct VoiceInputView: View {
             // Update UI state
             isRecording = true
             sessionStartTime = Date()
+            recordingStartTime = Date()
             
-            SyntraLogger.logUI("Speech recognition session active", details: "Using accumulative mode with \(bufferSize) buffer size")
+            // Set up speech detection timeout to prevent indefinite recording
+            speechDetectionTimer = Timer.scheduledTimer(withTimeInterval: speechDetectionTimeout, repeats: false) { _ in
+                Task { @MainActor in
+                    SyntraLogger.logUI("Speech detection timeout reached", details: "Max duration: \(self.speechDetectionTimeout)s")
+                    await self.stopRecordingSafely()
+                }
+            }
+            
+            SyntraLogger.logUI("Speech recognition session active", details: "Using accumulative mode with \(bufferSize) buffer size, timeout: \(speechDetectionTimeout)s")
             print("[VoiceInputView] Enhanced speech recognition started (accumulative mode)")
             
         } catch {
@@ -369,7 +408,7 @@ struct VoiceInputView: View {
         isProcessingRequest = false
     }
     
-    // ROBUST: Safe recording stop
+    // ROBUST: Safe recording stop with enhanced cleanup
     private func stopRecordingSafely() async {
         guard !isProcessingRequest else {
             SyntraLogger.logUI("Stop request ignored - already processing", level: .warning)
@@ -378,7 +417,12 @@ struct VoiceInputView: View {
         
         isProcessingRequest = true
         
+        // Clean up timers
+        speechDetectionTimer?.invalidate()
+        speechDetectionTimer = nil
+        
         let sessionDuration = Date().timeIntervalSince(sessionStartTime)
+        let recordingDuration = recordingStartTime.map { Date().timeIntervalSince($0) } ?? 0
         
         // Stop audio engine safely
         if audioEngine.isRunning {
@@ -395,14 +439,17 @@ struct VoiceInputView: View {
         // Update final text binding with accumulated content
         if !accumulatedText.isEmpty {
             text = accumulatedText.trimmingCharacters(in: .whitespacesAndNewlines)
-            SyntraLogger.logUI("Voice session completed", details: "Duration: \(String(format: "%.1f", sessionDuration))s, Final text: \(text)")
+            SyntraLogger.logUI("Voice session completed successfully", details: "Recording: \(String(format: "%.1f", recordingDuration))s, Total: \(String(format: "%.1f", sessionDuration))s, Words: \(text.split(separator: " ").count)")
             print("[VoiceInputView] Stopped recording, accumulated text: \(text)")
+        } else if recordingDuration < minimumRecordingDuration {
+            SyntraLogger.logUI("Voice session too short for reliable detection", details: "Recording: \(String(format: "%.1f", recordingDuration))s (minimum: \(minimumRecordingDuration)s)")
         } else {
-            SyntraLogger.logUI("Voice session ended with no text captured", details: "Duration: \(String(format: "%.1f", sessionDuration))s")
+            SyntraLogger.logUI("Voice session ended with no text captured", details: "Recording: \(String(format: "%.1f", recordingDuration))s, may need to speak louder or closer to device")
         }
         
         // Reset state
         isRecording = false
+        recordingStartTime = nil
         recognitionRequest = nil
         recognitionTask = nil
         
@@ -423,10 +470,15 @@ struct VoiceInputView: View {
         }
     }
     
-    // ROBUST: Comprehensive error handling
+    // ROBUST: Enhanced error handling with complete cleanup
     private func handleRecordingError(_ error: Error) async {
         SyntraLogger.logUI("Speech recognition error", level: .error, details: error.localizedDescription)
         print("[VoiceInputView] Recording error: \(error)")
+        
+        // Clean up all timers
+        speechDetectionTimer?.invalidate()
+        speechDetectionTimer = nil
+        debounceTimer?.invalidate()
         
         // Reset audio engine state
         if audioEngine.isRunning {
@@ -435,13 +487,14 @@ struct VoiceInputView: View {
         }
         
         // Update UI with error
-        errorMessage = error.localizedDescription
+        errorMessage = "Speech recognition failed: \(error.localizedDescription)"
         showError = true
         isRecording = false
+        recordingStartTime = nil
         isProcessingRequest = false
         
-        // Auto-hide error after 5 seconds
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+        // Auto-hide error after 7 seconds (increased for better readability)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 7) {
             showError = false
             errorMessage = nil
         }
@@ -509,6 +562,47 @@ enum SpeechRecognitionError: Error, LocalizedError {
             return "Speech recognition permission denied"
         case .audioEngineError:
             return "Audio engine configuration failed"
+        }
+    }
+}
+
+// MARK: - Recording Duration View
+struct RecordingDurationView: View {
+    let startTime: Date
+    let minimumDuration: Double
+    @State private var currentDuration: Double = 0
+    @State private var timer: Timer?
+    
+    var body: some View {
+        HStack(spacing: 8) {
+            // Duration indicator
+            Text(String(format: "%.1fs", currentDuration))
+                .font(.caption)
+                .foregroundColor(currentDuration >= minimumDuration ? .green : .orange)
+                .bold()
+            
+            // Progress bar for minimum duration
+            ProgressView(value: min(currentDuration / minimumDuration, 1.0))
+                .frame(width: 60)
+                .progressViewStyle(.linear)
+                .tint(currentDuration >= minimumDuration ? .green : .orange)
+            
+            // Status text
+            Text(currentDuration >= minimumDuration ? "Ready" : "Keep talking...")
+                .font(.caption2)
+                .foregroundColor(currentDuration >= minimumDuration ? .green : .orange)
+        }
+        .onAppear {
+            startTimer()
+        }
+        .onDisappear {
+            timer?.invalidate()
+        }
+    }
+    
+    private func startTimer() {
+        timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
+            currentDuration = Date().timeIntervalSince(startTime)
         }
     }
 }

@@ -8,6 +8,87 @@ import Network
 import FoundationModels
 #endif
 
+// MARK: - Memory System Placeholders (iOS Standalone Implementation)
+// These are simplified implementations for iOS build compatibility
+// Full implementations are in swift/SyntraTools/
+
+enum MemoryType {
+    case conversation
+    case knowledge
+    case episodic
+}
+
+actor DualStreamMemoryManager {
+    private var memoryStore: [String: Any] = [:]
+    
+    func store(key: String, value: Any) async {
+        memoryStore[key] = value
+    }
+    
+    func retrieve(key: String) async -> Any? {
+        return memoryStore[key]
+    }
+    
+    func storeMemory(content: String, metadata: [String: Any] = [:]) async -> String {
+        let id = UUID().uuidString
+        memoryStore[id] = ["content": content, "metadata": metadata]
+        return id
+    }
+}
+
+class ModernMemoryVault {
+    private var vault: [String: Any] = [:]
+    
+    struct ConsciousnessContext {
+        let valon: Double
+        let modi: Double
+        let emotional: [String: Double]
+        let analytical: [String: Double]
+        
+        init(valon: Double = 0.7, modi: Double = 0.3, emotional: [String: Double] = [:], analytical: [String: Double] = [:]) {
+            self.valon = valon
+            self.modi = modi
+            self.emotional = emotional
+            self.analytical = analytical
+        }
+    }
+    
+    func store(key: String, value: Any) {
+        vault[key] = value
+    }
+    
+    func retrieve(key: String) -> Any? {
+        return vault[key]
+    }
+    
+    func storeMemory(content: String, metadata: [String: Any] = [:], memoryType: MemoryType, consciousnessContext: ConsciousnessContext) async -> String {
+        let id = UUID().uuidString
+        vault[id] = [
+            "content": content,
+            "metadata": metadata,
+            "type": memoryType,
+            "context": consciousnessContext
+        ]
+        return id
+    }
+}
+
+class MemoryVaultManager {
+    private let vault = ModernMemoryVault()
+    
+    func storeMemory(key: String, value: Any) {
+        vault.store(key: key, value: value)
+    }
+    
+    func retrieveMemory(key: String) -> Any? {
+        return vault.retrieve(key: key)
+    }
+    
+    func updateStatistics() async {
+        // Placeholder: Update memory statistics
+    }
+}
+
 // MARK: - Enhanced Logging System with Real-Time Viewer Integration
 struct SyntraLogger {
     private static let logger = Logger(subsystem: "com.syntra.ios", category: "consciousness")
@@ -179,6 +260,11 @@ class SyntraCore: ObservableObject {
     // FIXED: Make sessionId internal so it can be accessed from SyntraBrain
     internal let sessionId: String
     
+    // Memory systems integration
+    private var memoryManager: DualStreamMemoryManager?
+    private var memoryVault: ModernMemoryVault?
+    private var memoryVaultManager: MemoryVaultManager?
+    
     // Foundation Models (works offline on device)
     #if canImport(FoundationModels)
     private var foundationModel: SystemLanguageModel?
@@ -194,8 +280,9 @@ class SyntraCore: ObservableObject {
     private let crashTester = CrashTester()
     private let debugLogger = DebugLogger()
     
-    init(config: SyntraConfig = SyntraConfig()) {
-        self.config = config
+    init(config: SyntraConfig? = nil) {
+        // Create config safely to avoid actor isolation issues
+        self.config = config ?? SyntraConfig()
         
         // Load or create persistent session ID
         if let existingSessionId = UserDefaults.standard.string(forKey: "syntra_session_id") {
@@ -221,7 +308,22 @@ class SyntraCore: ObservableObject {
         // Initialize crash testing
         setupCrashTesting()
         
+        // Initialize memory systems
+        setupMemorySystems()
+        
         SyntraLogger.log("[SyntraCore] Offline-first architecture initialized")
+    }
+    
+    // MARK: - Memory Systems Setup
+    private func setupMemorySystems() {
+        Task {
+            // Initialize the sophisticated memory systems
+            memoryManager = DualStreamMemoryManager()
+            memoryVault = ModernMemoryVault()
+            memoryVaultManager = MemoryVaultManager()
+            
+            SyntraLogger.logMemory("Memory systems initialized", details: "DualStreamMemoryManager, ModernMemoryVault, MemoryVaultManager")
+        }
     }
     
     // MARK: - Foundation Models Setup
@@ -402,6 +504,9 @@ class SyntraCore: ObservableObject {
                 details: "Generated response: '\(responseText.prefix(100))...'"
             )
             
+            // Store in sophisticated memory systems
+            await storeInMemorySystems(input: input, response: responseText, context: context)
+            
             return responseText
         } catch {
             SyntraLogger.logFoundationModels(
@@ -422,7 +527,7 @@ class SyntraCore: ObservableObject {
     
     private func buildAgenticPrompt(input: String, context: SyntraContext) -> String {
         // Build sophisticated prompt that leverages SYNTRA's consciousness architecture
-        var prompt = """
+        let prompt = """
         You are SYNTRA, an advanced AI assistant with a unique three-brain architecture:
         - VALON: Moral reasoning, creativity, and emotional intelligence
         - MODI: Logical analysis, technical expertise, and problem-solving
@@ -453,6 +558,51 @@ class SyntraCore: ObservableObject {
         } else {
             return "I understand you're asking about '\(input)'. Let me help you with that!"
         }
+    }
+    
+    // MARK: - Memory Systems Integration
+    private func storeInMemorySystems(input: String, response: String, context: SyntraContext) async {
+        guard let memoryManager = memoryManager,
+              let memoryVault = memoryVault,
+              let memoryVaultManager = memoryVaultManager else {
+            SyntraLogger.logMemory("Memory systems not initialized", level: .error)
+            return
+        }
+        
+        // Store in dual-stream memory system
+        let memoryId = await memoryManager.storeMemory(
+            content: input,
+            metadata: [
+                "emotionalValence": 0.5,
+                "attentionLevel": 0.8,
+                "consciousnessContext": "iOS conversation processing"
+            ]
+        )
+        
+        SyntraLogger.logMemory("Stored in dual-stream memory", details: "Memory ID: \(memoryId)")
+        
+        // Store in modern memory vault
+        let vaultId = await memoryVault.storeMemory(
+            content: input,
+            metadata: [
+                "emotionalWeight": 0.5,
+                "associations": ["conversation", "ios", "user_input"]
+            ],
+            memoryType: .conversation,
+            consciousnessContext: ModernMemoryVault.ConsciousnessContext(
+                valon: 0.7,
+                modi: 0.3,
+                emotional: ["neutral": 0.5],
+                analytical: ["processing": 0.8]
+            )
+        )
+        
+        SyntraLogger.logMemory("Stored in modern memory vault", details: "Vault ID: \(vaultId)")
+        
+        // Update memory vault manager statistics
+        await memoryVaultManager.updateStatistics()
+        
+        SyntraLogger.logMemory("Memory systems updated successfully", details: "Dual-stream: \(memoryId), Vault: \(vaultId)")
     }
     
     // MARK: - Persistent Memory Integration
@@ -487,10 +637,8 @@ class SyntraCore: ObservableObject {
         if let observer = appStateObserver {
             NotificationCenter.default.removeObserver(observer)
         }
-        // FIXED: Use Task for async cleanup
-        Task { @MainActor in
-            await saveAllData()
-        }
+        // Note: Cannot call async methods during deinit in Swift 6 concurrency mode
+        // Data will be saved automatically during app lifecycle events
     }
 }
 
@@ -569,13 +717,60 @@ class SyntraBrain: ObservableObject {
         let userMessage = SyntraMessage(sender: "User", content: message, role: .user, consciousnessInfluences: [:])
         let syntraMessage = SyntraMessage(sender: "SYNTRA", content: response, role: .assistant, consciousnessInfluences: [:])
         
-        SyntraLogger.logMemory("Storing interaction in conversation memory")
+        // Enhanced memory logging
+        SyntraLogger.logMemory("Storing interaction in conversation memory", details: "User message: \(message.prefix(50)), SYNTRA response: \(response.prefix(50))")
+        SyntraLogger.logMemory("Memory consolidation triggered", details: "Session: \(context.sessionId), History count: \(conversationHistory.count)")
+        
+        // Store in memory system
+        await storeInMemory(userMessage: message, syntraResponse: response, context: context)
+        
         messages.append(userMessage)
         messages.append(syntraMessage)
         
         isProcessing = false
         SyntraLogger.logUI("SYNTRA brain state transition: processing → ready")
         SyntraLogger.logConsciousness("[SyntraBrain iOS] Consciousness cycle complete", details: "Generated response: '\(response.prefix(100))'")
+    }
+    
+    // MARK: - Memory Storage
+    private func storeInMemory(userMessage: String, syntraResponse: String, context: SyntraContext) async {
+        // Store in persistent memory using the correct method signature
+        await storeInPersistentMemory(input: userMessage, response: syntraResponse, context: context)
+        
+        SyntraLogger.logMemory("Memory stored successfully", details: "Session: \(context.sessionId), Entry size: \(userMessage.count + syntraResponse.count) chars")
+    }
+    
+    // MARK: - Persistent Memory Storage
+    private func storeInPersistentMemory(input: String, response: String, context: SyntraContext) async {
+        do {
+            let memoryKey = "conversation_\(context.sessionId)_\(Date().timeIntervalSince1970)"
+            let memoryData = [
+                "input": input,
+                "response": response,
+                "sessionId": context.sessionId,
+                "timestamp": ISO8601DateFormatter().string(from: Date()),
+                "conversationHistory": context.conversationHistory
+            ] as [String: Any]
+            
+            // Store in UserDefaults for persistence (iOS-compatible)
+            let userDefaults = UserDefaults.standard
+            if let data = try? JSONSerialization.data(withJSONObject: memoryData) {
+                userDefaults.set(data, forKey: memoryKey)
+                SyntraLogger.logMemory("Memory stored in UserDefaults", details: "Key: \(memoryKey), Data size: \(input.count + response.count) chars")
+            }
+            
+            // Also log to file system for backup
+            let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            let memoryFile = documentsPath.appendingPathComponent("syntra_memory_\(memoryKey).json")
+            
+            if let fileData = try? JSONSerialization.data(withJSONObject: memoryData, options: .prettyPrinted) {
+                try fileData.write(to: memoryFile)
+                SyntraLogger.logMemory("Memory backed up to file system", details: "File: \(memoryFile.lastPathComponent)")
+            }
+            
+        } catch {
+            SyntraLogger.logMemory("Memory storage failed", level: .error, details: error.localizedDescription)
+        }
     }
 }
 

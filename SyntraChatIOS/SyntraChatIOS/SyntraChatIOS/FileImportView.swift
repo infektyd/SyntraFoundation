@@ -82,8 +82,8 @@ struct FileImportView: View {
     private func handleFileImport(_ result: Result<[URL], Error>) {
         // CRITICAL: Ensure file operations on main thread - Beta 3 threading fix
         Task { @MainActor in
-            do {
-                let urls = try result.get()
+            switch result {
+            case .success(let urls):
                 guard let url = urls.first else {
                     fileImporter.importError = "No file selected"
                     return
@@ -106,7 +106,7 @@ struct FileImportView: View {
                     await handleTextFileImport(url)
                 }
                 
-            } catch {
+            case .failure(let error):
                 fileImporter.importError = "Import failed: \(error.localizedDescription)"
                 print("[FileImportView] Import error: \(error)")
             }
@@ -135,47 +135,41 @@ struct FileImportView: View {
     }
     
     private func handlePDFImport(_ url: URL) async {
-        do {
-            // Simple PDF text extraction for now
-            guard let document = PDFDocument(url: url) else {
-                fileImporter.importError = "Failed to load PDF document"
-                return
-            }
-            
-            var extractedText = ""
-            for i in 0..<document.pageCount {
-                if let page = document.page(at: i),
-                   let pageText = page.string {
-                    extractedText += pageText + "\n\n"
-                }
-            }
-            
-            let processedContent = """
-            📄 PDF Processed: \(url.lastPathComponent)
-            
-            📊 Summary:
-            - Original text length: \(extractedText.count) characters
-            - Pages processed: \(document.pageCount)
-            - Processing: Basic text extraction
-            
-            📝 Content Preview:
-            \(String(extractedText.prefix(1000)))...
-            
-            [Note: Full PDF processing with Apple Foundation Models will be available in a future update]
-            """
-            
-            // Update imported content
-            fileImporter.importedText = processedContent
-            fileImporter.importedFileName = url.lastPathComponent
-            fileImporter.importError = nil
-            
-            print("[FileImportView] Successfully processed PDF: \(url.lastPathComponent)")
-            print("[FileImportView] Processed content length: \(processedContent.count) characters")
-            
-        } catch {
-            fileImporter.importError = "PDF processing failed: \(error.localizedDescription)"
-            print("[FileImportView] PDF processing error: \(error)")
+        // Simple PDF text extraction for now
+        guard let document = PDFDocument(url: url) else {
+            fileImporter.importError = "Failed to load PDF document"
+            return
         }
+        
+        var extractedText = ""
+        for i in 0..<document.pageCount {
+            if let page = document.page(at: i),
+               let pageText = page.string {
+                extractedText += pageText + "\n\n"
+            }
+        }
+        
+        let processedContent = """
+        📄 PDF Processed: \(url.lastPathComponent)
+        
+        📊 Summary:
+        - Original text length: \(extractedText.count) characters
+        - Pages processed: \(document.pageCount)
+        - Processing: Basic text extraction
+        
+        📝 Content Preview:
+        \(String(extractedText.prefix(1000)))...
+        
+        [Note: Full PDF processing with Apple Foundation Models will be available in a future update]
+        """
+        
+        // Update imported content
+        fileImporter.importedText = processedContent
+        fileImporter.importedFileName = url.lastPathComponent
+        fileImporter.importError = nil
+        
+        print("[FileImportView] Successfully processed PDF: \(url.lastPathComponent)")
+        print("[FileImportView] Processed content length: \(processedContent.count) characters")
     }
     
     /// Clear imported content
