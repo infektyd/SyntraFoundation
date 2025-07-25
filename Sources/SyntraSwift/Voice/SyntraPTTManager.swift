@@ -19,7 +19,7 @@ public final class SyntraPTTManager: NSObject, ObservableObject {
     
     // MARK: - Private Properties
     #if canImport(PushToTalk) && os(iOS)
-    @available(iOS 16.0, *)
+    @available(iOS 26.0, *)
     private var channelManager: PTChannelManager?
     #endif
     
@@ -95,7 +95,7 @@ public final class SyntraPTTManager: NSObject, ObservableObject {
     
     // MARK: - Private Implementation
     #if canImport(PushToTalk) && os(iOS)
-    @available(iOS 16.0, *)
+    @available(iOS 26.0, *)
     private func joinPTTChannel() async {
         do {
             // Create channel manager
@@ -126,7 +126,7 @@ public final class SyntraPTTManager: NSObject, ObservableObject {
         }
     }
     
-    @available(iOS 16.0, *)
+    @available(iOS 26.0, *)
     private func createChannelImage() -> UIImage {
         // Create a simple SYNTRA icon for the PTT channel
         let config = UIImage.SymbolConfiguration(pointSize: 30, weight: .bold)
@@ -139,7 +139,7 @@ public final class SyntraPTTManager: NSObject, ObservableObject {
 
 // MARK: - PTChannelManagerDelegate
 #if canImport(PushToTalk) && os(iOS)
-@available(iOS 16.0, *)
+@available(iOS 26.0, *)
 extension SyntraPTTManager: PTChannelManagerDelegate {
     
     public func channelManager(
@@ -171,7 +171,7 @@ extension SyntraPTTManager: PTChannelManagerDelegate {
 }
 
 // MARK: - PTChannelRestorationDelegate
-@available(iOS 16.0, *)
+@available(iOS 26.0, *)
 extension SyntraPTTManager: PTChannelRestorationDelegate {
     
     public func channelManager(

@@ -87,7 +87,7 @@ jobs:
         
   # Fallback: Use standard Swift build on current macOS runners
   swift-build-macos:
-    runs-on: macos-14  # Use latest available macOS runner
+    runs-on: macos-latest  # Use latest available macOS runner with Xcode 26
     
     steps:
     - name: Checkout repository
