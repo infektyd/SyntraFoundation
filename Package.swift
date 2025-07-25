@@ -1,38 +1,56 @@
 // swift-tools-version: 6.0
+// The swift-tools-version declares the minimum version of Swift required to build this package.
+
 import PackageDescription
 
 let package = Package(
     name: "SyntraFoundation",
     platforms: [
-        .iOS(.v17),        // Modern syntax - NOT .v17 vs "17.0"
-        .macOS(.v14)       // Required for FoundationModels
+        .macOS(.v14),
+        .iOS(.v17),
     ],
     products: [
-        .executable(name: "SyntraSwiftCLI", targets: ["SyntraSwiftCLI"]),
-        .library(name: "SyntraSwift", targets: ["SyntraSwift"])
+        // Products define the executables and libraries a package produces, making them visible to other packages.
+        .library(
+            name: "SyntraFoundation",
+            targets: ["SyntraFoundation"]),
+        .executable(
+            name: "SyntraSwift", 
+            targets: ["SyntraSwift"]),
+    ],
+    dependencies: [
+        // Dependencies declare other packages that this package depends on.
+        .package(url: "https://github.com/apple/swift-foundation", from: "0.0.1"),
+        // WebAssembly host runtime support
+        .package(url: "https://github.com/swiftwasm/WasmKit.git", from: "0.1.0"),
     ],
     targets: [
+        // Targets are the basic building blocks of a package, defining a module or a test suite.
+        // Targets can depend on other targets in this package and products from dependencies.
+        .target(
+            name: "SyntraFoundation",
+            dependencies: [
+                .product(name: "FoundationEssentials", package: "swift-foundation"),
+                "WasmKit",
+            ],
+            path: "SyntraFoundation/Sources"),
         .target(
             name: "SyntraSwift",
-            dependencies: [],
-            swiftSettings: [
-                .enableExperimentalFeature("StrictConcurrency"),
-                .unsafeFlags([
-                    "-Xfrontend", "-warn-concurrency"
-                ])
-            ]
-        ),
-        .executableTarget(
-            name: "SyntraSwiftCLI",
-            dependencies: ["SyntraSwift"],
-            path: "swift/Main",  // CLAUDE.md: Isolate to Main directory
-            swiftSettings: [
-                .enableExperimentalFeature("StrictConcurrency")
-            ]
-        ),
+            dependencies: [
+                "SyntraFoundation",
+                .product(name: "FoundationEssentials", package: "swift-foundation"),
+                "WasmKit",
+            ],
+            path: "Sources",
+            exclude: [
+                // Exclude legacy sources to prevent conflicts
+                "../Sources-legacy",
+                // Exclude WebAssembly guest code (separate build)
+                "../WebAssembly/Guest",
+            ]),
         .testTarget(
-            name: "SyntraSwiftTests",
-            dependencies: ["SyntraSwift"]
-        )
+            name: "SyntraFoundationTests",
+            dependencies: ["SyntraFoundation"],
+            path: "SyntraFoundation/Tests"),
     ]
 )
