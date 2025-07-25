@@ -59,7 +59,7 @@ struct ChatView: View {
                         }
                         .padding()
                     }
-                    .onChange(of: brain.messages.count) { _ in
+                    .onChange(of: brain.messages.count) { oldValue, newValue in
                         if let lastMessage = brain.messages.last {
                             withAnimation(.easeOut(duration: 0.3)) {
                                 proxy.scrollTo(lastMessage.id, anchor: .bottom)

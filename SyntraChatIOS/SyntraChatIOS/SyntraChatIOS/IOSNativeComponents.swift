@@ -312,7 +312,15 @@ struct KeyboardAdaptive: ViewModifier {
                 // CRITICAL: Ensure UIKit operations on main thread - Beta 3 threading fix
                 DispatchQueue.main.async {
                     if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
-                        keyboardHeight = keyboardFrame.height - (UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0)
+                        // Use UIWindowScene.windows instead of deprecated UIApplication.shared.windows
+                        let safeAreaBottom: CGFloat
+                        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                           let window = windowScene.windows.first {
+                            safeAreaBottom = window.safeAreaInsets.bottom
+                        } else {
+                            safeAreaBottom = 0
+                        }
+                        keyboardHeight = keyboardFrame.height - safeAreaBottom
                     }
                 }
             }
