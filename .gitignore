@@ -14,10 +14,16 @@ DerivedData/
 *.ipa
 *.dSYM/
 *.dSYM.zip
+**/xcshareddata/
+project.xcworkspace/
+*.xcodeproj/project.xcworkspace/xcshareddata/
 
 # SwiftPM build artifacts
 .build/
 .swiftpm/
+**/ModuleCache/
+**/index/store/
+**/*.pcm
 
 # Package.swift dependencies
 Package.resolved
