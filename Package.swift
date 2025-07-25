@@ -1,4 +1,4 @@
-// swift-tools-version: 6.0
+// swift-tools-version: 6.2
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -6,8 +6,8 @@ import PackageDescription
 let package = Package(
     name: "SyntraFoundation",
     platforms: [
-        .macOS(.v15),
-        .iOS(.v17),
+        .macOS("26.0"),
+        .iOS("26.0"),
     ],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
@@ -33,7 +33,12 @@ let package = Package(
                 .product(name: "FoundationEssentials", package: "swift-foundation"),
                 "WasmKit",
             ],
-            path: "SyntraFoundation/Sources"),
+            path: "SyntraFoundation/Sources",
+            swiftSettings: [
+                .defaultIsolation(MainActor.self),
+                .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
+                .enableUpcomingFeature("InferIsolatedConformances")
+            ]),
         .executableTarget(
             name: "SyntraSwift",
             dependencies: [
@@ -41,7 +46,12 @@ let package = Package(
                 .product(name: "FoundationEssentials", package: "swift-foundation"),
                 "WasmKit",
             ],
-            path: "swift/Main"),
+            path: "swift/Main",
+            swiftSettings: [
+                .defaultIsolation(MainActor.self),
+                .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
+                .enableUpcomingFeature("InferIsolatedConformances")
+            ]),
         .testTarget(
             name: "SyntraFoundationTests",
             dependencies: ["SyntraFoundation"],

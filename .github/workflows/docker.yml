@@ -66,7 +66,7 @@ jobs:
   swift-tests:
     runs-on: ubuntu-22.04
     container:
-      image: swift:6.2-noble
+              image: swift:6.0
       
     steps:
     - name: Checkout repository
@@ -132,7 +132,7 @@ jobs:
         syft ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} -o spdx-json=sbom.spdx.json
         
     - name: Upload SBOM artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: sbom
         path: sbom.spdx.json

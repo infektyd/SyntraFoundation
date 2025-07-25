@@ -1,11 +1,12 @@
-// swift-tools-version:6.0
+// swift-tools-version: 6.2
 import PackageDescription
 
 let package = Package(
     name: "SyntraChat",
     platforms: [
-        // SwiftUI Chat UI and SyntraConfig require macOS 26.0+
-        .macOS("26.0")
+        // SwiftUI Chat UI and SyntraConfig require macOS 26.0+ and iOS 26.0+
+        .macOS("26.0"),
+        .iOS("26.0")
     ],
     products: [
         .executable(name: "SyntraChat", targets: ["SyntraChat"])
