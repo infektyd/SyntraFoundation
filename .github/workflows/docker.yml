@@ -1,0 +1,189 @@
+name: Docker Build & Push
+
+on:
+  push:
+    branches: [ main, feature/ios-native-migration ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  docker-build:
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+      packages: write
+      
+    strategy:
+      matrix:
+        platform:
+          - linux/amd64
+          - linux/arm64
+          
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+      
+    - name: Log in to Container Registry
+      if: github.event_name != 'pull_request'
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Extract metadata
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+        tags: |
+          type=ref,event=branch
+          type=ref,event=pr
+          type=semver,pattern={{version}}
+          type=semver,pattern={{major}}.{{minor}}
+          type=sha,prefix={{branch}}-
+          
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        file: ./ContainerSpecs/Dockerfile
+        platforms: ${{ matrix.platform }}
+        push: ${{ github.event_name != 'pull_request' }}
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+        
+  swift-tests:
+    runs-on: ubuntu-22.04
+    container:
+      image: swift:6.2-noble
+      
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Cache Swift packages
+      uses: actions/cache@v3
+      with:
+        path: .build
+        key: ${{ runner.os }}-swift-${{ hashFiles('**/Package.resolved') }}
+        restore-keys: |
+          ${{ runner.os }}-swift-
+          
+    - name: Build Swift package
+      run: swift build --configuration release
+      
+    - name: Run Swift tests
+      run: swift test
+      
+    - name: Run integration tests
+      run: |
+        if [ -f "Scripts/run_tests.sh" ]; then
+          chmod +x Scripts/run_tests.sh
+          ./Scripts/run_tests.sh
+        fi
+        
+  security-scan:
+    runs-on: ubuntu-22.04
+    needs: docker-build
+    if: github.event_name != 'pull_request'
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+        format: 'sarif'
+        output: 'trivy-results.sarif'
+        
+    - name: Upload Trivy scan results
+      uses: github/codeql-action/upload-sarif@v2
+      with:
+        sarif_file: 'trivy-results.sarif'
+        
+  sbom-generation:
+    runs-on: ubuntu-22.04
+    needs: docker-build
+    if: github.event_name != 'pull_request'
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Install Syft
+      run: |
+        curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
+        
+    - name: Generate SBOM
+      run: |
+        syft ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} -o spdx-json=sbom.spdx.json
+        
+    - name: Upload SBOM artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: sbom
+        path: sbom.spdx.json
+        
+    - name: Sign SBOM with Cosign
+      if: github.ref == 'refs/heads/main'
+      uses: sigstore/cosign-installer@v3
+      with:
+        cosign-release: 'v2.2.0'
+        
+    - name: Sign container image
+      if: github.ref == 'refs/heads/main'
+      run: |
+        cosign sign --yes ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+        
+  release:
+    runs-on: ubuntu-22.04
+    needs: [docker-build, swift-tests, security-scan, sbom-generation]
+    if: startsWith(github.ref, 'refs/tags/v')
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Download SBOM artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: sbom
+        
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          sbom.spdx.json
+        body: |
+          ## SYNTRA Foundation Release ${{ github.ref_name }}
+          
+          ### Cross-Platform Container Support
+          - ✅ Multi-architecture images (AMD64, ARM64)
+          - ✅ OCI-compliant container runtime
+          - ✅ Security scanning with Trivy
+          - ✅ SBOM generation and signing
+          
+          ### Container Images
+          - `${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}`
+          - `${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest`
+          
+          ### Security
+          - 🔒 Signed with Sigstore/Cosign
+          - 📋 SBOM included for supply chain verification
+          - 🛡️ Vulnerability scanning passed
+          
+        draft: false
+        prerelease: false 

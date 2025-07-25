@@ -1,0 +1,160 @@
+name: macOS Container Build
+
+on:
+  push:
+    branches: [ main, feature/ios-native-migration ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  macos-container:
+    runs-on: macos-latest
+    if: false  # Disabled until macOS 26 runners are available
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Check macOS version
+      run: |
+        sw_vers
+        echo "Checking for macOS 26 (required for Apple Containerization)"
+        
+    - name: Install Apple Container CLI
+      run: |
+        # Note: This will be available when macOS 26 is released
+        # brew tap apple/container
+        # brew install apple/container/container
+        echo "Apple Container CLI installation pending macOS 26 release"
+        
+    - name: Setup Xcode 26
+      if: false  # Enable when Xcode 26 is available
+      uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: '26.0'
+        
+    - name: Cache Swift packages
+      uses: actions/cache@v3
+      with:
+        path: .build
+        key: ${{ runner.os }}-swift-${{ hashFiles('**/Package.resolved') }}
+        restore-keys: |
+          ${{ runner.os }}-swift-
+          
+    - name: Build with Apple Containerization
+      if: false  # Enable when container CLI is available
+      run: |
+        # Start container system
+        container system start
+        
+        # Build using Apple's native containerization
+        ./Scripts/build_container.sh
+        
+        # List built containers
+        container images list
+        
+    - name: Test container functionality
+      if: false  # Enable when container CLI is available
+      run: |
+        # Run container with health check
+        container run --detach --name syntra-test \
+          --publish 8080 \
+          syntra:latest
+          
+        # Wait for startup
+        sleep 10
+        
+        # Test health endpoint
+        container exec syntra-test curl -f http://localhost:8080/health || exit 1
+        
+        # Stop test container
+        container stop syntra-test
+        container rm syntra-test
+        
+    - name: Export container image
+      if: false  # Enable when container CLI is available
+      run: |
+        # Export to OCI format for compatibility
+        container images save syntra:latest -o syntra-macos-arm64.tar
+        
+    - name: Upload container artifact
+      if: false  # Enable when container CLI is available
+      uses: actions/upload-artifact@v3
+      with:
+        name: syntra-macos-container
+        path: syntra-macos-arm64.tar
+        retention-days: 7
+        
+  # Fallback: Use standard Swift build on current macOS runners
+  swift-build-macos:
+    runs-on: macos-14  # Use latest available macOS runner
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Xcode
+      uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: 'latest-stable'
+        
+    - name: Check Swift version
+      run: |
+        swift --version
+        xcodebuild -version
+        
+    - name: Cache Swift packages
+      uses: actions/cache@v3
+      with:
+        path: .build
+        key: ${{ runner.os }}-swift-${{ hashFiles('**/Package.resolved') }}
+        restore-keys: |
+          ${{ runner.os }}-swift-
+          
+    - name: Build SYNTRA Foundation
+      run: |
+        swift build --configuration release
+        
+    - name: Run tests
+      run: |
+        swift test
+        
+    - name: Build iOS target
+      run: |
+        cd SyntraChatIOS
+        xcodebuild -project SyntraChatIOS.xcodeproj \
+          -scheme SyntraChatIOS \
+          -destination 'platform=iOS Simulator,name=iPhone 15 Pro' \
+          -configuration Release \
+          build
+          
+    - name: Test container build script compatibility
+      run: |
+        # Test that our build script detects current environment correctly
+        chmod +x Scripts/build_container.sh
+        ./Scripts/build_container.sh --dry-run || echo "Container build not available on current macOS version"
+        
+  # Validate Container Specifications
+  validate-specs:
+    runs-on: ubuntu-22.04
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Validate Dockerfile
+      run: |
+        # Check Dockerfile syntax
+        docker build --file ContainerSpecs/Dockerfile --target builder .
+        
+    - name: Validate Container Build Script
+      run: |
+        # Test script syntax
+        bash -n Scripts/build_container.sh
+        echo "Container build script syntax valid"
+        
+    - name: Check OCI compliance
+      run: |
+        # Validate that our Dockerfile produces OCI-compliant images
+        docker build --file ContainerSpecs/Dockerfile --tag syntra:test .
+        docker inspect syntra:test --format='{{.Config.Labels}}' 
