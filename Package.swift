@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "SyntraFoundation",
     platforms: [
-        .macOS(.v14),
+        .macOS(.v15),
         .iOS(.v17),
     ],
     products: [
@@ -20,7 +20,7 @@ let package = Package(
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
-        .package(url: "https://github.com/apple/swift-foundation", from: "0.0.1"),
+        .package(url: "https://github.com/apple/swift-foundation", branch: "main"),
         // WebAssembly host runtime support
         .package(url: "https://github.com/swiftwasm/WasmKit.git", from: "0.1.0"),
     ],
@@ -34,20 +34,14 @@ let package = Package(
                 "WasmKit",
             ],
             path: "SyntraFoundation/Sources"),
-        .target(
+        .executableTarget(
             name: "SyntraSwift",
             dependencies: [
                 "SyntraFoundation",
                 .product(name: "FoundationEssentials", package: "swift-foundation"),
                 "WasmKit",
             ],
-            path: "Sources",
-            exclude: [
-                // Exclude legacy sources to prevent conflicts
-                "../Sources-legacy",
-                // Exclude WebAssembly guest code (separate build)
-                "../WebAssembly/Guest",
-            ]),
+            path: "swift/Main"),
         .testTarget(
             name: "SyntraFoundationTests",
             dependencies: ["SyntraFoundation"],
