@@ -87,3 +87,5 @@ export.stream
 repo.bundle
 *.bundle
 *.stream
+entropy_logs/
+archived_tests/*.rtf
