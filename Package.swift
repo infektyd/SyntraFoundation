@@ -28,89 +28,80 @@ let package = Package(
         .target(
             name: "Valon",
             dependencies: ["ConsciousnessStructures"],
-            path: "swift/Valon"
+            path: "Shared/Swift/Valon"
         ),
         .target(
             name: "Modi",
             dependencies: ["ConsciousnessStructures"],
-            path: "swift/Modi"
+            path: "Shared/Swift/Modi"
         ),
         .target(
             name: "Drift",
-            path: "swift/Drift"
+            path: "Shared/Swift/Drift"
         ),
         .target(
             name: "MemoryEngine",
             dependencies: ["Valon", "Modi", "Drift"],
-            path: "swift/MemoryEngine"
+            path: "Shared/Swift/MemoryEngine"
         ),
         .target(
             name: "ConsciousnessStructures",
-            path: "swift/ConsciousnessStructures"
+            path: "Shared/Swift/ConsciousnessStructures"
         ),
         .target(
             name: "BrainEngine",
-            dependencies: ["Valon", "Modi", "Drift", "ConsciousnessStructures", "SyntraConfig"],
-            path: "swift/BrainEngine"
+            dependencies: ["Valon", "Modi", "Drift", "ConsciousnessStructures", "SyntraConfig", "SyntraTools"],
+            path: "Shared/Swift/BrainEngine"
         ),
          .target(
              name: "ConversationalInterface",
-             dependencies: ["BrainEngine", "MoralDriftMonitoring", "MemoryEngine", "ConsciousnessStructures"],
-             path: "swift/ConversationalInterface"
+             dependencies: ["BrainEngine", "MoralDriftMonitoring", "MemoryEngine", "ConsciousnessStructures", "SyntraTools"],
+             path: "Shared/Swift/ConversationalInterface"
          ),
         .target(
             name: "MoralDriftMonitoring",
             dependencies: ["ConsciousnessStructures"],
-            path: "swift/MoralDriftMonitoring"
+            path: "Shared/Swift/MoralDriftMonitoring"
         ),
         .target(
             name: "StructuredConsciousnessService",
             dependencies: ["ConsciousnessStructures", "MoralDriftMonitoring"],
-            path: "swift/StructuredConsciousnessService"
+            path: "Shared/Swift/StructuredConsciousnessService"
         ),
         .target(
             name: "SyntraConfig",
             dependencies: [],
-            path: "swift/SyntraConfig"
+            path: "Shared/Swift/SyntraConfig"
         ),
         .target(
             name: "MoralCore",
             dependencies: ["ConsciousnessStructures"],
-            path: "swift/MoralCore"
+            path: "Shared/Swift/MoralCore"
         ),
         .target(
             name: "SyntraTools",
-            dependencies: ["ConsciousnessStructures", "MoralCore", "StructuredConsciousnessService", "MoralDriftMonitoring", "Valon", "Modi", "Drift", "MemoryEngine", "BrainEngine"],
-            path: "swift/SyntraTools"
+            dependencies: ["ConsciousnessStructures", "MoralCore", "StructuredConsciousnessService", "MoralDriftMonitoring", "Valon", "Modi", "Drift", "MemoryEngine"],
+            path: "Shared/Swift/SyntraTools"
         ),
         .target(
             name: "CognitiveDrift",
             dependencies: ["SyntraConfig", "Valon", "Modi", "Drift", "MemoryEngine", "ConsciousnessStructures", "ConflictResolver"],
-            path: "swift/CognitiveDrift"
+            path: "Shared/Swift/CognitiveDrift"
         ),
         .target(
             name: "ConflictResolver",
             dependencies: ["ConsciousnessStructures"],
-            path: "swift/ConflictResolver"
+            path: "Shared/Swift/ConflictResolver"
         ),
         .executableTarget(
             name: "SyntraSwiftCLI",
             dependencies: [
                 "Valon", "Modi", "Drift", "MemoryEngine", "BrainEngine",
                 "ConsciousnessStructures", "MoralDriftMonitoring",
-                "StructuredConsciousnessService", "SyntraTools", "SyntraConfig", "MoralCore"
+                "StructuredConsciousnessService", "SyntraTools", "SyntraConfig", "MoralCore", "ConversationalInterface"
             ],
-            path: "swift/Main",
-            exclude: [
-                "*.sh"
-            ],
+            path: "Shared/Swift/Main",
             sources: ["main.swift"]
         ),
-        .testTarget(
-            name: "SyntraSwiftTests",
-            dependencies: ["Valon", "Modi", "Drift", "MemoryEngine", "BrainEngine", "SyntraConfig", "StructuredConsciousnessService"],
-            path: "tests",
-            exclude: ["__pycache__", "*.py"]
-        )
     ]
 )

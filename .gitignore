@@ -35,12 +35,18 @@ Package.resolved
 # Build logs
 build.log
 
-# Local configuration files
+# Secrets and credentials (REQUIRED by AGENTS_AND_CONTRIBUTORS.md)
 config.local.json
 config/config.local.json
+*.key
+*.pem
+*.crt
+secrets.*
+.env.*
 
-# Memory vault temporary files
+# Memory vault files (REQUIRED by AGENTS_AND_CONTRIBUTORS.md)
 memory_vault/temp/
+memory_vault/*.json
 
 # Log files
 *.log
@@ -98,3 +104,6 @@ archived_tests/*.rtf
 .build/
 entropy_logs/
 archived_tests/*.rtf
+
+# PDFs (REQUIRED by AGENTS_AND_CONTRIBUTORS.md)
+*.pdf
