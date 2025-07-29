@@ -5,8 +5,8 @@ let package = Package(
     name: "SyntraChat",
     platforms: [
         // SwiftUI Chat UI and SyntraConfig require macOS 26.0+ and iOS 26.0+
-        .macOS("26.0"),
-        .iOS("26.0")
+        .macOS(.v26),
+        .iOS(.v26)
     ],
     products: [
         .executable(name: "SyntraChat", targets: ["SyntraChat"])

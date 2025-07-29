@@ -51,6 +51,8 @@ memory_vault/*.json
 # Log files
 *.log
 logs/
+drift_logs/
+entropy_logs/
 
 # Test coverage
 coverage/
@@ -99,10 +101,6 @@ export.stream
 repo.bundle
 *.bundle
 *.stream
-entropy_logs/
-archived_tests/*.rtf
-.build/
-entropy_logs/
 archived_tests/*.rtf
 
 # PDFs (REQUIRED by AGENTS_AND_CONTRIBUTORS.md)

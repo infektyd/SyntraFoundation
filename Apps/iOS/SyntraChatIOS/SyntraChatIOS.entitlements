@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- iOS App Store and Development -->
+	<key>aps-environment</key>
+	<string>development</string>
+	
+	<!-- iCloud Services for Data Sync -->
+	<key>com.apple.developer.icloud-container-identifiers</key>
+	<array/>
+	<key>com.apple.developer.icloud-services</key>
+	<array>
+		<string>CloudKit</string>
+	</array>
+	
+	<!-- iOS-specific entitlements only -->
+	<!-- Note: iOS apps do NOT use macOS sandbox entitlements -->
+	<!-- All permissions are handled via Info.plist and runtime requests -->
+</dict>
+</plist>

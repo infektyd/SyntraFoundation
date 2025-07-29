@@ -1,20 +1,27 @@
 import Foundation
 
+public struct SymbolicData: Sendable {
+    let emotion: String
+    let symbol: String
+    let moralWeight: Double
+    let actionBias: String
+}
+
 // VALON: The Moral/Creative/Symbolic Brain
 // Processes input through emotional intelligence, creativity, and symbolic reasoning
 // Represents the "heart" of consciousness - intuition, values, creativity
-public struct Valon {
+public struct Valon: Sendable {
     
     // Symbolic emotion mapping - the foundation of moral reasoning
-    private let emotionalSymbols: [String: [String: Any]] = [
-        "danger": ["emotion": "protective_alert", "symbol": "⚠️", "moral_weight": 0.9, "action_bias": "caution"],
-        "suffering": ["emotion": "empathetic_concern", "symbol": "💔", "moral_weight": 0.95, "action_bias": "help"],
-        "creation": ["emotion": "inspired_wonder", "symbol": "✨", "moral_weight": 0.7, "action_bias": "nurture"],
-        "learning": ["emotion": "curious_growth", "symbol": "🌱", "moral_weight": 0.8, "action_bias": "explore"],
-        "problem": ["emotion": "determined_focus", "symbol": "🔍", "moral_weight": 0.6, "action_bias": "solve"],
-        "beauty": ["emotion": "aesthetic_appreciation", "symbol": "🎨", "moral_weight": 0.5, "action_bias": "cherish"],
-        "truth": ["emotion": "reverent_clarity", "symbol": "💎", "moral_weight": 0.85, "action_bias": "honor"],
-        "connection": ["emotion": "warm_belonging", "symbol": "🤝", "moral_weight": 0.75, "action_bias": "bond"]
+    private let emotionalSymbols: [String: SymbolicData] = [
+        "danger": .init(emotion: "protective_alert", symbol: "⚠️", moralWeight: 0.9, actionBias: "caution"),
+        "suffering": .init(emotion: "empathetic_concern", symbol: "💔", moralWeight: 0.95, actionBias: "help"),
+        "creation": .init(emotion: "inspired_wonder", symbol: "✨", moralWeight: 0.7, actionBias: "nurture"),
+        "learning": .init(emotion: "curious_growth", symbol: "🌱", moralWeight: 0.8, actionBias: "explore"),
+        "problem": .init(emotion: "determined_focus", symbol: "🔍", moralWeight: 0.6, actionBias: "solve"),
+        "beauty": .init(emotion: "aesthetic_appreciation", symbol: "🎨", moralWeight: 0.5, actionBias: "cherish"),
+        "truth": .init(emotion: "reverent_clarity", symbol: "💎", moralWeight: 0.85, actionBias: "honor"),
+        "connection": .init(emotion: "warm_belonging", symbol: "🤝", moralWeight: 0.75, actionBias: "bond")
     ]
     
     // Moral reasoning patterns - how Valon evaluates right/wrong
@@ -51,7 +58,7 @@ public struct Valon {
     // Process symbolic meaning - the heart of Valon's intelligence
     public func processSymbolicMeaning(_ content: String) -> [String: Any] {
         let lower = content.lowercased()
-        var detectedSymbols: [String: Any] = [:]
+        var detectedSymbols: [String: SymbolicData] = [:]
         var totalMoralWeight: Double = 0
         var dominantEmotion = "contemplative_neutral"
         
@@ -59,12 +66,8 @@ public struct Valon {
         for (concept, symbolData) in emotionalSymbols {
             if lower.contains(concept) || containsConceptualMatch(content: lower, concept: concept) {
                 detectedSymbols[concept] = symbolData
-                if let weight = symbolData["moral_weight"] as? Double {
-                    totalMoralWeight += weight
-                }
-                if let emotion = symbolData["emotion"] as? String {
-                    dominantEmotion = emotion
-                }
+                totalMoralWeight += symbolData.moralWeight
+                dominantEmotion = symbolData.emotion
             }
         }
         

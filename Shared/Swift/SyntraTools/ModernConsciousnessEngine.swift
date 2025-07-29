@@ -168,9 +168,7 @@ public class ModernConsciousnessEngine {
         )
         
         // Prewarm the model for better performance
-        Task {
-            await session.prewarm()
-        }
+        try! session.prewarm()  // Remove the async call and potential error throwing
     }
     
     // MARK: - Primary Consciousness Processing
@@ -195,7 +193,7 @@ public class ModernConsciousnessEngine {
         lastUpdate = Date()
         
         // Log the consciousness update
-        await logConsciousnessUpdate(stimulus: stimulus, state: response.content)
+        logConsciousnessUpdate(stimulus: stimulus, state: response.content)
         
         return response.content
     }
@@ -205,17 +203,13 @@ public class ModernConsciousnessEngine {
     public func streamConsciousnessUpdates(stimulus: String, context: String? = nil) -> AsyncStream<ConsciousnessState.PartiallyGenerated> {
         let (stream, continuation) = AsyncStream<ConsciousnessState.PartiallyGenerated>.makeStream(of: ConsciousnessState.PartiallyGenerated.self, bufferingPolicy: .unbounded)
 
-        Task {
-            await MainActor.run {
-                isProcessing = true
-                processingStage = "streaming_consciousness"
-            }
+        Task { @MainActor in
+            isProcessing = true
+            processingStage = "streaming_consciousness"
 
             defer {
-                Task { @MainActor in
-                    isProcessing = false
-                    processingStage = "idle"
-                }
+                isProcessing = false
+                processingStage = "idle"
             }
 
             do {
@@ -226,19 +220,15 @@ public class ModernConsciousnessEngine {
                 )
 
                 for try await partialState in streamResponse {
-                    await MainActor.run {
-                        continuation.yield(partialState)
-                    }
+                    continuation.yield(partialState)
 
                     // Update current state if it's complete enough
                     if let _ = partialState.awarenessLevel,
                        let _ = partialState.emotionalState,
                        let _ = partialState.confidence {
-                        await MainActor.run {
-                            if let complete = convertPartialToComplete(partialState) {
-                                currentState = complete
-                                lastUpdate = Date()
-                            }
+                        if let complete = convertPartialToComplete(partialState) {
+                            currentState = complete
+                            lastUpdate = Date()
                         }
                     }
                 }
@@ -449,7 +439,7 @@ public class ModernConsciousnessEngine {
         )
     }
     
-    private func logConsciousnessUpdate(stimulus: String, state: ConsciousnessState) async {
+    private func logConsciousnessUpdate(stimulus: String, state: ConsciousnessState) {
         let logEntry: [String: Any] = [
             "timestamp": Date().timeIntervalSince1970,
             "stimulus": stimulus,
@@ -492,6 +482,7 @@ public enum ConsciousnessEngineError: Error, LocalizedError {
 
 // MARK: - Observable Extensions
 
+@available(macOS 26.0, *)
 extension ModernConsciousnessEngine {
     public var currentAwarenessLevel: Double {
         currentState?.awarenessLevel ?? 0.0
@@ -520,6 +511,9 @@ extension ModernConsciousnessEngine {
 // do not declare Sendable conformance yet.  We add an unchecked conformance here
 // so that they can safely cross concurrency boundaries inside streaming logic.
 
+@available(macOS 26.0, *)
 extension ModernConsciousnessEngine.ConsciousnessState.PartiallyGenerated: @unchecked Sendable {}
 
+@available(macOS 26.0, *)
 extension StructuredConsciousnessService: @unchecked Sendable {}
+

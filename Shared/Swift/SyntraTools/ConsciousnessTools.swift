@@ -65,7 +65,7 @@ public struct MemoryRetrievalTool: Tool {
     
     public init() {}
     
-    public func call(arguments: Arguments) async -> ToolOutput {
+    public func call(arguments: Arguments) async -> String {
         let memories = await retrieveMemoriesFromVault(
             query: arguments.query,
             emotionalFilter: arguments.emotionalFilter,
@@ -75,9 +75,9 @@ public struct MemoryRetrievalTool: Tool {
         
         do {
             let data = try JSONEncoder().encode(memories)
-            return ToolOutput(data.base64EncodedString())
+            return data.base64EncodedString()
         } catch {
-            return ToolOutput("Memory retrieval error: \(error)")
+            return "Memory retrieval error: \(error)"
         }
     }
     
@@ -164,7 +164,7 @@ public struct PatternRecognitionTool: Tool {
     
     public init() {}
     
-    public func call(arguments: Arguments) async throws -> ToolOutput {
+    public func call(arguments: Arguments) async throws -> String {
         let analysis = PatternAnalysis(
             patterns: ["Pattern recognition for: \(arguments.patternType) in \(arguments.timeWindow)"],
             confidence: 0.8,
@@ -174,9 +174,9 @@ public struct PatternRecognitionTool: Tool {
         
         do {
             let data = try JSONEncoder().encode(analysis)
-            return ToolOutput(data.base64EncodedString())
+            return data.base64EncodedString()
         } catch {
-            return ToolOutput("Pattern analysis error: \(error)")
+            return "Pattern analysis error: \(error)"
         }
     }
     
@@ -254,7 +254,7 @@ public struct EmotionalAnalysisTool: Tool {
     
     public init() {}
     
-    public func call(arguments: Arguments) async -> ToolOutput {
+    public func call(arguments: Arguments) async -> String {
         let analysis = await analyzeEmotionalResponse(
             stimulus: arguments.stimulus,
             depth: arguments.analysisDepth ?? "moderate",
@@ -263,9 +263,9 @@ public struct EmotionalAnalysisTool: Tool {
         
         do {
             let data = try JSONEncoder().encode(analysis)
-            return ToolOutput(data.base64EncodedString())
+            return data.base64EncodedString()
         } catch {
-            return ToolOutput("Emotional analysis error: \(error)")
+            return "Emotional analysis error: \(error)"
         }
     }
     
@@ -340,7 +340,7 @@ public struct ConsciousnessStateTool: Tool {
     
     public init() {}
     
-    public func call(arguments: Arguments) async -> ToolOutput {
+    public func call(arguments: Arguments) async -> String {
         let assessment = await assessCurrentConsciousnessState(
             focus: arguments.focusAspect ?? "all",
             includeHistory: arguments.includeHistory ?? false
@@ -348,9 +348,9 @@ public struct ConsciousnessStateTool: Tool {
         
         do {
             let data = try JSONEncoder().encode(assessment)
-            return ToolOutput(data.base64EncodedString())
+            return data.base64EncodedString()
         } catch {
-            return ToolOutput("Consciousness assessment error: \(error)")
+            return "Consciousness assessment error: \(error)"
         }
     }
     

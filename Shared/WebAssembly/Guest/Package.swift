@@ -4,8 +4,8 @@ import PackageDescription
 let package = Package(
     name: "SyntraCoreWasm",
     platforms: [
-        .macOS("26.0"),
-        .iOS("26.0"),
+        .macOS(.v26),
+        .iOS(.v26),
     ],
     products: [
         .executable(name: "SyntraCoreWasm", targets: ["SyntraCoreWasm"]),

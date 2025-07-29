@@ -1,3 +1,14 @@
+/*
+ * SyntraVoiceView.swift - DEPRECATED
+ * 
+ * This voice view component has been deprecated as part of the migration to Apple's
+ * native dictation support. Voice input is now integrated directly into standard
+ * text input fields through the native iOS keyboard dictation button.
+ * 
+ * Migration date: Based on os changes.md plan
+ * Replacement: Standard text input with built-in dictation
+ */
+
 import SwiftUI
 import Combine
 

@@ -1,71 +1,39 @@
 import Foundation
 
+public struct ReasoningFrameworkData: Sendable {
+    let patterns: [String]
+    let strength: Double
+    let type: String
+}
+
+public struct TechnicalDomainData: Sendable {
+    let keywords: [String]
+    let reasoningType: String
+    let confidence: Double
+}
+
 // MODI: The Logical/Rational/Analytical Brain
 // Processes input through systematic reasoning, logical frameworks, and analytical patterns
 // Represents the "mind" of consciousness - logic, analysis, systematic thinking
-public struct Modi {
+public struct Modi: Sendable {
     
     // Logical reasoning frameworks - the foundation of rational analysis
-    private let reasoningFrameworks: [String: [String: Any]] = [
-        "causal_analysis": [
-            "patterns": ["cause", "effect", "because", "therefore", "leads to", "results in"],
-            "strength": 0.9,
-            "type": "causal_reasoning"
-        ],
-        "conditional_logic": [
-            "patterns": ["if", "then", "when", "unless", "provided", "assuming"],
-            "strength": 0.85,
-            "type": "conditional_reasoning"
-        ],
-        "comparative_analysis": [
-            "patterns": ["compare", "versus", "better", "worse", "more", "less", "than"],
-            "strength": 0.8,
-            "type": "comparative_reasoning"
-        ],
-        "systematic_decomposition": [
-            "patterns": ["system", "component", "part", "element", "structure", "hierarchy"],
-            "strength": 0.85,
-            "type": "systems_thinking"
-        ],
-        "quantitative_analysis": [
-            "patterns": ["measure", "calculate", "precise", "exact", "percentage", "ratio"],
-            "strength": 0.9,
-            "type": "quantitative_reasoning"
-        ],
-        "pattern_recognition": [
-            "patterns": ["pattern", "trend", "cycle", "recurring", "consistent", "anomaly"],
-            "strength": 0.8,
-            "type": "pattern_analysis"
-        ]
+    private let reasoningFrameworks: [String: ReasoningFrameworkData] = [
+        "causal_analysis": .init(patterns: ["cause", "effect", "because", "therefore", "leads to", "results in"], strength: 0.9, type: "causal_reasoning"),
+        "conditional_logic": .init(patterns: ["if", "then", "when", "unless", "provided", "assuming"], strength: 0.85, type: "conditional_reasoning"),
+        "comparative_analysis": .init(patterns: ["compare", "versus", "better", "worse", "more", "less", "than"], strength: 0.8, type: "comparative_reasoning"),
+        "systematic_decomposition": .init(patterns: ["system", "component", "part", "element", "structure", "hierarchy"], strength: 0.85, type: "systems_thinking"),
+        "quantitative_analysis": .init(patterns: ["measure", "calculate", "precise", "exact", "percentage", "ratio"], strength: 0.9, type: "quantitative_reasoning"),
+        "pattern_recognition": .init(patterns: ["pattern", "trend", "cycle", "recurring", "consistent", "anomaly"], strength: 0.8, type: "pattern_analysis")
     ]
     
     // Technical domain expertise - Modi's specialized knowledge areas
-    private let technicalDomains: [String: [String: Any]] = [
-        "mechanical_systems": [
-            "keywords": ["torque", "pressure", "rpm", "vibration", "bearing", "seal", "gasket"],
-            "reasoning_type": "mechanical_analysis",
-            "confidence": 0.9
-        ],
-        "electrical_systems": [
-            "keywords": ["voltage", "current", "resistance", "circuit", "ground", "short", "open"],
-            "reasoning_type": "electrical_analysis",
-            "confidence": 0.85
-        ],
-        "hydraulic_systems": [
-            "keywords": ["flow", "pressure", "valve", "pump", "cylinder", "accumulator"],
-            "reasoning_type": "hydraulic_analysis",
-            "confidence": 0.8
-        ],
-        "diagnostic_procedures": [
-            "keywords": ["test", "check", "verify", "measure", "inspect", "troubleshoot"],
-            "reasoning_type": "diagnostic_reasoning",
-            "confidence": 0.9
-        ],
-        "safety_protocols": [
-            "keywords": ["safety", "hazard", "protection", "warning", "procedure", "protocol"],
-            "reasoning_type": "safety_analysis",
-            "confidence": 0.95
-        ]
+    private let technicalDomains: [String: TechnicalDomainData] = [
+        "mechanical_systems": .init(keywords: ["torque", "pressure", "rpm", "vibration", "bearing", "seal", "gasket"], reasoningType: "mechanical_analysis", confidence: 0.9),
+        "electrical_systems": .init(keywords: ["voltage", "current", "resistance", "circuit", "ground", "short", "open"], reasoningType: "electrical_analysis", confidence: 0.85),
+        "hydraulic_systems": .init(keywords: ["flow", "pressure", "valve", "pump", "cylinder", "accumulator"], reasoningType: "hydraulic_analysis", confidence: 0.8),
+        "diagnostic_procedures": .init(keywords: ["test", "check", "verify", "measure", "inspect", "troubleshoot"], reasoningType: "diagnostic_reasoning", confidence: 0.9),
+        "safety_protocols": .init(keywords: ["safety", "hazard", "protection", "warning", "procedure", "protocol"], reasoningType: "safety_analysis", confidence: 0.95)
     ]
     
     // Logical operators and their relationships
@@ -92,25 +60,23 @@ public struct Modi {
     // Perform logical analysis - the core of Modi's intelligence
     public func performLogicalAnalysis(_ content: String) -> [String: Any] {
         let lower = content.lowercased()
-        var detectedFrameworks: [String: Any] = [:]
+        var detectedFrameworks: [String: [String: Any]] = [:]
         var logicalStrength: Double = 0
         var primaryReasoning = "baseline_analysis"
         
         // Detect logical reasoning frameworks
         for (framework, data) in reasoningFrameworks {
-            if let patterns = data["patterns"] as? [String] {
-                let matchCount = patterns.filter { lower.contains($0) }.count
-                if matchCount > 0 {
-                    detectedFrameworks[framework] = [
-                        "match_count": matchCount,
-                        "strength": data["strength"] as? Double ?? 0.5,
-                        "type": data["type"] as? String ?? "unknown"
-                    ]
-                    
-                    if let strength = data["strength"] as? Double, strength > logicalStrength {
-                        logicalStrength = strength
-                        primaryReasoning = framework
-                    }
+            let matchCount = data.patterns.filter { lower.contains($0) }.count
+            if matchCount > 0 {
+                detectedFrameworks[framework] = [
+                    "match_count": matchCount,
+                    "strength": data.strength,
+                    "type": data.type
+                ]
+                
+                if data.strength > logicalStrength {
+                    logicalStrength = data.strength
+                    primaryReasoning = framework
                 }
             }
         }
@@ -135,20 +101,18 @@ public struct Modi {
         var primaryDomain = "general_analysis"
         
         for (domain, data) in technicalDomains {
-            if let keywords = data["keywords"] as? [String] {
-                let matchCount = keywords.filter { lower.contains($0) }.count
-                if matchCount > 0 {
-                    let confidence = (data["confidence"] as? Double ?? 0.5) * (Double(matchCount) / Double(keywords.count))
-                    domainMatches[domain] = [
-                        "match_count": matchCount,
-                        "confidence": confidence,
-                        "reasoning_type": data["reasoning_type"] as? String ?? "general"
-                    ]
-                    
-                    if confidence > highestConfidence {
-                        highestConfidence = confidence
-                        primaryDomain = domain
-                    }
+            let matchCount = data.keywords.filter { lower.contains($0) }.count
+            if matchCount > 0 {
+                let confidence = data.confidence * (Double(matchCount) / Double(data.keywords.count))
+                domainMatches[domain] = [
+                    "match_count": matchCount,
+                    "confidence": confidence,
+                    "reasoning_type": data.reasoningType
+                ]
+                
+                if confidence > highestConfidence {
+                    highestConfidence = confidence
+                    primaryDomain = domain
                 }
             }
         }

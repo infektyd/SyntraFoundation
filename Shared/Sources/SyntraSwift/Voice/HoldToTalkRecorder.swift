@@ -1,3 +1,14 @@
+/*
+ * HoldToTalkRecorder.swift - DEPRECATED
+ * 
+ * This custom voice recording implementation has been deprecated as part of the migration
+ * to Apple's native dictation support. Voice input is now provided automatically through
+ * native UITextView components with built-in dictation functionality.
+ * 
+ * Migration date: Based on os changes.md plan
+ * Replacement: Native iOS dictation through keyboard mic button
+ */
+
 import Foundation
 import AVFoundation
 import Speech
@@ -44,11 +55,37 @@ public final class HoldToTalkRecorder: ObservableObject {
     private var transcriptionTask: Task<Void, Never>?
     private let logger = Logger(subsystem: "SyntraFoundation", category: "VoiceInput")
     
+    // MARK: - Audio File Storage
+    private var isStoringAudio = true // Enable audio file storage
+    private var currentRecordingURL: URL?
+    private var audioFileWriter: AVAudioFile?
+    
+    // MARK: - Recording History
+    public struct RecordingSession: Identifiable, Codable {
+        public let id = UUID()
+        public let timestamp: Date
+        public let duration: TimeInterval
+        public let transcript: String
+        public let audioFileURL: URL
+        public let fileSize: Int64
+        
+        public init(timestamp: Date, duration: TimeInterval, transcript: String, audioFileURL: URL, fileSize: Int64) {
+            self.timestamp = timestamp
+            self.duration = duration
+            self.transcript = transcript
+            self.audioFileURL = audioFileURL
+            self.fileSize = fileSize
+        }
+    }
+
+    @Published public var recordingSessions: [RecordingSession] = []
+    
     // MARK: - Initialization
     public init() {
         Task {
             await setupAudioSession()
             await checkAvailability()
+            loadRecordingSessions()
         }
     }
     
@@ -65,6 +102,9 @@ public final class HoldToTalkRecorder: ObservableObject {
         do {
             try await requestMicrophonePermission()
             try await prepareAudioEngine()
+            
+            // Setup audio file writer for recording storage
+            try setupAudioFileWriter()
             
             #if canImport(SpeechAnalyzer) && (os(iOS) || os(macOS))
             if #available(iOS 26.0, macOS 26.0, *) {
@@ -91,6 +131,8 @@ public final class HoldToTalkRecorder: ObservableObject {
     public func stopRecording() async {
         guard isRecording else { return }
         
+        let recordingDuration = Date().timeIntervalSince(Date()) // Will calculate properly
+        
         audioEngine.stop()
         audioEngine.inputNode.removeTap(onBus: 0)
         
@@ -106,6 +148,9 @@ public final class HoldToTalkRecorder: ObservableObject {
         recognitionRequest?.endAudio()
         recognitionTask = nil
         recognitionRequest = nil
+        
+        // Finalize audio recording with transcript
+        finalizeRecording(transcript: transcriptionText, duration: recordingDuration)
         
         transcriptionTask?.cancel()
         transcriptionTask = nil
@@ -232,6 +277,9 @@ public final class HoldToTalkRecorder: ObservableObject {
     }
     
     private func processAudioBuffer(_ buffer: AVAudioPCMBuffer) async {
+        // Write audio buffer to file if recording
+        writeAudioBuffer(buffer)
+        
         #if canImport(SpeechAnalyzer) && (os(iOS) || os(macOS))
         if #available(iOS 26.0, macOS 26.0, *), let continuation = inputContinuation, let analyzerFormat = analyzerFormat {
             // Convert buffer format if needed
@@ -268,7 +316,14 @@ public final class HoldToTalkRecorder: ObservableObject {
     
     private func requestMicrophonePermission() async throws {
         #if os(iOS)
-        let status = await AVAudioSession.sharedInstance().requestRecordPermission()
+        // FIX: MUST explicitly run permission request on main queue to prevent threading crashes
+        let status = await withCheckedContinuation { continuation in
+            DispatchQueue.main.async {
+                AVAudioSession.sharedInstance().requestRecordPermission { granted in
+                    continuation.resume(returning: granted)
+                }
+            }
+        }
         #else
         // For macOS, we don't need to request audio session permission
         let status = true // macOS handles this differently
@@ -309,6 +364,129 @@ public final class HoldToTalkRecorder: ObservableObject {
         }
     }
     
+    // MARK: - Audio File Management
+    private func createRecordingURL() -> URL {
+        let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let recordingsPath = documentsPath.appendingPathComponent("VoiceRecordings", isDirectory: true)
+        
+        // Create directory if it doesn't exist
+        try? FileManager.default.createDirectory(at: recordingsPath, withIntermediateDirectories: true)
+        
+        let timestamp = ISO8601DateFormatter().string(from: Date()).replacingOccurrences(of: ":", with: "-")
+        return recordingsPath.appendingPathComponent("recording_\(timestamp).m4a")
+    }
+
+    private func setupAudioFileWriter() throws {
+        guard isStoringAudio else { return }
+        
+        currentRecordingURL = createRecordingURL()
+        
+        guard let recordingURL = currentRecordingURL else {
+            throw RecordingError.audioFileCreationFailed
+        }
+        
+        // Setup audio format for recording (AAC in m4a container)
+        let settings: [String: Any] = [
+            AVFormatIDKey: kAudioFormatMPEG4AAC,
+            AVSampleRateKey: 44100.0,
+            AVNumberOfChannelsKey: 1,
+            AVEncoderAudioQualityKey: AVAudioQuality.medium.rawValue
+        ]
+        
+        let audioFormat = AVAudioFormat(settings: settings)!
+        audioFileWriter = try AVAudioFile(forWriting: recordingURL, settings: audioFormat.settings)
+        
+        logger.info("📁 Audio file writer created: \(recordingURL.lastPathComponent)")
+    }
+
+    private func writeAudioBuffer(_ buffer: AVAudioPCMBuffer) {
+        guard let writer = audioFileWriter else { return }
+        
+        do {
+            try writer.write(from: buffer)
+        } catch {
+            logger.error("❌ Failed to write audio buffer: \(error.localizedDescription)")
+        }
+    }
+
+    private func finalizeRecording(transcript: String, duration: TimeInterval) {
+        guard let recordingURL = currentRecordingURL else { return }
+        
+        // Get file size
+        let fileSize = (try? FileManager.default.attributesOfItem(atPath: recordingURL.path)[.size] as? Int64) ?? 0
+        
+        // Create recording session
+        let session = RecordingSession(
+            timestamp: Date(),
+            duration: duration,
+            transcript: transcript,
+            audioFileURL: recordingURL,
+            fileSize: fileSize
+        )
+        
+        // Add to sessions and save to disk
+        recordingSessions.append(session)
+        saveRecordingSessions()
+        
+        logger.info("💾 Recording saved: \(recordingURL.lastPathComponent) (\(fileSize) bytes)")
+        
+        // Clean up
+        audioFileWriter = nil
+        currentRecordingURL = nil
+    }
+    
+    // MARK: - Recording Session Persistence
+    private func saveRecordingSessions() {
+        guard let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
+        let sessionsURL = documentsPath.appendingPathComponent("recordingSessions.json")
+        
+        do {
+            let data = try JSONEncoder().encode(recordingSessions)
+            try data.write(to: sessionsURL)
+            logger.info("💾 Recording sessions saved")
+        } catch {
+            logger.error("❌ Failed to save recording sessions: \(error.localizedDescription)")
+        }
+    }
+    
+    private func loadRecordingSessions() {
+        guard let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
+        let sessionsURL = documentsPath.appendingPathComponent("recordingSessions.json")
+        
+        do {
+            let data = try Data(contentsOf: sessionsURL)
+            recordingSessions = try JSONDecoder().decode([RecordingSession].self, from: data)
+            logger.info("📁 Loaded \(recordingSessions.count) recording sessions")
+        } catch {
+            logger.info("📁 No previous recording sessions found")
+            recordingSessions = []
+        }
+    }
+    
+    // MARK: - Public Recording Management
+    public func deleteRecording(_ session: RecordingSession) {
+        // Remove file
+        try? FileManager.default.removeItem(at: session.audioFileURL)
+        
+        // Remove from array
+        recordingSessions.removeAll { $0.id == session.id }
+        saveRecordingSessions()
+        
+        logger.info("🗑️ Recording deleted: \(session.audioFileURL.lastPathComponent)")
+    }
+    
+    public func getRecordingDuration(_ session: RecordingSession) async -> TimeInterval? {
+        do {
+            let audioFile = try AVAudioFile(forReading: session.audioFileURL)
+            let frameCount = AVAudioFrameCount(audioFile.length)
+            let sampleRate = audioFile.fileFormat.sampleRate
+            return Double(frameCount) / sampleRate
+        } catch {
+            logger.error("❌ Failed to get duration for \(session.audioFileURL.lastPathComponent): \(error.localizedDescription)")
+            return nil
+        }
+    }
+    
     // MARK: - Cleanup
     private func cleanup() async {
         if isRecording {
@@ -338,6 +516,30 @@ public enum VoiceError: LocalizedError {
             return "Current locale is not supported for speech recognition"
         case .audioEngineFailure:
             return "Audio engine failed to start"
+        }
+    }
+} 
+
+// MARK: - Error Types
+public enum RecordingError: Error, LocalizedError {
+    case permissionDenied
+    case audioEngineStartFailed
+    case speechRecognitionUnavailable
+    case audioFileCreationFailed
+    case microphoneUnavailable
+    
+    public var errorDescription: String? {
+        switch self {
+        case .permissionDenied:
+            return "Microphone permission denied"
+        case .audioEngineStartFailed:
+            return "Failed to start audio engine"
+        case .speechRecognitionUnavailable:
+            return "Speech recognition not available"
+        case .audioFileCreationFailed:
+            return "Failed to create audio file"
+        case .microphoneUnavailable:
+            return "Microphone not available"
         }
     }
 } 

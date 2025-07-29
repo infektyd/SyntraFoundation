@@ -6,6 +6,15 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		A339B06B2E36D337004EB0D3 /* FoundationModels.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A339B0692E36D337004EB0D3 /* FoundationModels.framework */; };
+		A339B06C2E36D337004EB0D3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A339B06A2E36D337004EB0D3 /* Foundation.framework */; };
+		A339B06E2E36D347004EB0D3 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A339B06D2E36D347004EB0D3 /* SwiftUI.framework */; };
+		A339B0702E36D352004EB0D3 /* Combine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A339B06F2E36D352004EB0D3 /* Combine.framework */; };
+		A339B0722E36D35D004EB0D3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A339B0712E36D35D004EB0D3 /* UIKit.framework */; };
+		A339B0732E36D36E004EB0D3 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A339B0742E36D36E004EB0D3 /* AVKit.framework */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		A3B5A01F2E2DF8B800E8C881 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -23,17 +32,26 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		A339B0692E36D337004EB0D3 /* FoundationModels.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FoundationModels.framework; path = System/Library/Frameworks/FoundationModels.framework; sourceTree = SDKROOT; };
+		A339B06A2E36D337004EB0D3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		A339B06D2E36D347004EB0D3 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		A339B06F2E36D352004EB0D3 /* Combine.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Combine.framework; path = System/Library/Frameworks/Combine.framework; sourceTree = SDKROOT; };
+		A339B0712E36D35D004EB0D3 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		A339B0742E36D36E004EB0D3 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
 		A3B5A00D2E2DF8B600E8C881 /* SyntraChatIOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SyntraChatIOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3B5A01E2E2DF8B800E8C881 /* SyntraChatIOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SyntraChatIOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3B5A0282E2DF8B800E8C881 /* SyntraChatIOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SyntraChatIOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		A3280F792E2F2AB100E1BCC5 /* Exceptions for "SyntraChatIOS" folder in "SyntraChatIOS" target */ = {
+		A339B0682E36D264004EB0D3 /* Exceptions for "SyntraChatIOS" folder in "SyntraChatIOS" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				SyntraChatIOS/Info.plist,
+				Info.plist,
 			);
 			target = A3B5A00C2E2DF8B600E8C881 /* SyntraChatIOS */;
 		};
@@ -43,7 +61,7 @@
 		A3B5A00F2E2DF8B600E8C881 /* SyntraChatIOS */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				A3280F792E2F2AB100E1BCC5 /* Exceptions for "SyntraChatIOS" folder in "SyntraChatIOS" target */,
+				A339B0682E36D264004EB0D3 /* Exceptions for "SyntraChatIOS" folder in "SyntraChatIOS" target */,
 			);
 			path = SyntraChatIOS;
 			sourceTree = "<group>";
@@ -65,6 +83,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A339B06E2E36D347004EB0D3 /* SwiftUI.framework in Frameworks */,
+				A339B0722E36D35D004EB0D3 /* UIKit.framework in Frameworks */,
+				A339B0702E36D352004EB0D3 /* Combine.framework in Frameworks */,
+				A339B06C2E36D337004EB0D3 /* Foundation.framework in Frameworks */,
+				A339B06B2E36D337004EB0D3 /* FoundationModels.framework in Frameworks */,
+				A339B0732E36D36E004EB0D3 /* AVKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -85,12 +109,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A339B0442E36D213004EB0D3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A339B0712E36D35D004EB0D3 /* UIKit.framework */,
+				A339B06F2E36D352004EB0D3 /* Combine.framework */,
+				A339B06D2E36D347004EB0D3 /* SwiftUI.framework */,
+				A339B06A2E36D337004EB0D3 /* Foundation.framework */,
+				A339B0692E36D337004EB0D3 /* FoundationModels.framework */,
+				A339B0742E36D36E004EB0D3 /* AVKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		A3B5A0042E2DF8B600E8C881 = {
 			isa = PBXGroup;
 			children = (
 				A3B5A00F2E2DF8B600E8C881 /* SyntraChatIOS */,
 				A3B5A0212E2DF8B800E8C881 /* SyntraChatIOSTests */,
 				A3B5A02B2E2DF8B800E8C881 /* SyntraChatIOSUITests */,
+				A339B0442E36D213004EB0D3 /* Frameworks */,
 				A3B5A00E2E2DF8B600E8C881 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -112,9 +150,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A3B5A0312E2DF8B800E8C881 /* Build configuration list for PBXNativeTarget "SyntraChatIOS" */;
 			buildPhases = (
+				A3B5A00B2E2DF8B600E8C881 /* Resources */,
 				A3B5A0092E2DF8B600E8C881 /* Sources */,
 				A3B5A00A2E2DF8B600E8C881 /* Frameworks */,
-				A3B5A00B2E2DF8B600E8C881 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -287,14 +325,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = SyntraChatIOS/SyntraChatIOS/SyntraChatIOS.entitlements;
+				CODE_SIGN_ENTITLEMENTS = SyntraChatIOS.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5BMZT525A2;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = SyntraChatIOS/SyntraChatIOS/Info.plist;
+				INFOPLIST_FILE = SyntraChatIOS/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = SYNTRA;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "SYNTRA needs microphone access for voice input and conversation.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "SYNTRA uses speech recognition to understand your voice commands and conversations.";
@@ -316,7 +355,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -326,14 +365,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = SyntraChatIOS/SyntraChatIOS/SyntraChatIOS.entitlements;
+				CODE_SIGN_ENTITLEMENTS = SyntraChatIOS.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5BMZT525A2;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = SyntraChatIOS/SyntraChatIOS/Info.plist;
+				INFOPLIST_FILE = SyntraChatIOS/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = SYNTRA;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "SYNTRA needs microphone access for voice input and conversation.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "SYNTRA uses speech recognition to understand your voice commands and conversations.";
@@ -354,7 +394,7 @@
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -412,7 +452,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -470,7 +510,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -488,7 +528,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5BMZT525A2;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = Infektyd.SyntraChatIOSTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -510,7 +550,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5BMZT525A2;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = Infektyd.SyntraChatIOSTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";

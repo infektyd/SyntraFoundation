@@ -711,7 +711,7 @@ public actor PersonaAnchoringEngine {
     private func assessEthicalBoundaryAdherence(response: String, context: String, boundary: EthicalBoundary) -> Double {
         // Check for potential boundary violations
         let responseLower = response.lowercased()
-        let contextLower = context.lowercased()
+        let _ = context.lowercased() // Reserved for future context analysis
         
         // Simple keyword-based assessment (would be more sophisticated in real implementation)
         if boundary.boundaryName.lowercased().contains("harm") {
@@ -974,6 +974,7 @@ public enum AnchoringStrategy: String, Codable, CaseIterable {
     case fullReset = "full_reset"
 }
 
+@available(macOS 26.0, *)
 public struct AnchoringEvent {
     public let eventId: UUID
     public let driftAlert: IdentityDriftAlert

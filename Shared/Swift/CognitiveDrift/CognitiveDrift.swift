@@ -53,7 +53,7 @@ public func processThroughBrainsWithDrift(_ input: String, config: SyntraConfig)
     )
 
     // Build shared bridge for fusion
-    let bridge = ValonModiBridge(valon: valonResponse, modi: modiResponse, driftAnalysis: driftAnalysisStruct)
+    _ = ValonModiBridge(valon: valonResponse, modi: modiResponse, driftAnalysis: driftAnalysisStruct)
     let driftWeightedDecision: String
     if config.useAdaptiveFusion == true {
         driftWeightedDecision = "[FUSED] " + valonResponse + " | " + modiResponse // Placeholder for FusionMLP().fuse(bridge)

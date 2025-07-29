@@ -1,6 +1,54 @@
 import OSLog
 import Foundation
 
+// MARK: - SyntraLogger Bridge for SyntraTools
+@available(macOS 26.0, *)
+public struct SyntraLogger {
+    public static func logMemory(_ message: String, level: LogLevel = .info, details: String = "") {
+        let logger = Logger(subsystem: "SyntraTools", category: "Memory")
+        
+        switch level {
+        case .info:
+            logger.info("\(message) - \(details)")
+        case .warning:
+            logger.warning("\(message) - \(details)")
+        case .error:
+            logger.error("\(message) - \(details)")
+        }
+    }
+    
+    public static func logConsciousness(_ message: String, level: LogLevel = .info, details: String = "") {
+        let logger = Logger(subsystem: "SyntraTools", category: "Consciousness")
+        
+        switch level {
+        case .info:
+            logger.info("\(message) - \(details)")
+        case .warning:
+            logger.warning("\(message) - \(details)")
+        case .error:
+            logger.error("\(message) - \(details)")
+        }
+    }
+    
+    public static func logFoundationModels(_ message: String, level: LogLevel = .info, details: String = "") {
+        let logger = Logger(subsystem: "SyntraTools", category: "FoundationModels")
+        
+        switch level {
+        case .info:
+            logger.info("\(message) - \(details)")
+        case .warning:
+            logger.warning("\(message) - \(details)")
+        case .error:
+            logger.error("\(message) - \(details)")
+        }
+    }
+}
+
+@available(macOS 26.0, *)
+public enum LogLevel {
+    case info, warning, error
+}
+
 /// SYNTRA Performance Logging System
 /// Provides timing, stage tracking, and performance monitoring for the three-brain architecture
 /// Moved from ConversationalInterface to resolve circular dependency issues

@@ -227,19 +227,19 @@ public actor WisdomAccumulationEngine {
         var patterns: [ExperiencePattern] = []
         
         // Temporal patterns
-        let temporalPatterns = await identifyTemporalPatterns(experiences: experiences)
+        let temporalPatterns = identifyTemporalPatterns(experiences: experiences)
         patterns.append(contentsOf: temporalPatterns)
         
         // Causal patterns
-        let causalPatterns = await identifyCausalPatterns(experiences: experiences)
+        let causalPatterns = identifyCausalPatterns(experiences: experiences)
         patterns.append(contentsOf: causalPatterns)
         
         // Emotional patterns
-        let emotionalPatterns = await identifyEmotionalPatterns(experiences: experiences)
+        let emotionalPatterns = identifyEmotionalPatterns(experiences: experiences)
         patterns.append(contentsOf: emotionalPatterns)
         
         // Outcome patterns
-        let outcomePatterns = await identifyOutcomePatterns(experiences: experiences)
+        let outcomePatterns = identifyOutcomePatterns(experiences: experiences)
         patterns.append(contentsOf: outcomePatterns)
         
         return patterns
@@ -261,9 +261,9 @@ public actor WisdomAccumulationEngine {
     private func formulateWisdomInsight(pattern: ExperiencePattern, context: String, experiences: [UUID]) async -> WisdomInsight {
         // Generate wisdom insight based on pattern
         let wisdomType = classifyWisdomType(pattern: pattern)
-        let insight = await generateInsightText(pattern: pattern, wisdomType: wisdomType)
-        let evidence = await collectEvidence(pattern: pattern, experiences: experiences)
-        let applicableContexts = await identifyApplicableContexts(pattern: pattern, baseContext: context)
+        let insight = generateInsightText(pattern: pattern, wisdomType: wisdomType)
+        let evidence = collectEvidence(pattern: pattern, experiences: experiences)
+        let applicableContexts = identifyApplicableContexts(pattern: pattern, baseContext: context)
         
         return WisdomInsight(
             wisdomType: wisdomType,
@@ -343,7 +343,7 @@ public actor WisdomAccumulationEngine {
         )
         
         // Check if ready to progress to next phase
-        if await shouldProgressToNextPhase(cycle: cycle) {
+        if shouldProgressToNextPhase(cycle: cycle) {
             cycle = await advanceLearningPhase(cycle: cycle)
         }
         
@@ -351,7 +351,7 @@ public actor WisdomAccumulationEngine {
         return cycle
     }
     
-    private func shouldProgressToNextPhase(cycle: LearningCycle) async -> Bool {
+    private func shouldProgressToNextPhase(cycle: LearningCycle) -> Bool {
         switch cycle.currentPhase {
         case .experience:
             return cycle.cycleExperiences.count >= 5 // Minimum experiences for reflection
@@ -458,8 +458,8 @@ public actor WisdomAccumulationEngine {
     private func resolveWisdomConflicts(newInsight: WisdomInsight, conflicts: [WisdomInsight]) async {
         for conflict in conflicts {
             // Merge insights if they're compatible
-            if await areInsightsCompatible(insight1: newInsight, insight2: conflict) {
-                let mergedInsight = await mergeWisdomInsights(insight1: newInsight, insight2: conflict)
+            if areInsightsCompatible(insight1: newInsight, insight2: conflict) {
+                let mergedInsight = mergeWisdomInsights(insight1: newInsight, insight2: conflict)
                 wisdomInsights[conflict.insightId] = mergedInsight
             } else {
                 // Keep the higher-confidence insight
@@ -552,10 +552,17 @@ public actor WisdomAccumulationEngine {
     // MARK: - Wisdom Hierarchy Management
     
     private func startWisdomAccumulation() async {
-        while true {
-            try? await Task.sleep(nanoseconds: UInt64(distillationInterval * 1_000_000_000))
-            
-            await performPeriodicWisdomMaintenance()
+        while !Task.isCancelled {
+            do {
+                try await Task.sleep(nanoseconds: UInt64(distillationInterval * 1_000_000_000))
+                await performPeriodicWisdomMaintenance()
+            } catch is CancellationError {
+                // Preserve wisdom accumulation state during shutdown
+                print("[WisdomAccumulation] Cancelled - preserving wisdom state")
+                break
+            } catch {
+                print("[WisdomAccumulation] Error: \(error)")
+            }
         }
     }
     
@@ -575,27 +582,27 @@ public actor WisdomAccumulationEngine {
     
     // MARK: - Helper Methods
     
-    private func determineExperienceContext(experienceId: UUID) async -> String {
+    private func determineExperienceContext(experienceId: UUID) -> String {
         // Analyze memory to determine context
         return "general" // Placeholder
     }
     
-    private func identifyTemporalPatterns(experiences: [UUID]) async -> [ExperiencePattern] {
+    private func identifyTemporalPatterns(experiences: [UUID]) -> [ExperiencePattern] {
         // Identify patterns in timing and sequence
         return [] // Placeholder
     }
     
-    private func identifyCausalPatterns(experiences: [UUID]) async -> [ExperiencePattern] {
+    private func identifyCausalPatterns(experiences: [UUID]) -> [ExperiencePattern] {
         // Identify cause-effect relationships
         return [] // Placeholder
     }
     
-    private func identifyEmotionalPatterns(experiences: [UUID]) async -> [ExperiencePattern] {
+    private func identifyEmotionalPatterns(experiences: [UUID]) -> [ExperiencePattern] {
         // Identify emotional response patterns
         return [] // Placeholder
     }
     
-    private func identifyOutcomePatterns(experiences: [UUID]) async -> [ExperiencePattern] {
+    private func identifyOutcomePatterns(experiences: [UUID]) -> [ExperiencePattern] {
         // Identify patterns in outcomes and results
         return [] // Placeholder
     }
@@ -616,12 +623,12 @@ public actor WisdomAccumulationEngine {
         }
     }
     
-    private func generateInsightText(pattern: ExperiencePattern, wisdomType: WisdomType) async -> String {
+    private func generateInsightText(pattern: ExperiencePattern, wisdomType: WisdomType) -> String {
         // Generate human-readable wisdom insight text
         return "Pattern-based insight: \(pattern.description)"
     }
     
-    private func collectEvidence(pattern: ExperiencePattern, experiences: [UUID]) async -> [Evidence] {
+    private func collectEvidence(pattern: ExperiencePattern, experiences: [UUID]) -> [Evidence] {
         return [
             Evidence(
                 evidenceType: .experiential,
@@ -632,7 +639,7 @@ public actor WisdomAccumulationEngine {
         ]
     }
     
-    private func identifyApplicableContexts(pattern: ExperiencePattern, baseContext: String) async -> [String] {
+    private func identifyApplicableContexts(pattern: ExperiencePattern, baseContext: String) -> [String] {
         return [baseContext, "general"]
     }
     
@@ -665,11 +672,11 @@ public actor WisdomAccumulationEngine {
         return 0.5 // Placeholder
     }
     
-    private func areInsightsCompatible(insight1: WisdomInsight, insight2: WisdomInsight) async -> Bool {
+    private func areInsightsCompatible(insight1: WisdomInsight, insight2: WisdomInsight) -> Bool {
         return insight1.wisdomType == insight2.wisdomType
     }
     
-    private func mergeWisdomInsights(insight1: WisdomInsight, insight2: WisdomInsight) async -> WisdomInsight {
+    private func mergeWisdomInsights(insight1: WisdomInsight, insight2: WisdomInsight) -> WisdomInsight {
         // Merge two compatible insights
         let combinedEvidence = insight1.supportingEvidence + insight2.supportingEvidence
         let combinedContexts = Array(Set(insight1.applicableContexts + insight2.applicableContexts))
@@ -770,17 +777,17 @@ public actor WisdomAccumulationEngine {
     
     private func performScheduledDistillation() async {
         // Identify memories ready for distillation
-        let candidateMemories = await identifyDistillationCandidates()
+        let candidateMemories = identifyDistillationCandidates()
         
         if candidateMemories.count >= 10 {
-            await performKnowledgeDistillation(
+            let _ = await performKnowledgeDistillation(
                 sourceMemories: candidateMemories,
                 targetAbstraction: .conceptual
             )
         }
     }
     
-    private func identifyDistillationCandidates() async -> [UUID] {
+    private func identifyDistillationCandidates() -> [UUID] {
         // Identify memories that would benefit from distillation
         return [] // Placeholder - would interface with memory manager
     }
@@ -866,6 +873,7 @@ public struct MetaCognitiveInsight {
     public let timestamp: Date
 }
 
+@available(macOS 26.0, *)
 public struct WisdomHierarchy {
     private var levels: [AbstractionLevel: [UUID]] = [:]
     
@@ -896,6 +904,7 @@ public struct WisdomHierarchy {
     }
 }
 
+@available(macOS 26.0, *)
 public struct WisdomStatistics {
     public let totalWisdomInsights: Int
     public let averageConfidence: Double

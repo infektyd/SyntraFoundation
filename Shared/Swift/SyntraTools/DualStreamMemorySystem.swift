@@ -571,6 +571,7 @@ public struct MemoryRetrievalResult: @unchecked Sendable {
     }
 }
 
+@available(macOS 26.0, *)
 public struct ConsolidatedMemoryCluster {
     public let theme: String
     public var coreMemories: [MemoryTrace]

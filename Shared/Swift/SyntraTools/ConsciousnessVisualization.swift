@@ -17,6 +17,14 @@ public struct ConsciousnessView: View {
     
     private let availableTools = ["retrieve_memory", "analyze_patterns", "analyze_emotional_state", "assess_consciousness_state"]
     
+    private var backgroundColorForPlatform: Color {
+        #if os(macOS)
+        Color(NSColor.controlBackgroundColor)
+        #else
+        Color(.systemGray6)
+        #endif
+    }
+    
     public init() {
         do {
             let consciousnessEngine = try ModernConsciousnessEngine()
@@ -104,7 +112,7 @@ public struct ConsciousnessView: View {
             }
             
             // Emotional State
-            if let emotion = state.emotionalState {
+            if state.emotionalState != nil {
                 // Handle PartiallyGenerated emotional state
                 placeholderView("Processing emotional state...")
             } else {
@@ -443,7 +451,7 @@ public struct ConsciousnessView: View {
                     }
                 }
                 .padding()
-                .background(Color(NSColor.controlBackgroundColor))
+                .background(backgroundColorForPlatform)
                 .cornerRadius(12)
                 .transition(.slide.combined(with: .opacity))
             }

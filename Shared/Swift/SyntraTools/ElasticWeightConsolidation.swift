@@ -539,7 +539,7 @@ public actor ElasticWeightConsolidationEngine {
             
             // Trigger emergency consolidation if critical
             if severity == .critical {
-                await performElasticConsolidation(
+                let _ = await performElasticConsolidation(
                     newLearningData: [],
                     consolidationType: .emergencyConsolidation
                 )
@@ -613,7 +613,7 @@ public actor ElasticWeightConsolidationEngine {
         }
         
         // Perform routine consolidation
-        await performElasticConsolidation(
+        let _ = await performElasticConsolidation(
             newLearningData: [],
             consolidationType: .scheduledConsolidation
         )

@@ -59,7 +59,7 @@ public final class ValonEngine {
     }
     
     private func processValonFallback(_ input: String, context: SyntraContext) -> ValonResponse {
-        // Rule-based moral and creative processing with persistent memory
+        // Rule-based creative and moral processing with memory integration
         let lowercased = input.lowercased()
         let hasMemory = !context.conversationHistory.isEmpty
         
@@ -67,17 +67,17 @@ public final class ValonEngine {
         let followUpKeywords = ["this", "that", "it", "document", "service", "procedure"]
         let isFollowUp = followUpKeywords.contains { lowercased.contains($0) } && hasMemory
         
-        let moralKeywords = ["help", "assist", "support", "care", "protect"]
-        let moralAlignment = moralKeywords.contains { lowercased.contains($0) } ? 0.8 : 0.6
+        let moralKeywords = ["help", "support", "right", "wrong", "ethical", "moral"]
+        let creativeKeywords = ["create", "design", "imagine", "innovative", "artistic"]
         
-        let creativeElements = ["create", "imagine", "design", "innovate"]
-        let creativity = creativeElements.contains { lowercased.contains($0) } ? 0.9 : 0.5
+        let moralAlignment = moralKeywords.contains { lowercased.contains($0) } ? 0.9 : 0.7
+        let creativity = creativeKeywords.contains { lowercased.contains($0) } ? 0.8 : 0.6
         
         let content: String
         if isFollowUp {
-            content = "From Valon: Building on our conversation and stored knowledge, I approach this with continued moral consideration and creative insight..."
+            content = "Looking at this with my moral and creative reasoning, and considering our conversation history, I want to explore the ethical implications and creative possibilities here..."
         } else {
-            content = "From Valon: I approach this with moral consideration and creativity..."
+            content = "From a moral and creative perspective, I find myself considering both the ethical dimensions and the innovative potential of this question..."
         }
         
         return ValonResponse(
@@ -165,20 +165,23 @@ public final class ModiEngine {
         let followUpKeywords = ["this", "that", "it", "document", "service", "procedure"]
         let isFollowUp = followUpKeywords.contains { lowercased.contains($0) } && hasMemory
         
-        let technicalKeywords = ["analyze", "calculate", "explain", "logic", "reason"]
+        let technicalKeywords = ["analyze", "calculate", "explain", "logic", "reason", "systematic"]
+        let factualKeywords = ["fact", "data", "evidence", "research", "statistics"]
+        
         let logicalCoherence = technicalKeywords.contains { lowercased.contains($0) } ? 0.9 : 0.7
+        let factualAccuracy = factualKeywords.contains { lowercased.contains($0) } ? 0.9 : 0.8
         
         let content: String
         if isFollowUp {
-            content = "From Modi: Analyzing this logically and systematically with context from our conversation and stored knowledge..."
+            content = "Let me analyze this systematically, building on what we've discussed. I'm thinking through the logical connections and looking for patterns based on our conversation..."
         } else {
-            content = "From Modi: Analyzing this logically and systematically..."
+            content = "Taking an analytical approach here, I want to break this down logically and examine the facts and relationships involved..."
         }
         
         return ModiResponse(
             content: content,
             logicalCoherence: logicalCoherence,
-            factualAccuracy: 0.8
+            factualAccuracy: factualAccuracy
         )
     }
     

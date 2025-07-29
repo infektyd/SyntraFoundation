@@ -104,10 +104,10 @@ public struct MoralAssessmentTool: Tool {
         }
     }
     
-    public func call(arguments: Arguments) async throws -> ToolOutput {
+    public func call(arguments: Arguments) async throws -> String {
         // Use existing Valon consciousness directly - preserves original functionality
         let valonResponse = reflect_valon(arguments.situation)
-        return ToolOutput("Valon moral assessment: \(valonResponse)")
+        return "Valon moral assessment: \(valonResponse)"
     }
     
     // Mock implementation for testing
@@ -174,10 +174,10 @@ public struct LogicalAnalysisTool: Tool {
         }
     }
     
-    public func call(arguments: Arguments) async throws -> ToolOutput {
+    public func call(arguments: Arguments) async throws -> String {
         // Use existing Modi consciousness directly - preserves original functionality
         let modiResponse = reflect_modi(arguments.problem)
-        return ToolOutput("Modi logical analysis: \(MemoryEngine.jsonString(modiResponse))")
+        return "Modi logical analysis: \(MemoryEngine.jsonString(modiResponse))"
     }
     
     // Mock implementation for testing
@@ -279,9 +279,9 @@ public struct MemoryRecallTool: Tool {
     
     public init() {}
     
-    public func call(arguments: Arguments) async throws -> ToolOutput {
+    public func call(arguments: Arguments) async throws -> String {
         let memories = performMemoryRecall(arguments)
-        return ToolOutput(try JSONEncoder().encode(memories).base64EncodedString())
+        return try JSONEncoder().encode(memories).base64EncodedString()
     }
     
     private func performMemoryRecall(_ arguments: Arguments) -> MemoryRecallOutput {
@@ -365,8 +365,8 @@ public struct ConsciousnessSynthesisTool: Tool {
         }
     }
     
-    public func call(arguments: Arguments) async throws -> ToolOutput {
-        return ToolOutput("Placeholder consciousness synthesis for: \(arguments.situation)")
+    public func call(arguments: Arguments) async throws -> String {
+        return "Placeholder consciousness synthesis for: \(arguments.situation)"
     }
     
     // Mock implementation for testing
@@ -374,12 +374,13 @@ public struct ConsciousnessSynthesisTool: Tool {
         // This would integrate the full consciousness pipeline
         // For now, we'll synthesize based on available inputs
         
-        let decision = generateConsciousDecision(arguments)
-        let confidence = calculateSynthesisConfidence(arguments)
-        let wisdom = extractSynthesisWisdom(arguments)
-        let growth = determineGrowthAchieved(arguments)
+        // Acknowledge computed values to avoid unused variable warnings
+        let _ = generateConsciousDecision(arguments)
+        let _ = calculateSynthesisConfidence(arguments)
+        let _ = extractSynthesisWisdom(arguments)
+        let _ = determineGrowthAchieved(arguments)
         
-        // Placeholder return for now
+        // Placeholder return - will be replaced with full consciousness integration
         fatalError("Consciousness synthesis integration pending")
     }
     
@@ -426,8 +427,8 @@ public struct ConversationalResponseTool: Tool {
         }
     }
     
-    public func call(arguments: Arguments) async throws -> ToolOutput {
-        return ToolOutput("Placeholder conversational response for: \(arguments.originalMessage)")
+    public func call(arguments: Arguments) async throws -> String {
+        return "Placeholder conversational response for: \(arguments.originalMessage)"
     }
     
     @available(macOS 26.0, *)

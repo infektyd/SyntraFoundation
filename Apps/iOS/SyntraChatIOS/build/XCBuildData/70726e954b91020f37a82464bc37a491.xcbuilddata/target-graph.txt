@@ -1,2 +1,0 @@
-Target dependency graph (1 target)
-Target 'SyntraChatIOS' in project 'SyntraChatIOS' (no dependencies)

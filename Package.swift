@@ -1,28 +1,15 @@
-// swift-tools-version: 6.2
+// swift-tools-version:6.2
 import PackageDescription
 
 let package = Package(
     name: "SyntraFoundation",
     platforms: [
-        .macOS ("26.0"), // Required for FoundationModels
-        .iOS ("26.0")
+        .macOS(.v26),
+        .iOS(.v26)
     ],
     products: [
-        .library(name: "Valon", targets: ["Valon"]),
-        .library(name: "Modi", targets: ["Modi"]),
-        .library(name: "Drift", targets: ["Drift"]),
-        .library(name: "MemoryEngine", targets: ["MemoryEngine"]),
-        .library(name: "ConsciousnessStructures", targets: ["ConsciousnessStructures"]),
-        .library(name: "BrainEngine", targets: ["BrainEngine"]),
-        .library(name: "ConversationalInterface", targets: ["ConversationalInterface"]),
-        .library(name: "StructuredConsciousnessService", targets: ["StructuredConsciousnessService"]),
-        .library(name: "MoralDriftMonitoring", targets: ["MoralDriftMonitoring"]),
-        .library(name: "SyntraConfig", targets: ["SyntraConfig"]),
-        .library(name: "MoralCore", targets: ["MoralCore"]),
-        .library(name: "SyntraTools", targets: ["SyntraTools"]),
-        .library(name: "CognitiveDrift", targets: ["CognitiveDrift"]),
-        .library(name: "ConflictResolver", targets: ["ConflictResolver"]),
-        .executable(name: "SyntraSwiftCLI", targets: ["SyntraSwiftCLI"])
+        .library(name: "SyntraFoundation", targets: ["Valon", "Modi", "Drift", "MemoryEngine", "ConsciousnessStructures", "BrainEngine", "ConversationalInterface", "StructuredConsciousnessService", "MoralDriftMonitoring", "SyntraConfig", "MoralCore", "SyntraTools", "SyntraCore", "CognitiveDrift", "ConflictResolver", "SyntraUI"]),
+        .library(name: "SyntraSwift", targets: ["SyntraSwift"])
     ],
     targets: [
         .target(
@@ -53,6 +40,16 @@ let package = Package(
             dependencies: ["Valon", "Modi", "Drift", "ConsciousnessStructures", "SyntraConfig", "SyntraTools"],
             path: "Shared/Swift/BrainEngine"
         ),
+        .target(
+            name: "SyntraCore",
+            dependencies: ["Valon", "Modi", "BrainEngine"],
+            path: "Shared/Swift/SyntraCore"
+        ),
+        .target(
+            name: "SyntraUI",
+            dependencies: ["SyntraCore"],
+            path: "Shared/Swift/SyntraUI"
+        ),
          .target(
              name: "ConversationalInterface",
              dependencies: ["BrainEngine", "MoralDriftMonitoring", "MemoryEngine", "ConsciousnessStructures", "SyntraTools"],
@@ -80,7 +77,17 @@ let package = Package(
         ),
         .target(
             name: "SyntraTools",
-            dependencies: ["ConsciousnessStructures", "MoralCore", "StructuredConsciousnessService", "MoralDriftMonitoring", "Valon", "Modi", "Drift", "MemoryEngine"],
+            dependencies: [
+                "ConsciousnessStructures", 
+                "MoralCore", 
+                "StructuredConsciousnessService", 
+                "MoralDriftMonitoring", 
+                "Valon", 
+                "Modi", 
+                "Drift", 
+                "MemoryEngine", 
+                "SyntraConfig"  // This should already be there
+            ],
             path: "Shared/Swift/SyntraTools"
         ),
         .target(
@@ -93,15 +100,15 @@ let package = Package(
             dependencies: ["ConsciousnessStructures"],
             path: "Shared/Swift/ConflictResolver"
         ),
-        .executableTarget(
-            name: "SyntraSwiftCLI",
-            dependencies: [
-                "Valon", "Modi", "Drift", "MemoryEngine", "BrainEngine",
-                "ConsciousnessStructures", "MoralDriftMonitoring",
-                "StructuredConsciousnessService", "SyntraTools", "SyntraConfig", "MoralCore", "ConversationalInterface"
-            ],
-            path: "Shared/Swift/Main",
-            sources: ["main.swift"]
+        .target(
+            name: "SyntraSwift",
+            dependencies: ["SyntraCore", "SyntraTools"],
+            path: "Shared/Sources/SyntraSwift"
         ),
+        .testTarget(
+            name: "SyntraFoundationTests",
+            dependencies: ["SyntraCore"],
+            path: "Tests/SyntraFoundationTests"
+        )
     ]
 )

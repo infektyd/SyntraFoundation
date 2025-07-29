@@ -4,8 +4,8 @@ import PackageDescription
 let package = Package(
     name: "SyntraCLITest",
     platforms: [
-        .macOS("26.0"),
-        .iOS("26.0")
+        .macOS(.v26),
+        .iOS(.v26)
     ],
     products: [
         .executable(name: "syntra-cli", targets: ["SyntraCLIExecutable"]),

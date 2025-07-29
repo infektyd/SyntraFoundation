@@ -1,3 +1,14 @@
+/*
+ * SyntraVoiceBridge.swift - DEPRECATED
+ * 
+ * This voice bridge component has been deprecated as part of the migration to Apple's
+ * native dictation support. Voice functionality is now provided directly through
+ * native text input components without custom bridge layers.
+ * 
+ * Migration date: Based on os changes.md plan
+ * Replacement: Direct text input with native dictation
+ */
+
 import Foundation
 import OSLog
 import Combine
