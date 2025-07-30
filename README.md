@@ -2,6 +2,31 @@
 
 ## Overview
 
+My motivation for this project began with a simple curiosity, a pet project meant as a diagnostic tool, and it has since transformed into what you see in this repository. I approached the development with a “why not” mentality, believing that anything is possible in code with persistence and iteration. I have invested significant time and learned across many disciplines to reach this point. This isn’t the end for Syntra; if anything, it’s opened new doors for creativity that I’m eager to explore. 
+
+🧠 SYNTRA
+
+Symbolic Neural Transduction and Reasoning Architecture
+
+The central AI system. “SYNTRA” represents the fusion of symbolic reasoning with real-world signal interpretation. It's the architecture that processes, remembers, and evolves understanding over time. It includes VALON, MODI, and other modules.
+
+⸻
+
+🔧 MODI
+
+Mechanistic Observation and Diagnostic Intelligence
+
+The logic and diagnostics engine. MODI handles grounded, rule-based, cause-effect logic. It tracks fault drift, evaluates sensor patterns, and represents deductive cognition. Think of MODI as the mind that says “if X then Y” — structured and mechanical.
+
+⸻
+
+🔮 VALON
+
+Variable Abstraction and Lateral Ontologic Network
+
+The creative, emotional, and interpretive module. VALON handles symbolic abstraction, emotional anchoring, and lateral (nonlinear) reasoning. It’s the part of SYNTRA that “feels” the meaning of a symbol, forms patterns, and recognizes shifts in intent or tone. It’s more like Jungian symbolic intuition than a logic engine.
+
+
 This is the **iOS-native migration** of SYNTRA, designed to provide a truly native iOS experience while maintaining all the architecture and capabilities of the original macOS application.
 
 ### 🔄 Migration Rationale
