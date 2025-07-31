@@ -2,7 +2,7 @@
 
 ## Overview
 
-My motivation for this project began with a simple curiosity, a pet project meant as a diagnostic tool, and it has since transformed into what you see in this repository. I approached the development with a “why not” mentality, believing that anything is possible in code with persistence and iteration. I have invested significant time and learned across many disciplines to reach this point. This isn’t the end for Syntra; if anything, it’s opened new doors for creativity that I’m eager to explore. 
+My motivation for this project began with simple curiosity, a pet project meant as a diagnostic tool, and it has since transformed into what you see in this repository. I approached the development with a “why not” mentality, believing that anything is possible in code with persistence and iteration. I have invested significant time and learned across many disciplines to reach this point. This isn’t the end for Syntra; if anything, it’s opened new doors for creativity that I’m eager to explore. 
 
 🧠 SYNTRA
 
