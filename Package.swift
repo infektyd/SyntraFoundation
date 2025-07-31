@@ -8,7 +8,7 @@ let package = Package(
         .iOS(.v26)
     ],
     products: [
-        .library(name: "SyntraFoundation", targets: ["Valon", "Modi", "Drift", "MemoryEngine", "ConsciousnessStructures", "BrainEngine", "ConversationalInterface", "StructuredConsciousnessService", "MoralDriftMonitoring", "SyntraConfig", "MoralCore", "SyntraTools", "SyntraCore", "CognitiveDrift", "ConflictResolver", "SyntraUI"]),
+        .library(name: "SyntraFoundation", targets: ["Valon", "Modi", "Drift", "MemoryEngine", "ConsciousnessStructures", "BrainEngine", "ConversationalInterface", "StructuredConsciousnessService", "MoralDriftMonitoring", "SyntraConfig", "MoralCore", "SyntraTools", "SyntraCore", "CognitiveDrift", "ConflictResolver"]),
         .library(name: "SyntraSwift", targets: ["SyntraSwift"])
     ],
     targets: [
@@ -45,11 +45,7 @@ let package = Package(
             dependencies: ["Valon", "Modi", "BrainEngine"],
             path: "Shared/Swift/SyntraCore"
         ),
-        .target(
-            name: "SyntraUI",
-            dependencies: ["SyntraCore"],
-            path: "Shared/Swift/SyntraUI"
-        ),
+// SyntraUI target removed - UI components moved to Shared/Sources/SyntraSwift/
          .target(
              name: "ConversationalInterface",
              dependencies: ["BrainEngine", "MoralDriftMonitoring", "MemoryEngine", "ConsciousnessStructures", "SyntraTools"],
