@@ -70,10 +70,8 @@ This is the **iOS-native migration** of SYNTRA, designed to provide a truly nati
 ### Building
 
 ```bash
-# From the SyntraChatIOS directory
-swift build --target SyntraChatIOS
 
-# Or open in Xcode
+# in Xcode
 open Package.swift
 ```
 
