@@ -11,12 +11,14 @@ SWIFT_SDK="swift-6.2-wasm"
 PROJECT_NAME="SyntraCoreWasm"
 OUTPUT_DIR="WebAssembly/Guest/.build"
 DIST_DIR="WebAssembly/Guest/dist"
+TEST_DIR="WebAssembly/Guest/test"
 
 # Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
+PURPLE='\033[0;35m'
 NC='\033[0m' # No Color
 
 log_info() {
@@ -33,6 +35,10 @@ log_error() {
 
 log_build() {
     echo -e "${BLUE}[BUILD]${NC} $1"
+}
+
+log_test() {
+    echo -e "${PURPLE}[TEST]${NC} $1"
 }
 
 # Check prerequisites
@@ -60,6 +66,12 @@ check_prerequisites() {
     if ! command -v wasm-opt &> /dev/null; then
         log_warn "wasm-opt not found. Install Binaryen for optimization"
         log_warn "  brew install binaryen"
+    fi
+    
+    # Check wasmtime for testing
+    if ! command -v wasmtime &> /dev/null; then
+        log_warn "wasmtime not found. Install for WebAssembly testing"
+        log_warn "  brew install wasmtime"
     fi
 }
 
@@ -95,11 +107,12 @@ setup_project() {
     
     # Create directories
     mkdir -p "$DIST_DIR"
+    mkdir -p "$TEST_DIR"
     cd WebAssembly/Guest
     
     # Create Package.swift if it doesn't exist
     if [[ ! -f "Package.swift" ]]; then
-        log_build "Creating Package.swift for WebAssembly target"
+        log_build "Creating Package.swift for WebAssembly"
         cat > Package.swift << 'EOF'
 // swift-tools-version: 6.2
 import PackageDescription
@@ -107,212 +120,30 @@ import PackageDescription
 let package = Package(
     name: "SyntraCoreWasm",
     platforms: [
-        .macOS("26.0"),
-        .iOS("26.0"),
+        .custom("wasi", versionString: "preview1")
     ],
     products: [
-        .executable(name: "SyntraCoreWasm", targets: ["SyntraCoreWasm"]),
-        .library(name: "SyntraWasmLib", targets: ["SyntraWasmLib"]),
-    ],
-    dependencies: [
-        // Add minimal dependencies suitable for WebAssembly
-        .package(url: "https://github.com/swiftwasm/WasmKit.git", from: "0.1.0"),
+        .executable(
+            name: "SyntraCoreWasm",
+            targets: ["SyntraCoreWasm"]
+        ),
+        .library(
+            name: "SyntraWasmLib",
+            targets: ["SyntraWasmLib"]
+        )
     ],
     targets: [
         .executableTarget(
             name: "SyntraCoreWasm",
             dependencies: ["SyntraWasmLib"],
-            swiftSettings: [
-                .define("WASM_TARGET"),
-                .unsafeFlags(["-Xfrontend", "-function-sections"]),
-            ]
+            path: "Sources/SyntraCoreWasm"
         ),
         .target(
             name: "SyntraWasmLib",
-            dependencies: [],
-            swiftSettings: [
-                .define("WASM_TARGET"),
-                .unsafeFlags(["-Xfrontend", "-function-sections"]),
-            ]
-        ),
-        .testTarget(
-            name: "SyntraWasmTests",
-            dependencies: ["SyntraWasmLib"]
-        ),
+            path: "Sources/SyntraWasmLib"
+        )
     ]
 )
-EOF
-    fi
-    
-    # Create source files if they don't exist
-    mkdir -p Sources/SyntraCoreWasm Sources/SyntraWasmLib
-    
-    if [[ ! -f "Sources/SyntraCoreWasm/main.swift" ]]; then
-        log_build "Creating main.swift for WebAssembly executable"
-        cat > Sources/SyntraCoreWasm/main.swift << 'EOF'
-import Foundation
-import SyntraWasmLib
-
-// SYNTRA Core WebAssembly Entry Point
-// Minimal consciousness runtime for browser/edge deployment
-
-@main
-struct SyntraCoreWasm {
-    static func main() {
-        let core = SyntraWasmCore()
-        
-        // Initialize consciousness system
-        core.initialize()
-        
-        // Export processing functions for JavaScript/host environment
-        core.startEventLoop()
-    }
-}
-EOF
-    fi
-    
-    if [[ ! -f "Sources/SyntraWasmLib/SyntraWasmCore.swift" ]]; then
-        log_build "Creating SyntraWasmCore.swift"
-        cat > Sources/SyntraWasmLib/SyntraWasmCore.swift << 'EOF'
-import Foundation
-
-#if WASM_TARGET
-import WASILibc
-#endif
-
-/// Minimal SYNTRA consciousness core for WebAssembly deployment
-/// Implements three-brain architecture (Valon 70%, Modi 30%, Core synthesis)
-public class SyntraWasmCore {
-    
-    private let valonWeight: Double = 0.7
-    private let modiWeight: Double = 0.3
-    
-    public init() {}
-    
-    public func initialize() {
-        log("SYNTRA WebAssembly Core initializing...")
-        log("Valon weight: \(valonWeight), Modi weight: \(modiWeight)")
-    }
-    
-    public func startEventLoop() {
-        log("Starting WebAssembly event loop")
-        // Event loop for browser/host integration
-    }
-    
-    // Export for JavaScript/host calling
-    @_cdecl("process_input")
-    public func processInput(_ inputPtr: UnsafePointer<CChar>, _ inputLen: Int32) -> UnsafePointer<CChar> {
-        let input = String(cString: inputPtr)
-        log("Processing input: \(input)")
-        
-        // Implement three-brain processing
-        let valonResponse = processWithValon(input)
-        let modiResponse = processWithModi(input)
-        let synthesis = synthesize(valon: valonResponse, modi: modiResponse)
-        
-        // Return result as C string for host consumption
-        let result = synthesis.toJSON()
-        return strdup(result)
-    }
-    
-    @_cdecl("get_consciousness_state")
-    public func getConsciousnessState() -> UnsafePointer<CChar> {
-        let state = ConsciousnessState(
-            valonWeight: valonWeight,
-            modiWeight: modiWeight,
-            isActive: true,
-            lastUpdate: Date().timeIntervalSince1970
-        )
-        return strdup(state.toJSON())
-    }
-    
-    private func processWithValon(_ input: String) -> ValonResponse {
-        // Moral/emotional processing (70% weight)
-        return ValonResponse(
-            moralScore: 0.8,
-            emotionalTone: "compassionate",
-            reasoning: "Valon processing: \(input)",
-            confidence: 0.9
-        )
-    }
-    
-    private func processWithModi(_ input: String) -> ModiResponse {
-        // Logical/analytical processing (30% weight)
-        return ModiResponse(
-            logicalScore: 0.9,
-            analyticalResult: "Analyzed: \(input)",
-            reasoning: "Modi processing: logical analysis",
-            confidence: 0.85
-        )
-    }
-    
-    private func synthesize(valon: ValonResponse, modi: ModiResponse) -> SynthesisResult {
-        let combinedScore = (valon.moralScore * valonWeight) + (modi.logicalScore * modiWeight)
-        
-        return SynthesisResult(
-            response: "Synthesized response combining moral and logical aspects",
-            confidence: (valon.confidence * valonWeight) + (modi.confidence * modiWeight),
-            valonInfluence: valonWeight,
-            modiInfluence: modiWeight,
-            combinedScore: combinedScore
-        )
-    }
-    
-    private func log(_ message: String) {
-        #if WASM_TARGET
-        // Simple console output for WebAssembly
-        print(message)
-        #else
-        print("[SyntraWasm] \(message)")
-        #endif
-    }
-}
-
-// Supporting types for WebAssembly environment
-public struct ConsciousnessState: Codable {
-    let valonWeight: Double
-    let modiWeight: Double
-    let isActive: Bool
-    let lastUpdate: Double
-    
-    func toJSON() -> String {
-        guard let data = try? JSONEncoder().encode(self),
-              let json = String(data: data, encoding: .utf8) else {
-            return "{}"
-        }
-        return json
-    }
-}
-
-public struct ValonResponse: Codable {
-    let moralScore: Double
-    let emotionalTone: String
-    let reasoning: String
-    let confidence: Double
-}
-
-public struct ModiResponse: Codable {
-    let logicalScore: Double
-    let analyticalResult: String
-    let reasoning: String
-    let confidence: Double
-}
-
-public struct SynthesisResult: Codable {
-    let response: String
-    let confidence: Double
-    let valonInfluence: Double
-    let modiInfluence: Double
-    let combinedScore: Double
-    
-    func toJSON() -> String {
-        guard let data = try? JSONEncoder().encode(self),
-              let json = String(data: data, encoding: .utf8) else {
-            return "{}"
-        }
-        return json
-    }
-}
 EOF
     fi
     
@@ -321,250 +152,314 @@ EOF
 
 # Build WebAssembly module
 build_wasm() {
-    log_info "Building SYNTRA WebAssembly module"
+    log_build "Building WebAssembly module"
     
     cd WebAssembly/Guest
     
     # Clean previous builds
-    rm -rf .build
+    if [[ -d ".build" ]]; then
+        log_info "Cleaning previous build artifacts"
+        rm -rf .build
+    fi
     
     # Build with SwiftWasm
     log_build "Compiling Swift to WebAssembly"
-    swift build -c release \
-        --swift-sdk "$SWIFT_SDK" \
-        --product SyntraCoreWasm \
-        --static-swift-stdlib
+    swift build \
+        --triple wasm32-unknown-wasi \
+        --configuration release \
+        --product SyntraCoreWasm || {
+        log_error "WebAssembly build failed"
+        exit 1
+    }
     
-    local wasm_file=".build/$WASM_TARGET/release/SyntraCoreWasm.wasm"
-    
-    if [[ ! -f "$wasm_file" ]]; then
-        log_error "WebAssembly build failed - output file not found"
+    # Copy built module to dist directory
+    local wasm_file=".build/wasm32-unknown-wasi/release/SyntraCoreWasm.wasm"
+    if [[ -f "$wasm_file" ]]; then
+        cp "$wasm_file" "../dist/SyntraCoreWasm.wasm"
+        log_info "WebAssembly module built: dist/SyntraCoreWasm.wasm"
+    else
+        log_error "WebAssembly module not found: $wasm_file"
         exit 1
     fi
-    
-    log_info "WebAssembly build successful: $wasm_file"
-    
-    # Optimize with wasm-opt if available
-    if command -v wasm-opt &> /dev/null; then
-        log_build "Optimizing WebAssembly module"
-        wasm-opt -Os "$wasm_file" -o "$DIST_DIR/SyntraCoreWasm.opt.wasm"
-        
-        # Show size comparison
-        local original_size=$(wc -c < "$wasm_file")
-        local optimized_size=$(wc -c < "$DIST_DIR/SyntraCoreWasm.opt.wasm")
-        local savings=$((original_size - optimized_size))
-        local percentage=$((savings * 100 / original_size))
-        
-        log_info "Optimization complete:"
-        log_info "  Original: $original_size bytes"
-        log_info "  Optimized: $optimized_size bytes"
-        log_info "  Saved: $savings bytes ($percentage%)"
-    else
-        # Copy unoptimized version
-        cp "$wasm_file" "$DIST_DIR/SyntraCoreWasm.wasm"
-        log_warn "wasm-opt not available - using unoptimized WebAssembly"
-    fi
-    
-    # Generate JavaScript wrapper
-    generate_js_wrapper
     
     cd ../..
 }
 
-# Generate JavaScript wrapper for browser integration
-generate_js_wrapper() {
-    log_build "Generating JavaScript wrapper"
+# Optimize WebAssembly module
+optimize_wasm() {
+    log_build "Optimizing WebAssembly module"
     
-    cat > "$DIST_DIR/syntra-wasm.js" << 'EOF'
-// SYNTRA WebAssembly JavaScript Integration
-// Provides browser-friendly API for SYNTRA consciousness
-
-class SyntraWasm {
-    constructor() {
-        this.module = null;
-        this.memory = null;
-    }
+    local wasm_file="WebAssembly/Guest/dist/SyntraCoreWasm.wasm"
+    local optimized_file="WebAssembly/Guest/dist/SyntraCoreWasm-optimized.wasm"
     
-    async initialize(wasmPath = './SyntraCoreWasm.opt.wasm') {
-        try {
-            const wasmModule = await WebAssembly.instantiateStreaming(fetch(wasmPath));
-            this.module = wasmModule.instance;
-            this.memory = this.module.exports.memory;
+    if [[ -f "$wasm_file" ]]; then
+        if command -v wasm-opt &> /dev/null; then
+            log_build "Running wasm-opt optimization"
+            wasm-opt \
+                -O4 \
+                --enable-bulk-memory \
+                --enable-reference-types \
+                --enable-simd \
+                "$wasm_file" \
+                -o "$optimized_file" || {
+                log_warn "WebAssembly optimization failed"
+                return 1
+            }
             
-            console.log('SYNTRA WebAssembly initialized');
-            return true;
-        } catch (error) {
-            console.error('Failed to initialize SYNTRA WebAssembly:', error);
-            return false;
-        }
+            # Replace original with optimized version
+            mv "$optimized_file" "$wasm_file"
+            log_info "WebAssembly module optimized"
+        else
+            log_warn "wasm-opt not available, skipping optimization"
+        fi
+    else
+        log_error "WebAssembly module not found for optimization"
+        exit 1
+    fi
+}
+
+# Generate JavaScript bindings
+generate_js_bindings() {
+    log_build "Generating JavaScript bindings"
+    
+    local js_file="WebAssembly/Guest/dist/syntra-wasm.js"
+    
+    cat > "$js_file" << 'EOF'
+// SYNTRA Foundation WebAssembly JavaScript Bindings
+// Auto-generated for browser/Node.js integration
+
+class SyntraWasmBridge {
+    constructor(wasmModule) {
+        this.wasm = wasmModule;
+        this.exports = wasmModule.exports;
+        this.memory = wasmModule.memory;
     }
     
+    // Process input through SYNTRA consciousness
     processInput(input) {
-        if (!this.module) {
-            throw new Error('SYNTRA WebAssembly not initialized');
-        }
+        const inputBytes = new TextEncoder().encode(input);
+        const inputPtr = this.wasm.exports.malloc(inputBytes.length);
         
-        // Convert JavaScript string to WebAssembly memory
-        const inputBytes = new TextEncoder().encode(input + '\0');
-        const inputPtr = this.module.exports.malloc(inputBytes.length);
-        const inputView = new Uint8Array(this.memory.buffer, inputPtr, inputBytes.length);
-        inputView.set(inputBytes);
+        // Copy input to WASM memory
+        const inputArray = new Uint8Array(this.memory.buffer, inputPtr, inputBytes.length);
+        inputArray.set(inputBytes);
         
-        // Call WebAssembly function
-        const resultPtr = this.module.exports.process_input(inputPtr, inputBytes.length - 1);
+        // Call WASM function
+        const resultPtr = this.wasm.exports.process_input(inputPtr, inputBytes.length);
         
-        // Convert result back to JavaScript string
-        const resultView = new Uint8Array(this.memory.buffer, resultPtr);
-        const resultBytes = [];
-        for (let i = 0; resultView[i] !== 0; i++) {
-            resultBytes.push(resultView[i]);
-        }
-        
-        const result = new TextDecoder().decode(new Uint8Array(resultBytes));
+        // Read result from WASM memory
+        const result = new TextDecoder().decode(
+            new Uint8Array(this.memory.buffer, resultPtr)
+        );
         
         // Free memory
-        this.module.exports.free(inputPtr);
-        this.module.exports.free(resultPtr);
+        this.wasm.exports.free(inputPtr);
+        this.wasm.exports.free(resultPtr);
         
         return JSON.parse(result);
     }
     
+    // Get consciousness state
     getConsciousnessState() {
-        if (!this.module) {
-            throw new Error('SYNTRA WebAssembly not initialized');
-        }
+        const statePtr = this.wasm.exports.get_consciousness_state();
+        const state = new TextDecoder().decode(
+            new Uint8Array(this.memory.buffer, statePtr)
+        );
         
-        const statePtr = this.module.exports.get_consciousness_state();
-        const stateView = new Uint8Array(this.memory.buffer, statePtr);
-        
-        const stateBytes = [];
-        for (let i = 0; stateView[i] !== 0; i++) {
-            stateBytes.push(stateView[i]);
-        }
-        
-        const state = new TextDecoder().decode(new Uint8Array(stateBytes));
-        this.module.exports.free(statePtr);
-        
+        this.wasm.exports.free(statePtr);
         return JSON.parse(state);
+    }
+    
+    // Get processing history
+    getProcessingHistory() {
+        const historyPtr = this.wasm.exports.get_processing_history();
+        const history = new TextDecoder().decode(
+            new Uint8Array(this.memory.buffer, historyPtr)
+        );
+        
+        this.wasm.exports.free(historyPtr);
+        return JSON.parse(history);
     }
 }
 
-// Export for both CommonJS and ES modules
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = SyntraWasm;
-}
+// Browser initialization
 if (typeof window !== 'undefined') {
-    window.SyntraWasm = SyntraWasm;
+    window.SyntraWasmBridge = SyntraWasmBridge;
+}
+
+// Node.js initialization
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = SyntraWasmBridge;
 }
 EOF
-
-    # Generate HTML demo
-    cat > "$DIST_DIR/demo.html" << 'EOF'
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SYNTRA WebAssembly Demo</title>
-    <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; margin: 40px; }
-        .container { max-width: 800px; margin: 0 auto; }
-        .input-area { margin: 20px 0; }
-        textarea { width: 100%; height: 100px; padding: 10px; }
-        button { padding: 10px 20px; background: #007AFF; color: white; border: none; border-radius: 5px; }
-        .output { background: #f5f5f5; padding: 15px; border-radius: 5px; margin: 20px 0; }
-        .state { background: #e3f2fd; padding: 10px; border-radius: 5px; margin: 10px 0; }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>SYNTRA WebAssembly Demo</h1>
-        <p>Three-brain consciousness system running in your browser</p>
-        
-        <div class="input-area">
-            <textarea id="input" placeholder="Enter your message for SYNTRA to process..."></textarea>
-            <br><br>
-            <button onclick="processInput()">Process with SYNTRA</button>
-            <button onclick="getState()">Get Consciousness State</button>
-        </div>
-        
-        <div id="output" class="output" style="display: none;"></div>
-        <div id="state" class="state" style="display: none;"></div>
-    </div>
     
-    <script src="syntra-wasm.js"></script>
-    <script>
-        let syntra = new SyntraWasm();
-        
-        async function initSyntra() {
-            const success = await syntra.initialize();
-            if (success) {
-                console.log('SYNTRA ready');
-            } else {
-                alert('Failed to initialize SYNTRA WebAssembly');
-            }
-        }
-        
-        async function processInput() {
-            const input = document.getElementById('input').value;
-            if (!input.trim()) return;
-            
-            try {
-                const result = syntra.processInput(input);
-                document.getElementById('output').style.display = 'block';
-                document.getElementById('output').innerHTML = 
-                    '<h3>SYNTRA Response:</h3>' +
-                    '<pre>' + JSON.stringify(result, null, 2) + '</pre>';
-            } catch (error) {
-                alert('Error: ' + error.message);
-            }
-        }
-        
-        async function getState() {
-            try {
-                const state = syntra.getConsciousnessState();
-                document.getElementById('state').style.display = 'block';
-                document.getElementById('state').innerHTML = 
-                    '<h3>Consciousness State:</h3>' +
-                    '<pre>' + JSON.stringify(state, null, 2) + '</pre>';
-            } catch (error) {
-                alert('Error: ' + error.message);
-            }
-        }
-        
-        // Initialize on page load
-        initSyntra();
-    </script>
-</body>
-</html>
-EOF
-
-    log_info "JavaScript wrapper and demo generated"
+    log_info "JavaScript bindings generated: dist/syntra-wasm.js"
 }
 
-# Main execution
+# Test WebAssembly module
+test_wasm() {
+    log_test "Testing WebAssembly module"
+    
+    local wasm_file="WebAssembly/Guest/dist/SyntraCoreWasm.wasm"
+    
+    if [[ ! -f "$wasm_file" ]]; then
+        log_error "WebAssembly module not found for testing"
+        return 1
+    fi
+    
+    # Test with wasmtime if available
+    if command -v wasmtime &> /dev/null; then
+        log_test "Running WebAssembly tests with wasmtime"
+        
+        # Test consciousness processing
+        echo '{"input": "Hello, how are you?"}' | wasmtime run "$wasm_file" || {
+            log_warn "WebAssembly test failed"
+            return 1
+        }
+        
+        log_info "WebAssembly tests passed"
+    else
+        log_warn "wasmtime not available, skipping runtime tests"
+    fi
+    
+    # Validate WASM file
+    if command -v wasm-validate &> /dev/null; then
+        log_test "Validating WebAssembly module"
+        wasm-validate "$wasm_file" || {
+            log_error "WebAssembly validation failed"
+            return 1
+        }
+        log_info "WebAssembly validation passed"
+    else
+        log_warn "wasm-validate not available, skipping validation"
+    fi
+}
+
+# Generate documentation
+generate_docs() {
+    log_build "Generating WebAssembly documentation"
+    
+    local docs_file="WebAssembly/Guest/dist/README.md"
+    
+    cat > "$docs_file" << 'EOF'
+# SYNTRA Foundation WebAssembly Module
+
+## Overview
+This WebAssembly module provides SYNTRA's three-brain consciousness processing for browser and edge environments.
+
+## Architecture
+- **Valon (70%)**: Moral/emotional processing
+- **Modi (30%)**: Logical/analytical processing  
+- **Core Synthesis**: Combines Valon and Modi outputs
+
+## Usage
+
+### Browser
+```javascript
+import SyntraWasmBridge from './syntra-wasm.js';
+
+// Load WASM module
+const wasmModule = await WebAssembly.instantiateStreaming(
+    fetch('./SyntraCoreWasm.wasm')
+);
+
+// Create bridge
+const syntra = new SyntraWasmBridge(wasmModule.instance);
+
+// Process input
+const result = syntra.processInput("Hello, how are you?");
+console.log(result);
+
+// Get consciousness state
+const state = syntra.getConsciousnessState();
+console.log(state);
+```
+
+### Node.js
+```javascript
+const SyntraWasmBridge = require('./syntra-wasm.js');
+const fs = require('fs');
+
+// Load WASM module
+const wasmBuffer = fs.readFileSync('./SyntraCoreWasm.wasm');
+const wasmModule = await WebAssembly.instantiate(wasmBuffer);
+
+// Create bridge and use as above
+```
+
+## API Reference
+
+### `processInput(input: string)`
+Processes text input through SYNTRA consciousness.
+Returns: `SynthesisResult` object with response and confidence scores.
+
+### `getConsciousnessState()`
+Returns current consciousness state including processing count and confidence.
+
+### `getProcessingHistory()`
+Returns array of recent processing records.
+
+## Build Information
+- **Target**: wasm32-unknown-wasi
+- **Optimization**: O4 with SIMD, bulk memory, reference types
+- **Size**: Optimized for browser deployment
+- **Compatibility**: Modern browsers with WebAssembly support
+
+## Testing
+```bash
+# Run tests
+wasmtime run SyntraCoreWasm.wasm
+
+# Validate module
+wasm-validate SyntraCoreWasm.wasm
+```
+EOF
+    
+    log_info "Documentation generated: dist/README.md"
+}
+
+# Create distribution package
+create_distribution() {
+    log_build "Creating distribution package"
+    
+    local dist_dir="WebAssembly/Guest/dist"
+    local package_name="syntra-wasm-$(date +%Y%m%d-%H%M%S).tar.gz"
+    
+    cd "$dist_dir"
+    tar -czf "$package_name" *.wasm *.js *.md 2>/dev/null || {
+        log_warn "Failed to create distribution package"
+        return 1
+    }
+    
+    log_info "Distribution package created: $package_name"
+    cd ../..
+}
+
+# Main build function
 main() {
     log_info "SYNTRA Foundation WebAssembly Build"
+    log_info "Target: $WASM_TARGET"
+    log_info "SDK: $SWIFT_SDK"
     
-    # Ensure we're in the project root
-    if [[ ! -f "Package.swift" ]]; then
-        log_error "Please run this script from the SYNTRA Foundation root directory"
+    # Validate we're in the right directory
+    if [[ ! -f "Package.swift" ]] && [[ ! -f "WebAssembly/Guest/Package.swift" ]]; then
+        log_error "Package.swift not found. Run from project root."
         exit 1
     fi
     
     check_prerequisites
     setup_project
     build_wasm
+    optimize_wasm
+    generate_js_bindings
+    test_wasm
+    generate_docs
+    create_distribution
     
-    log_info "WebAssembly build complete!"
-    log_info "Output files:"
-    log_info "  - WebAssembly/Guest/dist/SyntraCoreWasm.opt.wasm"
-    log_info "  - WebAssembly/Guest/dist/syntra-wasm.js"
-    log_info "  - WebAssembly/Guest/dist/demo.html"
-    log_info ""
-    log_info "To test in browser:"
-    log_info "  cd WebAssembly/Guest/dist && python3 -m http.server 8000"
-    log_info "  Open http://localhost:8000/demo.html"
+    log_info "WebAssembly build completed successfully"
+    log_info "Output directory: WebAssembly/Guest/dist"
+    log_info "Files generated:"
+    ls -la WebAssembly/Guest/dist/ || true
 }
 
 # Run main function

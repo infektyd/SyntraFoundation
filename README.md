@@ -70,9 +70,14 @@ This is the **iOS-native migration** of SYNTRA, designed to provide a truly nati
 ### Building
 
 ```bash
+# iOS App
+open Apps/iOS/SyntraChatIOS/SyntraChatIOS.xcodeproj
 
-# in Xcode
-open Package.swift
+# WebAssembly (optional)
+make wasm
+
+# Containers (optional)
+make container
 ```
 
 ### Running
@@ -80,6 +85,43 @@ open Package.swift
 1. **Simulator**: Select iOS device in Xcode and run
 2. **Device**: Connect iOS device and run with signing profile
 3. **TestFlight**: Build for distribution (requires Apple Developer account)
+
+### Build System
+
+```bash
+# See all available commands
+make help
+
+# Build specific components
+make ios-build      # iOS app
+make wasm           # WebAssembly modules
+make container      # Container images
+make test           # Run all tests
+```
+
+---
+
+## 📚 Documentation
+
+### Project Documentation
+- **[AGENTS_AND_CONTRIBUTORS.md](Documentation/AGENTS_AND_CONTRIBUTORS.md)** - Master guide for project vision and architecture
+- **[AGENTS.md](Documentation/AGENTS.md)** - Core architecture and development rules
+- **[CHANGELOG.md](Documentation/CHANGELOG.md)** - Complete change history and rollback information
+- **[Rules.md](Documentation/Rules.md)** - Project rules and coding standards
+- **[HARDCORE_LOGGING_GUIDE.md](Documentation/HARDCORE_LOGGING_GUIDE.md)** - Debugging and consciousness monitoring
+
+### Build System Documentation
+- **WebAssembly**: Complete build pipeline with consciousness processing
+- **Containerization**: Multi-runtime support (Apple Container, Docker, Podman)
+- **iOS Native**: Full iOS app with three-brain architecture
+
+### Recent Changes (2025-08-04)
+- ✅ **WebAssembly System**: Restored and completed with real consciousness implementation
+- ✅ **Containerization**: Multi-runtime build system with SBOM and security scanning
+- ✅ **Build Scripts**: 1,102 lines of production-quality code added
+- ✅ **Documentation**: Comprehensive changelog and rollback information
+
+For detailed change history, see **[CHANGELOG.md](Documentation/CHANGELOG.md)**.
 
 ---
 

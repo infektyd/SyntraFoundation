@@ -40,23 +40,23 @@ HAS_SWIFT := $(shell command -v swift 2> /dev/null)
 # Container build - uses Apple Containerization if available, otherwise Docker
 container:
 	@echo "Building container image: $(PROJECT_NAME):$(TAG)"
-	@chmod +x Scripts/build_container.sh
-	@./Scripts/build_container.sh $(TAG) $(PLATFORM)
+	@chmod +x tools/Scripts/build_container.sh
+	@./tools/Scripts/build_container.sh $(TAG) $(PLATFORM)
 
 # Docker multi-architecture build
 docker:
 	@echo "Building Docker images for multiple architectures"
 	@if [ "$(PLATFORM)" = "multiarch" ]; then \
-		./Scripts/build_container.sh $(TAG) multiarch; \
+		./tools/Scripts/build_container.sh $(TAG) multiarch; \
 	else \
-		./Scripts/build_container.sh $(TAG) local; \
+		./tools/Scripts/build_container.sh $(TAG) local; \
 	fi
 
 # WebAssembly build
 wasm:
 	@echo "Building WebAssembly modules"
-	@chmod +x Scripts/build_wasm.sh
-	@./Scripts/build_wasm.sh
+	@chmod +x tools/Scripts/build_wasm.sh
+	@./tools/Scripts/build_wasm.sh
 
 # Swift package build
 swift-build:
@@ -92,9 +92,9 @@ endif
 
 test-container:
 	@echo "Testing container functionality"
-	@if [ -f "Scripts/test_container.sh" ]; then \
-		chmod +x Scripts/test_container.sh; \
-		./Scripts/test_container.sh; \
+	@if [ -f "tools/Scripts/test_container.sh" ]; then \
+		chmod +x tools/Scripts/test_container.sh; \
+		./tools/Scripts/test_container.sh; \
 	else \
 		echo "Container tests not yet implemented"; \
 	fi

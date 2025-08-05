@@ -1,14 +1,15 @@
 /*
- * SyntraVoiceBridge.swift - DEPRECATED
+ * SyntraVoiceBridge.swift - TEMPORARILY DISABLED
  * 
- * This voice bridge component has been deprecated as part of the migration to Apple's
- * native dictation support. Voice functionality is now provided directly through
- * native text input components without custom bridge layers.
+ * This voice bridge component has been temporarily disabled
+ * as we're using native Apple voice input instead. This code is preserved
+ * for future development when custom voice functionality may be needed.
  * 
- * Migration date: Based on os changes.md plan
- * Replacement: Direct text input with native dictation
+ * Disabled date: Current development phase
+ * Reason: Using native iOS Speech framework instead
  */
 
+/*
 import Foundation
 import OSLog
 import Combine
@@ -21,9 +22,10 @@ public final class SyntraVoiceBridge: ObservableObject {
     @Published public var lastTranscript = ""
     @Published public var consciousnessResponse = ""
     @Published public var errorMessage: String?
+    @Published public var isRecording = false
     
     // MARK: - Private Properties
-    private let voiceRecorder = HoldToTalkRecorder()
+    private let voiceManager = SyntraVoiceManager.shared
     private var cancellables = Set<AnyCancellable>()
     private let logger = Logger(subsystem: "SyntraFoundation", category: "VoiceBridge")
     
@@ -32,43 +34,52 @@ public final class SyntraVoiceBridge: ObservableObject {
     
     // MARK: - Initialization
     public init() {
-        setupVoiceRecorderBindings()
+        setupVoiceManagerBindings()
     }
     
     // MARK: - Public Interface
     public func startVoiceInput() async {
-        guard voiceRecorder.isAvailable else {
-            errorMessage = "Voice input is not available"
+        // Request permissions if needed
+        await voiceManager.requestPermissions()
+        
+        guard voiceManager.isAuthorized else {
+            errorMessage = "Voice input is not authorized"
             return
         }
         
-        await voiceRecorder.startRecording()
+        await voiceManager.startRecording()
     }
     
     public func stopVoiceInput() async {
-        await voiceRecorder.stopRecording()
+        await voiceManager.stopRecording()
     }
     
     public func setConsciousnessProcessor(_ processor: ConsciousnessProcessor?) {
         self.consciousnessProcessor = processor
     }
     
-    // MARK: - Voice Recorder Integration
-    private func setupVoiceRecorderBindings() {
-        // Bind recorder state
-        voiceRecorder.$isRecording
+    // MARK: - Voice Manager Integration
+    private func setupVoiceManagerBindings() {
+        // Bind recording state
+        voiceManager.$isRecording
+            .receive(on: DispatchQueue.main)
+            .assign(to: \.isRecording, on: self)
+            .store(in: &cancellables)
+        
+        // Bind processing state
+        voiceManager.$isProcessing
             .receive(on: DispatchQueue.main)
             .assign(to: \.isProcessing, on: self)
             .store(in: &cancellables)
         
         // Bind error messages
-        voiceRecorder.$errorMessage
+        voiceManager.$errorMessage
             .receive(on: DispatchQueue.main)
             .assign(to: \.errorMessage, on: self)
             .store(in: &cancellables)
         
         // Process transcription results
-        voiceRecorder.$transcriptionText
+        voiceManager.$transcribedText
             .receive(on: DispatchQueue.main)
             .removeDuplicates()
             .filter { !$0.isEmpty }
@@ -93,56 +104,42 @@ public final class SyntraVoiceBridge: ObservableObject {
         
         // Send to SYNTRA consciousness processing
         if let processor = consciousnessProcessor {
-            let response = await processor.processVoiceInput(transcript)
+            let response = await Task { @MainActor in
+                await processor.processVoiceInput(transcript)
+            }.value
             consciousnessResponse = response
             
             logger.info("🧠 Consciousness response generated: \(response.prefix(100))...")
-            
-            // Trigger TTS output if available
-            await speakResponse(response)
-            
         } else {
-            // Fallback processing without full consciousness integration
-            consciousnessResponse = generateFallbackResponse(for: transcript)
-            logger.warning("⚠️ Processing voice without consciousness processor")
+            // Fallback response if no processor is available
+            consciousnessResponse = "SYNTRA: I heard you say '\(transcript)'. This is a placeholder response while the consciousness processor is being configured."
+            logger.warning("⚠️ No consciousness processor available, using fallback response")
         }
         
-        errorMessage = nil
         isProcessing = false
-    }
-    
-    private func generateFallbackResponse(for transcript: String) -> String {
-        // Simple fallback when consciousness processor isn't available
-        return "I heard you say: \"\(transcript)\". SYNTRA consciousness processing is not fully initialized."
-    }
-    
-    // MARK: - TTS Output
-    private func speakResponse(_ response: String) async {
-        // TODO: Integrate with TTS system when available
-        logger.info("🔊 Would speak response: \(response.prefix(50))...")
     }
 }
 
 // MARK: - Consciousness Processor Protocol
-public protocol ConsciousnessProcessor: Sendable {
-    func processVoiceInput(_ transcript: String) async -> String
+public protocol ConsciousnessProcessor {
+    func processVoiceInput(_ input: String) async -> String
 }
 
 // MARK: - Mock Implementation for Development
-public final class MockConsciousnessProcessor: ConsciousnessProcessor, @unchecked Sendable {
+public final class MockConsciousnessProcessor: ConsciousnessProcessor {
     public init() {}
     
-    public func processVoiceInput(_ transcript: String) async -> String {
+    public func processVoiceInput(_ input: String) async -> String {
         // Simulate processing delay
         try? await Task.sleep(nanoseconds: 1_000_000_000) // 1 second
         
         // Mock response that shows three-brain processing
         return """
-        SYNTRA Three-Brain Response to: "\(transcript)"
+        SYNTRA Three-Brain Response to: "\(input)"
         
         🎭 VALON (70%): This input shows human creativity and emotional expression. I sense curiosity and openness in your communication.
         
-        🔬 MODI (30%): Analyzing linguistic patterns and semantic content. Input contains \(transcript.split(separator: " ").count) words with clear intent.
+        🔬 MODI (30%): Analyzing linguistic patterns and semantic content. Input contains \(input.split(separator: " ").count) words with clear intent.
         
         ⚖️ SYNTHESIS: Integrating moral intuition with logical analysis. My response prioritizes helpful engagement while maintaining ethical boundaries.
         
@@ -150,3 +147,4 @@ public final class MockConsciousnessProcessor: ConsciousnessProcessor, @unchecke
         """
     }
 } 
+*/ 

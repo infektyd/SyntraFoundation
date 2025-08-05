@@ -24,6 +24,7 @@ project.xcworkspace/
 **/ModuleCache/
 **/index/store/
 **/*.pcm
+*.build/
 
 # Package.swift dependencies
 Package.resolved
@@ -38,11 +39,29 @@ build.log
 # Secrets and credentials (REQUIRED by AGENTS_AND_CONTRIBUTORS.md)
 config.local.json
 config/config.local.json
+config.production.json
+config.development.json
 *.key
 *.pem
 *.crt
 secrets.*
 .env.*
+.env
+.env.local
+.env.production
+.env.development
+
+# API Keys and Credentials
+**/api_keys/
+**/credentials/
+**/secrets/
+**/private/
+**/personal/
+
+# Sensitive configuration
+config/sensitive/
+config/private/
+config/production/
 
 # Memory vault files (REQUIRED by AGENTS_AND_CONTRIBUTORS.md)
 memory_vault/temp/

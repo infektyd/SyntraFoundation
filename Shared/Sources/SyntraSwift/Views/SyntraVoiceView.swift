@@ -1,14 +1,15 @@
 /*
- * SyntraVoiceView.swift - DEPRECATED
+ * SyntraVoiceView.swift - TEMPORARILY DISABLED
  * 
- * This voice view component has been deprecated as part of the migration to Apple's
- * native dictation support. Voice input is now integrated directly into standard
- * text input fields through the native iOS keyboard dictation button.
+ * This voice view component has been temporarily disabled
+ * as we're using native Apple voice input instead. This code is preserved
+ * for future development when custom voice UI may be needed.
  * 
- * Migration date: Based on os changes.md plan
- * Replacement: Standard text input with built-in dictation
+ * Disabled date: Current development phase
+ * Reason: Using native iOS Speech framework instead
  */
 
+/*
 import SwiftUI
 import Combine
 
@@ -84,7 +85,8 @@ public struct SyntraVoiceView: View {
     private var mainVoiceInterface: some View {
         VStack(spacing: 16) {
             
-            // Voice Input Button
+            // Voice Input Button - TEMPORARILY DISABLED (using native voice input)
+            /*
             PTTButton(
                 isEnabled: !voiceBridge.isProcessing,
                 onStart: {
@@ -98,6 +100,14 @@ public struct SyntraVoiceView: View {
                     }
                 }
             )
+            */
+            
+            // Native voice input placeholder
+            Text("Voice input is now handled through native iOS keyboard dictation")
+                .font(.caption)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+                .padding()
             
             // Transcript Preview
             if !voiceBridge.lastTranscript.isEmpty {
@@ -202,92 +212,69 @@ public struct SyntraVoiceView: View {
                         .font(.title2)
                         .foregroundColor(.purple)
                     
-                    Text("SYNTRA Consciousness Response")
+                    Text("SYNTRA Response")
                         .font(.headline)
                     
                     Spacer()
                 }
                 
-                ScrollView {
-                    Text(voiceBridge.consciousnessResponse)
-                        .font(.body)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .textSelection(.enabled)
-                }
-                .frame(maxHeight: 200)
+                Text(voiceBridge.consciousnessResponse)
+                    .font(.body)
+                    .padding()
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(.secondary.opacity(0.1))
+                    )
+                    .textSelection(.enabled)
             }
             .padding()
             .background(
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(.purple.opacity(0.05))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 12)
-                            .stroke(.purple.opacity(0.2), lineWidth: 1)
-                    )
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(.ultraThinMaterial)
             )
         }
     }
     
     @ViewBuilder
     private var textInputFallback: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("Text Input Alternative")
-                .font(.caption)
-                .foregroundColor(.secondary)
+        VStack(spacing: 12) {
+            Text("Text Input Fallback")
+                .font(.headline)
             
-            HStack {
-                TextField("Type your message...", text: $textInput)
-                    .textFieldStyle(.roundedBorder)
-                
-                Button("Send") {
-                    Task {
-                        await processTextInput()
-                    }
+            TextField("Type your message...", text: $textInput, axis: .vertical)
+                .textFieldStyle(.roundedBorder)
+                .lineLimit(3...6)
+            
+            Button("Send") {
+                // Process text input
+                Task {
+                    await processTextInput(textInput)
+                    textInput = ""
                 }
-                .disabled(textInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
             }
+            .buttonStyle(.borderedProminent)
+            .disabled(textInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
         }
-    }
-    
-    // MARK: - Error Display
-    @ViewBuilder
-    private var errorDisplay: some View {
-        if let errorMessage = voiceBridge.errorMessage {
-            HStack {
-                Image(systemName: "exclamationmark.triangle")
-                    .foregroundColor(.orange)
-                
-                Text(errorMessage)
-                    .font(.caption)
-                    .foregroundColor(.orange)
-                
-                Spacer()
-                
-                Button("Dismiss") {
-                    voiceBridge.errorMessage = nil
-                }
-                .font(.caption)
-            }
-            .padding()
-            .background(
-                RoundedRectangle(cornerRadius: 8)
-                    .fill(.orange.opacity(0.1))
-            )
-        }
-    }
-    
-    // MARK: - Helper Properties
-    private var statusText: String {
-        if voiceBridge.isProcessing {
-            return "Processing voice input..."
-        } else if !voiceBridge.lastTranscript.isEmpty {
-            return "Ready for voice input"
-        } else {
-            return "Hold button to talk"
-        }
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(.ultraThinMaterial)
+        )
     }
     
     // MARK: - Helper Methods
+    private var statusText: String {
+        if voiceBridge.isProcessing {
+            return "Processing voice input..."
+        } else if voiceBridge.isRecording {
+            return "Recording voice input..."
+        } else if !voiceBridge.errorMessage.isNilOrEmpty {
+            return voiceBridge.errorMessage ?? "Error occurred"
+        } else {
+            return "Ready for voice input"
+        }
+    }
+    
     private func setupConsciousnessProcessor() {
         // For now, use mock processor
         // TODO: Connect to real SYNTRA consciousness system
@@ -295,24 +282,30 @@ public struct SyntraVoiceView: View {
         voiceBridge.setConsciousnessProcessor(mockProcessor)
     }
     
-    private func processTextInput() async {
-        guard !textInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
-            return
-        }
+    private func processTextInput(_ input: String) async {
+        guard !input.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
         
-        let input = textInput
-        textInput = ""
-        
-        // Process text through the same consciousness pipeline
-        // This simulates what voice input would do
         voiceBridge.lastTranscript = input
+        voiceBridge.isProcessing = true
         
-        // TODO: Process through consciousness system
+        // Simulate processing delay
+        try? await Task.sleep(nanoseconds: 1_000_000_000) // 1 second
+        
+        // Mock response
+        voiceBridge.consciousnessResponse = "SYNTRA: I understand you typed '\(input)'. This is a placeholder response while the consciousness system is being integrated."
+        
+        voiceBridge.isProcessing = false
     }
 }
 
-#if DEBUG
+// MARK: - String Extension
+extension String {
+    var isNilOrEmpty: Bool {
+        return self.isEmpty
+    }
+}
+
 #Preview {
     SyntraVoiceView()
-}
-#endif 
+} 
+*/ 

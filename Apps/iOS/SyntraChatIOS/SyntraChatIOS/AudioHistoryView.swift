@@ -1,29 +1,34 @@
 /*
- * AudioHistoryView.swift - DEPRECATED
+ * AudioHistoryView.swift - TEMPORARILY DISABLED
  * 
- * This audio recording history feature has been deprecated as part of the migration
- * to Apple's native dictation support. Native dictation doesn't create separate
- * audio files that need to be managed, making this history view unnecessary.
+ * This audio recording history feature has been temporarily disabled
+ * as we're using native Apple voice input instead. This code is preserved
+ * for future development when custom voice recording functionality may be needed.
  * 
- * Migration date: Based on os changes.md plan
+ * Disabled date: Current development phase
+ * Reason: Using native iOS Speech framework instead
+ * 
+ * Previous functionality:
+ * - Displayed history of voice recordings with playback capabilities
+ * - Managed local audio files and transcription data
+ * - Native dictation has no separate audio history - integrated seamlessly
+ * 
  * Replacement: Native dictation has no separate audio history - integrated seamlessly
  */
 
+/*
 import SwiftUI
 import AVFoundation
-import Combine
 
 // Local recording session model (simplified version)
 struct RecordingSession: Identifiable, Codable {
-    var id = UUID()
+    let id = UUID()
     let timestamp: Date
     let duration: TimeInterval
-    let transcript: String
     let audioFileURL: URL
-    let fileSize: Int64
+    let transcriptionText: String?
 }
 
-// Simple local recorder manager
 class LocalAudioRecorder: ObservableObject {
     @Published var recordingSessions: [RecordingSession] = []
     
@@ -72,14 +77,13 @@ struct AudioHistoryView: View {
     @StateObject private var recorder = LocalAudioRecorder()
     @State private var audioPlayer: AVAudioPlayer?
     @State private var audioPlayerDelegate: AudioPlayerDelegate?
-    @State private var currentlyPlaying: UUID?
-    @State private var isPlaying = false
+    @State private var currentlyPlayingSession: RecordingSession?
     @State private var showingDeleteAlert = false
     @State private var sessionToDelete: RecordingSession?
     
     var body: some View {
         NavigationView {
-            List {
+            Group {
                 if recorder.recordingSessions.isEmpty {
                     ContentUnavailableView(
                         "No Recordings",
@@ -87,14 +91,16 @@ struct AudioHistoryView: View {
                         description: Text("Your voice recordings will appear here")
                     )
                 } else {
-                    ForEach(recorder.recordingSessions.reversed()) { session in
-                        RecordingRowView(
-                            session: session,
-                            isPlaying: currentlyPlaying == session.id && isPlaying,
-                            onPlay: { playRecording(session) },
-                            onStop: { stopPlayback() },
-                            onDelete: { deleteRecording(session) }
-                        )
+                    List {
+                        ForEach(recorder.recordingSessions.reversed()) { session in
+                            RecordingRowView(
+                                session: session,
+                                isPlaying: currentlyPlayingSession?.id == session.id,
+                                onPlay: { playRecording(session) },
+                                onStop: { stopPlayback() },
+                                onDelete: { deleteRecording(session) }
+                            )
+                        }
                     }
                 }
             }
@@ -107,36 +113,33 @@ struct AudioHistoryView: View {
                     .disabled(recorder.recordingSessions.isEmpty)
                 }
             }
-        }
-        .alert("Delete Recording", isPresented: $showingDeleteAlert) {
-            Button("Delete", role: .destructive) {
-                if let session = sessionToDelete {
-                    recorder.deleteRecording(session)
+            .alert("Delete Recording", isPresented: $showingDeleteAlert) {
+                Button("Delete", role: .destructive) {
+                    if let session = sessionToDelete {
+                        recorder.deleteRecording(session)
+                    }
                 }
+                Button("Cancel", role: .cancel) { }
+            } message: {
+                Text("Are you sure you want to delete this recording?")
             }
-            Button("Cancel", role: .cancel) { }
-        } message: {
-            Text("Are you sure you want to delete this recording?")
         }
     }
     
     private func playRecording(_ session: RecordingSession) {
-        stopPlayback() // Stop any current playback
+        stopPlayback() // Stop any currently playing recording
         
         do {
             audioPlayer = try AVAudioPlayer(contentsOf: session.audioFileURL)
+            audioPlayer?.prepareToPlay()
             
-            // Create and store delegate to prevent deallocation
             audioPlayerDelegate = AudioPlayerDelegate(onFinished: {
-                currentlyPlaying = nil
-                isPlaying = false
+                currentlyPlayingSession = nil
             })
             audioPlayer?.delegate = audioPlayerDelegate
             
-            currentlyPlaying = session.id
-            isPlaying = true
+            currentlyPlayingSession = session
             audioPlayer?.play()
-            
         } catch {
             print("Failed to play recording: \(error.localizedDescription)")
         }
@@ -146,8 +149,7 @@ struct AudioHistoryView: View {
         audioPlayer?.stop()
         audioPlayer = nil
         audioPlayerDelegate = nil
-        currentlyPlaying = nil
-        isPlaying = false
+        currentlyPlayingSession = nil
     }
     
     private func deleteRecording(_ session: RecordingSession) {
@@ -169,67 +171,57 @@ struct RecordingRowView: View {
     let onStop: () -> Void
     let onDelete: () -> Void
     
-    private var formattedDate: String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .short
-        formatter.timeStyle = .short
-        return formatter.string(from: session.timestamp)
-    }
-    
-    private var formattedDuration: String {
-        let formatter = DateComponentsFormatter()
-        formatter.allowedUnits = [.minute, .second]
-        formatter.unitsStyle = .abbreviated
-        return formatter.string(from: session.duration) ?? "0s"
-    }
-    
-    private var formattedFileSize: String {
-        ByteCountFormatter.string(fromByteCount: session.fileSize, countStyle: .file)
-    }
-    
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(formattedDate)
-                        .font(.headline)
-                    
-                    Text("\(formattedDuration) • \(formattedFileSize)")
+        HStack {
+            VStack(alignment: .leading, spacing: 4) {
+                Text(session.timestamp, style: .date)
+                    .font(.headline)
+                
+                Text(session.timestamp, style: .time)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                
+                if let transcription = session.transcriptionText {
+                    Text(transcription)
                         .font(.caption)
                         .foregroundColor(.secondary)
+                        .lineLimit(2)
                 }
                 
-                Spacer()
-                
-                HStack {
-                    Button(action: isPlaying ? onStop : onPlay) {
-                        Image(systemName: isPlaying ? "stop.fill" : "play.fill")
-                            .foregroundColor(.blue)
-                    }
-                    .buttonStyle(.plain)
-                    
-                    Button(action: onDelete) {
-                        Image(systemName: "trash")
-                            .foregroundColor(.red)
-                    }
-                    .buttonStyle(.plain)
-                }
+                Text(formatDuration(session.duration))
+                    .font(.caption)
+                    .foregroundColor(.secondary)
             }
             
-            if !session.transcript.isEmpty {
-                Text(session.transcript)
-                    .font(.body)
-                    .padding(8)
-                    .background(Color.gray.opacity(0.1))
-                    .cornerRadius(8)
-            } else {
-                Text("No transcript available")
-                    .font(.body)
-                    .italic()
-                    .foregroundColor(.secondary)
+            Spacer()
+            
+            HStack(spacing: 12) {
+                Button(action: {
+                    if isPlaying {
+                        onStop()
+                    } else {
+                        onPlay()
+                    }
+                }) {
+                    Image(systemName: isPlaying ? "stop.circle.fill" : "play.circle.fill")
+                        .font(.title2)
+                        .foregroundColor(isPlaying ? .red : .blue)
+                }
+                
+                Button(action: onDelete) {
+                    Image(systemName: "trash.circle.fill")
+                        .font(.title2)
+                        .foregroundColor(.red)
+                }
             }
         }
         .padding(.vertical, 4)
+    }
+    
+    private func formatDuration(_ duration: TimeInterval) -> String {
+        let minutes = Int(duration) / 60
+        let seconds = Int(duration) % 60
+        return String(format: "%d:%02d", minutes, seconds)
     }
 }
 
@@ -249,3 +241,4 @@ class AudioPlayerDelegate: NSObject, AVAudioPlayerDelegate {
 #Preview {
     AudioHistoryView()
 } 
+*/ 
