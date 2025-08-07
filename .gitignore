@@ -1,4 +1,6 @@
-# macOS files
+######################################
+# OS files
+######################################
 .DS_Store
 .DS_Store?
 ._*
@@ -7,7 +9,9 @@
 ehthumbs.db
 Thumbs.db
 
-# Xcode files
+######################################
+# Xcode & SwiftPM
+######################################
 *.xcuserstate
 xcuserdata/
 DerivedData/
@@ -15,28 +19,31 @@ DerivedData/
 *.dSYM/
 *.dSYM.zip
 **/xcshareddata/
-project.xcworkspace/
 *.xcodeproj/project.xcworkspace/xcshareddata/
-
-# SwiftPM build artifacts
+project.xcworkspace/
+# SPM
 .build/
+*.build/
 .swiftpm/
 **/ModuleCache/
 **/index/store/
 **/*.pcm
-*.build/
-
-# Package.swift dependencies
 Package.resolved
 
+######################################
 # IDE files
+######################################
 .vscode/
 .idea/
 
+######################################
 # Build logs
+######################################
 build.log
 
-# Secrets and credentials (REQUIRED by AGENTS_AND_CONTRIBUTORS.md)
+######################################
+# Secrets & credentials (MANDATORY)
+######################################
 config.local.json
 config/config.local.json
 config.production.json
@@ -45,82 +52,87 @@ config.development.json
 *.pem
 *.crt
 secrets.*
-.env.*
+.env*
 .env
 .env.local
 .env.production
 .env.development
 
-# API Keys and Credentials
+# API/keys/credentials
 **/api_keys/
 **/credentials/
 **/secrets/
 **/private/
 **/personal/
 
-# Sensitive configuration
+# Sensitive config directories
 config/sensitive/
 config/private/
 config/production/
 
-# Memory vault files (REQUIRED by AGENTS_AND_CONTRIBUTORS.md)
+######################################
+# Memory, Logs, Analytics (MANDATORY)
+######################################
 memory_vault/temp/
 memory_vault/*.json
-
-# Log files
 *.log
 logs/
 drift_logs/
 entropy_logs/
+entropy_logs/*.json
+telemetry/
 
-# Test coverage
+######################################
+# Test/Coverage artifacts
+######################################
 coverage/
 *.gcov
 *.gcda
 *.gcno
 
+######################################
 # Temporary files
+######################################
 *.tmp
 *.temp
 *~
 
-# Python bytecode (for development tools)
+######################################
+# Python dev artifacts
+######################################
 __pycache__/
 *.py[cod]
 *$py.class
 .pytest_cache/
 
-# Virtual environments
+# Python virtual environments
 venv/
 env/
-.env
 
-# Node.js (if using any JS tooling)
+######################################
+# Node.js
+######################################
 node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Build and system files
-.build/
-.DS_Store
-.swiftpm/
-*.xcworkspace/xcuserdata/
-entropy_logs/*.json
-telemetry/
-
-# Local configuration (secrets)
-config.local.json
-
-# Local backup files (disabled modules)
+######################################
+# Backup/Legacy/exports
+######################################
 .local_backup/
-
-# Large export and bundle files
 export.stream
 repo.bundle
 *.bundle
 *.stream
 archived_tests/*.rtf
 
-# PDFs (REQUIRED by AGENTS_AND_CONTRIBUTORS.md)
+######################################
+# Workspace pollution (duplicate, but leave for safety)
+######################################
+*.xcworkspace/xcuserdata/
+
+######################################
+# Non-source binary/docs (REQUIRED)
+######################################
 *.pdf

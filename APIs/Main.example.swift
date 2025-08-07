@@ -21,14 +21,14 @@
 // // // @main // <--- uncomment only IN YOUR CUSTOM Main.swift!
 // // public struct SyntraAPIServer {
 // //
-// //     // PORT config: uses SYNTRA_PORT env var or defaults to 8080
+// //     // PORT config: uses SYNTRA_PORT env var or defaults to 8081
 // //     private static let port: NWEndpoint.Port = {
 // //         if let val = ProcessInfo.processInfo.environment["SYNTRA_PORT"],
 // //            let portInt = UInt16(val),
 // //            let port = NWEndpoint.Port(rawValue: portInt) {
 // //             return port
 // //         }
-// //         return NWEndpoint.Port(rawValue: 8080)!
+// //         return NWEndpoint.Port(rawValue: 8081)!
 // //     }()
 // //
 // //     public static func main() async throws {

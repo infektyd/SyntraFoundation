@@ -69,7 +69,7 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD /usr/local/bin/syntra --health-check || exit 1
 
 # Expose default port (configurable via environment)
-EXPOSE 8080
+EXPOSE 8081
 
 # Default command
 CMD ["/usr/local/bin/syntra"]

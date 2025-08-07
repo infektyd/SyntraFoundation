@@ -63,7 +63,7 @@ container build \
 
 ```bash
 container run -t -i \
-  --publish 8080 \
+  --publish 8081 \
   syntra:local-arm64 \
   ./SyntraServer
 ```

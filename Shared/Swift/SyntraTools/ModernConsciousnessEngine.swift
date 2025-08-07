@@ -168,7 +168,7 @@ public class ModernConsciousnessEngine {
         )
         
         // Prewarm the model for better performance
-        try! session.prewarm()  // Remove the async call and potential error throwing
+        session.prewarm()  // Remove the async call and potential error throwing
     }
     
     // MARK: - Primary Consciousness Processing
@@ -214,7 +214,7 @@ public class ModernConsciousnessEngine {
 
             do {
                 let prompt = buildPrompt(stimulus: stimulus, context: context)
-                let streamResponse = try await session.streamResponse(
+                let streamResponse = session.streamResponse(
                     to: prompt,
                     generating: ConsciousnessState.self
                 )

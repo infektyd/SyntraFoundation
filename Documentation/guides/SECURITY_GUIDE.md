@@ -24,11 +24,11 @@ This guide ensures that sensitive information never gets committed to the public
 ```swift
 // ✅ CORRECT - Use environment variables
 let apiKey = ProcessInfo.processInfo.environment["OPENAI_API_KEY"]
-let port = UInt16(ProcessInfo.processInfo.environment["SYNTRA_PORT"] ?? "8080")
+let port = UInt16(ProcessInfo.processInfo.environment["SYNTRA_PORT"] ?? "8081")
 
 // ❌ WRONG - Never hardcode sensitive values
 let apiKey = "sk-1234567890abcdef"
-let port: NWEndpoint.Port = 8080
+let port: NWEndpoint.Port = 8081
 ```
 
 ### **2. Template Files for Public Distribution**
@@ -55,7 +55,7 @@ Create these files locally (never commit):
    ```bash
    export OPENAI_API_KEY=your_key_here
    export APPLE_LLM_API_KEY=your_key_here
-   export SYNTRA_PORT=8080
+   export SYNTRA_PORT=8081
    ```
 4. **Create local configuration:**
    ```json
@@ -65,7 +65,7 @@ Create these files locally (never commit):
        "apple_llm": "your_key_here"
      },
      "server": {
-       "port": 8080,
+       "port": ,
        "host": "localhost"
      }
    }
@@ -148,7 +148,7 @@ swift run SyntraAPILayer
 ### **Production Deployment:**
 ```bash
 # 1. Set production environment variables
-export SYNTRA_PORT=8080
+export SYNTRA_PORT=
 export OPENAI_API_KEY=prod_key
 export APPLE_LLM_API_KEY=prod_key
 

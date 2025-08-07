@@ -1,9 +1,7 @@
 {
-  "openai_api_key": "lm-studio",
+  "openai_api_key": "Syntra",
   "openai_api_base": "http://localhost:1234/v1",
-  "openai_model": "phi-3-mini-4k-instruct",
-  "gemini_api_key": "AIzaSyAtyAlUJiZ_f_eQLsihW4oGKwA1rlnRDSI",
-  "gemini_model": "gemini-1.5-pro",
+  "openai_model": "Apple Foundation",
   "elevenlabs_api_key": "YOUR_ELEVENLABS_API_KEY",
   "use_mistral_for_valon": true,
   "preferred_voice": "auto",
@@ -30,7 +28,5 @@
   "memory_mode": "flat",
   "interpreter_output": true,
   "telemetry_csv_path": "C:\\HWiNFO_logs\\syntra_runtime.csv",
-  "apple_llm_api_base": "http://localhost:8080/v1",
-  "apple_llm_api_key": "YOUR_APPLE_LLM_API_KEY",
-  "use_apple_llm": false
+  "apple_llm_api_base": "http://localhost:8081/v1",
 }

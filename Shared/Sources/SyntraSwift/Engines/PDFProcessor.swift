@@ -185,7 +185,7 @@ public struct PDFProcessor {
                 return "[Foundation Models not available on this device]"
             }
             
-            let session = try LanguageModelSession(model: model)
+            let session = LanguageModelSession(model: model)
             let response = try await session.respond(to: prompt)
             
             return response.content
@@ -476,7 +476,7 @@ public struct LLMProcessor {
                 return "[Apple Foundation Models not available]"
             }
             
-            let session = try LanguageModelSession(model: model)
+            let session = LanguageModelSession(model: model)
             let response = try await session.respond(to: prompt)
             
             return response.content

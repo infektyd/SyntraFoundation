@@ -14,7 +14,7 @@
   "use_adaptive_fusion": false,
   "use_adaptive_weighting": false,
   "enable_two_pass_loop": false,
-  "apple_llm_api_base": "http://localhost:8080/v1",
+  "apple_llm_api_base": "http://localhost:8081/v1",
   "apple_llm_api_key": "your-apple-llm-key-here",
   "use_apple_llm": true
 } 
