@@ -219,7 +219,10 @@ public class ModernConsciousnessEngine {
                     generating: ConsciousnessState.self
                 )
 
-                for try await partialState in streamResponse {
+                for try await snapshot in streamResponse {
+                    // The stream yields Snapshot wrappers containing PartiallyGenerated states,
+                    // so extract the partial state from the snapshot before yielding.
+                    let partialState = snapshot.content
                     continuation.yield(partialState)
 
                     // Update current state if it's complete enough
@@ -261,9 +264,6 @@ public class ModernConsciousnessEngine {
         
         return result
     }
-    
-    // Streaming temporarily disabled due to Swift 6 concurrency requirements
-    // TODO: Implement proper streaming with @Sendable conformance
     
     // MARK: - Tool-Enhanced Processing
     
@@ -506,10 +506,6 @@ extension ModernConsciousnessEngine {
 }
 
 // MARK: - Concurrency Adaptations
-
-// The automatically generated PartiallyGenerated structures from FoundationModels
-// do not declare Sendable conformance yet.  We add an unchecked conformance here
-// so that they can safely cross concurrency boundaries inside streaming logic.
 
 @available(macOS 26.0, *)
 extension ModernConsciousnessEngine.ConsciousnessState.PartiallyGenerated: @unchecked Sendable {}

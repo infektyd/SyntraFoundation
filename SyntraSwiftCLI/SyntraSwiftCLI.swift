@@ -92,7 +92,7 @@ struct SyntraSwiftCLI {
     // --- Enhanced Session Handler Supporting Summarization ---
     private static func continueSession(_ input: String, instructions: String? = nil) async throws -> String {
         let model = try getAvailableModel()
-        let session = LanguageModelSession(model: model, instructions: instructions ?? "You are SYNTRA, synthesize as Valon & Modi.")
+        let session = LanguageModelSession(model: model, instructions: instructions ?? "You are Syntra.")
         do {
             let response = try await session.respond(to: input)
             return response.content
@@ -100,11 +100,11 @@ struct SyntraSwiftCLI {
             if case .exceededContextWindowSize = error {
                 // Summarization-on-overflow: Always a real model call!
                 let summary = try await session.respond(
-                    to: "Summarize everything so far in 5 bullets (preserve Valon & Modi perspective)."
+                    to: "Summarize everything so far in 5 bullets."
                 ).content
                 // Start a new session with that summary as instructions
                 let newSession = LanguageModelSession(
-                    model: model, instructions: "CONTEXT SUMMARY: \(summary)\n\nContinue the conversation with full Valon & Modi synthesis."
+                    model: model, instructions: "CONTEXT SUMMARY: \(summary)\n\nContinue the conversation as Syntra."
                 )
                 let response = try await newSession.respond(to: input)
                 return "[CONTEXT SUMMARIZED]\n" + response.content
