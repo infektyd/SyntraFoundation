@@ -2,7 +2,7 @@
 
 ## Overview
 
-My motivation for this project began with simple curiosity, a pet project meant as a diagnostic tool, and it has since transformed into what you see in this repository. I approached the development with a “why not” mentality, believing that anything is possible in code with persistence and iteration. I have invested significant time and learned across many disciplines to reach this point. This isn’t the end for Syntra; if anything, it’s opened new doors for creativity that I’m eager to explore. 
+Starting from zero AI background in February 2025, I approached the development with a "why not" mentality, believing that anything is possible in code with persistence and iteration. I have invested significant time and learned across many disciplines to reach this point. I know SYNTRA isn't the final answer to consciousness - but it's also not just another dead end. This project sits somewhere between breakthrough and experiment, and I think that honest uncertainty is important to acknowledge.  This isn't the end for Syntra; if anything, it's opened new doors for creativity that I'm eager to explore.
 
 🧠 SYNTRA
 
