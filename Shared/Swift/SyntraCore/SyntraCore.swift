@@ -20,6 +20,7 @@ public class SyntraCore: ObservableObject {
     // MARK: - Configuration
     public var moralWeight: Double = 0.7      // 70% Valon influence (immutable in production)
     public var logicalWeight: Double = 0.3    // 30% Modi influence
+    private let debug = false
     
     // MARK: - Singleton for Unified Access
     public static let shared = SyntraCore()
@@ -33,8 +34,10 @@ public class SyntraCore: ObservableObject {
         self.modi = ModiCore()
         self.brain = BrainCore()
         
-        print("[SyntraCore] Consciousness architecture initialized")
-        print("[SyntraCore] Moral weight: \(Int(moralWeight * 100))% | Logical weight: \(Int(logicalWeight * 100))%")
+        if debug {
+            print("[SyntraCore] Consciousness architecture initialized")
+            print("[SyntraCore] Moral weight: \(Int(moralWeight * 100))% | Logical weight: \(Int(logicalWeight * 100))%")
+        }
     }
     
     // MARK: - Main Processing Interface
@@ -77,7 +80,7 @@ public class SyntraCore: ObservableObject {
             let result = await valon.processInput(input)
             return ValonResponse(emotionalState: result["emotional_state"] as? String ?? "contemplative", moralWeight: 0.7)
         } catch {
-            print("[SyntraCore] Valon processing interrupted: \(error.localizedDescription)")
+            if debug { print("[SyntraCore] Valon processing interrupted: \(error.localizedDescription)") }
             return ValonResponse(emotionalState: "processing_interrupted", moralWeight: 0.7)
         }
     }
@@ -88,7 +91,7 @@ public class SyntraCore: ObservableObject {
             let result = await modi.processInput(input)
             return ModiResponse(reasoningPatterns: result["reasoning_patterns"] as? [String] ?? ["analytical"], logicalWeight: 0.3)
         } catch {
-            print("[SyntraCore] Modi processing interrupted: \(error.localizedDescription)")
+            if debug { print("[SyntraCore] Modi processing interrupted: \(error.localizedDescription)") }
             return ModiResponse(reasoningPatterns: ["processing_interrupted"], logicalWeight: 0.3)
         }
     }

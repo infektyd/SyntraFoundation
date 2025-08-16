@@ -1,6 +1,10 @@
 // SyntraCLIWrapper.swift
 
 import Foundation
+import Modi
+import Valon
+import ConsciousnessStructures
+import SyntraTools
 
 public struct SyntraCLIWrapper {
     public enum SyntraError: Error, CustomStringConvertible {
@@ -118,11 +122,48 @@ public struct SyntraCLIWrapper {
         try await runCLI(command: "foundation_model", args: [prompt])
     }
     
+    /// Enhanced analysis endpoint returning FlatJSONResponse
+    public static func getEnhancedAnalysis(_ input: String) async throws -> FlatJSONResponse {
+        let modi = Modi()
+        let modiDist = modi.calculateEnhancedBayesian(input)
+        let valonResponse = Valon.reflect_valon(input)
+        let metrics = await ConsciousnessMemoryManager.shared.getEnhancedMetrics()
+        
+        let modiAnalysis = ModiAnalysis(
+            probabilities: modiDist.probabilities,
+            entropy: modiDist.entropy,
+            prior: modiDist.prior,
+            posterior: modiDist.posterior,
+            likelihood: modiDist.likelihood
+        )
+        
+        let valonAnalysis = ValonAnalysis(
+            evaluation: valonResponse,
+            emotionalWeight: 0.7
+        )
+        
+        let metricsDict: [String: Double] = [
+            "minValue": metrics.minValue,
+            "maxValue": metrics.maxValue,
+            "average": metrics.average,
+            "standardDeviation": metrics.standardDeviation,
+            "entropy": metrics.entropy,
+            "driftScore": metrics.driftScore
+        ]
+        
+        return FlatJSONResponse(
+            modiAnalysis: modiAnalysis,
+            valonAnalysis: valonAnalysis,
+            metrics: metricsDict,
+            timestamp: Date()
+        )
+    }
+    
     // Health Check - ENHANCED
     public static func healthCheck() async -> Bool {
         #if os(macOS)
         do {
-            let result = try await runCLI(command: "chat", args: ["ping"], timeoutSeconds: 10.0)
+            let result = try await runCLI(command: "chat", args: ["ping"], timeoutSeconds: 15.0)
             return result.contains("PONG")
         } catch {
             print("🔧 [SyntraCLIWrapper] Health check failed: \(error)")
@@ -133,4 +174,3 @@ public struct SyntraCLIWrapper {
         #endif
     }
 }
-
