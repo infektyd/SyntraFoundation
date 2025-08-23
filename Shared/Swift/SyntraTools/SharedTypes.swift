@@ -8,6 +8,38 @@ public struct EnhancedMetrics: Sendable {
     public let standardDeviation: Double
     public let entropy: Double
     public let driftScore: Double
+    
+    // Enhanced consciousness metrics
+    public let syntraActivations: Int
+    public let totalDetections: Int
+    public let activationEntropy: Double
+    public let patternEntropy: Double
+    
+    public init(
+        minValue: Double,
+        maxValue: Double,
+        count: Int,
+        average: Double,
+        standardDeviation: Double,
+        entropy: Double,
+        driftScore: Double,
+        syntraActivations: Int,
+        totalDetections: Int,
+        activationEntropy: Double,
+        patternEntropy: Double
+    ) {
+        self.minValue = minValue
+        self.maxValue = maxValue
+        self.count = count
+        self.average = average
+        self.standardDeviation = standardDeviation
+        self.entropy = entropy
+        self.driftScore = driftScore
+        self.syntraActivations = syntraActivations
+        self.totalDetections = totalDetections
+        self.activationEntropy = activationEntropy
+        self.patternEntropy = patternEntropy
+    }
 }
 
 public struct ModiAnalysis: Sendable {

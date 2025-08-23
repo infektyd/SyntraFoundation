@@ -5,13 +5,13 @@ import FoundationModels
 
 @MainActor
 public final class SyntraCore: ObservableObject {
-    // AGENTS.md: Three-brain architecture - REAL IMPLEMENTATION
+    // Three-brain architecture - real implementation
     private let valonEngine: ValonEngine
     private let modiEngine: ModiEngine
     private let driftMonitor: DriftMonitor
     private let config: SyntraConfig
     
-    // AGENTS.md: Personality weights (70% Valon, 30% Modi)
+    // Personality weights (70% Valon, 30% Modi)
     private let valonWeight: Double
     private let modiWeight: Double
     
@@ -30,7 +30,7 @@ public final class SyntraCore: ObservableObject {
         _ input: String,
         context: SyntraContext
     ) async -> SyntraResponse {
-        // AGENTS.md: Real consciousness processing
+        // Real consciousness processing
         let valonResponse = await valonEngine.processInput(input, context: context)
         let modiResponse = await modiEngine.processInput(input, context: context)
         
@@ -60,14 +60,14 @@ public final class SyntraCore: ObservableObject {
         valon: ValonResponse,
         modi: ModiResponse
     ) -> String {
-        // AGENTS.md: Real synthesis algorithm - respects weights
+        // Real synthesis algorithm - respects weights
         let valonWeighted = valon.content.weight(valonWeight)
         let modiWeighted = modi.content.weight(modiWeight)
         
         return SyntraContentSynthesizer.combine(
             valonContent: valonWeighted,
             modiContent: modiWeighted,
-            preserveMoralCore: true  // AGENTS.md: Immutable moral framework
+            preserveMoralCore: true  // Immutable moral framework
         )
     }
 }

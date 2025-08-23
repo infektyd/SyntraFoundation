@@ -1,13 +1,16 @@
 import Foundation
-import Algorithms
+import FoundationModels
+// import Numerics
+// import Algorithms
+import Darwin
 
-#if compiler(>=6.0)
-#if canImport(_NumericsShims)
-// _NumericsShims may be available on some toolchains but we avoid importing it
-// as an @_implementationOnly dependency. Modi uses its local
-// ModiNumericsCompatibility shim which delegates to Darwin/libm functions.
-#endif
-#endif
+// #if compiler(>=6.0)
+// #if canImport(_NumericsShims)
+// // _NumericsShims may be available on some toolchains but we avoid importing it
+// // as an @_implementationOnly dependency. Modi uses its local
+// // ModiNumericsCompatibility shim which delegates to Darwin/libm functions.
+// #endif
+// #endif
 
 
 
@@ -163,8 +166,8 @@ public struct Modi: Sendable {
         let count = confidenceValues.count
         let sum = confidenceValues.reduce(0, +)
         let average = sum / Double(count)
-        let variance = confidenceValues.map { pow($0 - average, 2) }.reduce(0, +) / Double(count)
-        let standardDeviation = sqrt(variance)
+        let variance = confidenceValues.map { Darwin.pow($0 - average, 2) }.reduce(0, +) / Double(count)
+        let standardDeviation = Darwin.sqrt(variance)
         let entropy = calculateEntropy(for: confidenceValues)
         
         return QuantitativeAnalysisResult(
@@ -194,7 +197,8 @@ public struct Modi: Sendable {
         // Calculate likelihoods using sliding windows for pattern matching
         for (domain, data) in technicalDomains {
             let matchCount = data.keywords.count { keyword in 
-                lower.windows(ofCount: keyword.count).contains { $0.elementsEqual(keyword) }
+                // Replaced .windows() with native Swift implementation
+                lower.contains(keyword)
             }
             
             if matchCount > 0 {

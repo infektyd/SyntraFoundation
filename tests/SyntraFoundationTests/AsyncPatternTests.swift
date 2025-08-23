@@ -6,7 +6,7 @@ import AsyncAlgorithms
 import XCTest
 import Atomics
 import AsyncAlgorithms
-import Algorithms
+// import Algorithms
 @testable import SyntraTools
 @testable import Modi
 
@@ -176,6 +176,13 @@ final class AsyncPatternTests: XCTestCase {
         let metrics = await memory.getEnhancedMetrics()
         XCTAssertGreaterThan(metrics.count, 0, "Should record metrics")
         XCTAssertGreaterThan(metrics.entropy, 0, "Should calculate entropy")
+        
+        // Test new enhanced fields
+        XCTAssertGreaterThan(metrics.syntraActivations, 0, "Should record syntra activations")
+        XCTAssertGreaterThanOrEqual(metrics.totalDetections, 0, "Should record total detections")
+        XCTAssertGreaterThanOrEqual(metrics.activationEntropy, 0, "Should calculate activation entropy")
+        XCTAssertGreaterThanOrEqual(metrics.patternEntropy, 0, "Should calculate pattern entropy")
+        XCTAssertEqual(metrics.entropy, metrics.activationEntropy + metrics.patternEntropy, accuracy: 0.001, "Combined entropy should match sum")
         
         // Test reset
         await memory.resetActivationCounters()

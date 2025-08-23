@@ -204,20 +204,32 @@ public actor ConsciousnessMemoryManager {
         let (valon, modi, syntra, driftScore) = getActivationStatistics()
         let (totalDetections, commonPatterns) = getPatternStatistics()
         
-        // Calculate entropy for activation patterns
-        let totalActivations = Double(valon + modi)
-        let probabilities = [
-            Double(valon) / totalActivations,
-            Double(modi) / totalActivations
-        ].filter { $0 > 0 }
+        // Calculate entropy for activation patterns (three-brain architecture)
+        let totalActivations = Double(valon + modi + syntra)
+        let activationEntropy: Double
         
-        let activationEntropy = -probabilities.reduce(0) { $0 + ($1 * log($1)) }
+        if totalActivations > 0 {
+            let probabilities = [
+                Double(valon) / totalActivations,
+                Double(modi) / totalActivations,
+                Double(syntra) / totalActivations
+            ].filter { $0 > 0 }
+            activationEntropy = -probabilities.reduce(0) { $0 + ($1 * log($1)) }
+        } else {
+            activationEntropy = 0.0
+        }
         
         // Calculate entropy for common patterns
         let patternTotal = Double(commonPatterns.values.reduce(0, +))
-        let patternValues = commonPatterns.values.map { Double($0) / patternTotal }
-        let filteredPatterns = patternValues.filter { $0 > 0 }
-        let patternEntropy = -filteredPatterns.reduce(0) { $0 + ($1 * log($1)) }
+        let patternEntropy: Double
+        
+        if patternTotal > 0 {
+            let patternValues = commonPatterns.values.map { Double($0) / patternTotal }
+            let filteredPatterns = patternValues.filter { $0 > 0 }
+            patternEntropy = -filteredPatterns.reduce(0) { $0 + ($1 * log($1)) }
+        } else {
+            patternEntropy = 0.0
+        }
         
         return EnhancedMetrics(
             minValue: Double(commonPatterns["min_strength"] ?? 0) / 100.0,
@@ -225,8 +237,12 @@ public actor ConsciousnessMemoryManager {
             count: commonPatterns["pattern_count"] ?? 0,
             average: Double(commonPatterns["avg_strength"] ?? 0) / 100.0,
             standardDeviation: driftScore, // Using drift as proxy for stddev
-            entropy: activationEntropy + patternEntropy,
-            driftScore: driftScore
+            entropy: activationEntropy + patternEntropy, // Combined entropy for backward compatibility
+            driftScore: driftScore,
+            syntraActivations: syntra,
+            totalDetections: totalDetections,
+            activationEntropy: activationEntropy,
+            patternEntropy: patternEntropy
         )
     }
     

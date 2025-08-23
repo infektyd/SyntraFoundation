@@ -55,11 +55,19 @@ public struct SyntraCLIWrapper {
                 let stdout = String(data: stdoutData, encoding: .utf8) ?? ""
                 let stderr = String(data: stderrData, encoding: .utf8) ?? ""
                 
-                // Enhanced: Log only on errors, including refusal details if present
+                // Enhanced logging: Show all backend communication
+                print("🔧 [SyntraCLIWrapper] Exit code: \(process.terminationStatus)")
+                if !stdout.isEmpty { 
+                    print("🔧 [SyntraCLIWrapper] STDOUT (\(stdout.count) chars): \(stdout.prefix(500))")
+                    if stdout.count > 500 { print("🔧 [SyntraCLIWrapper] ...output truncated") }
+                }
+                if !stderr.isEmpty { 
+                    print("🔧 [SyntraCLIWrapper] STDERR: \(stderr.prefix(500))")
+                    if stderr.count > 500 { print("🔧 [SyntraCLIWrapper] ...stderr truncated") }
+                }
+                
                 if process.terminationStatus != 0 {
-                    print("🔧 [SyntraCLIWrapper] Exit code: \(process.terminationStatus)")
-                    if !stdout.isEmpty { print("🔧 STDOUT: \(stdout.prefix(500))") }
-                    if !stderr.isEmpty { print("🔧 STDERR (Possible Refusal Reason): \(stderr.prefix(500))") } // Log potential refusal explanation
+
                     let errorMsg = stderr.isEmpty ? "Process exited with code \(process.terminationStatus)" : stderr
                     throw SyntraError.executionFailed(errorMsg)
                 }

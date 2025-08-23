@@ -1,6 +1,6 @@
 import Foundation
 
-// AGENTS.md: Three-brain architecture preservation
+// Three-brain architecture preservation
 public struct SyntraResponse: Sendable {
     public let content: String
     public let valonInfluence: Double    // 70% default
@@ -29,7 +29,7 @@ public struct SyntraMessage: Identifiable, Codable, Sendable {
     public let role: MessageRole
     public let timestamp: Date
     
-    // AGENTS.md: Consciousness tracking - NO STUBS
+    // Consciousness tracking - no stubs
     public let valonInfluence: Double?
     public let modiInfluence: Double?
     public let driftScore: Double?
@@ -86,7 +86,7 @@ public struct SyntraContext: Sendable {
 public struct SyntraConfig: Sendable {
     public let driftRatio: [String: Double]
     public let userPreferences: [String: String] // FIXED: Make Sendable
-    public let moralCore: MoralFramework  // AGENTS.md: Immutable
+    public let moralCore: MoralFramework  // Immutable
     
     public init(
         driftRatio: [String: Double] = ["valon": 0.7, "modi": 0.3],
@@ -99,7 +99,7 @@ public struct SyntraConfig: Sendable {
     }
 }
 
-// AGENTS.md: Immutable moral framework - NEVER modify
+// Immutable moral framework - never modify
 public struct MoralFramework: Sendable {
     public static let `default` = MoralFramework()
     private init() {} // Prevent external modification

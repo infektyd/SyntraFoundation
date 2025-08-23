@@ -45,7 +45,7 @@ public struct SyntraChatTextInput: View {
     @ViewBuilder
     private var textInputField: some View {
         #if os(macOS)
-        // AGENTS.md: NSTextField bridge for macOS 26 Beta 3 compatibility
+        // NSTextField bridge for macOS 26 Beta 3 compatibility
         NativeTextField(
             text: $text,
             placeholder: placeholder,
@@ -105,8 +105,8 @@ public struct SyntraChatTextInput: View {
     }
 }
 
-// AGENTS.md: macOS 26 Beta 3 NSTextField Bridge - NO REGRESSION
 #if os(macOS)
+// macOS 26 Beta 3 NSTextField bridge - no regression
 struct NativeTextField: NSViewRepresentable {
     @Binding var text: String
     let placeholder: String

@@ -8,6 +8,7 @@ import StructuredConsciousnessService
 import ConsciousnessStructures
 import MoralDriftMonitoring
 
+
 // SYNTRA CONSCIOUSNESS TOOLS
 // Apple FoundationModels Tool Calling implementation for consciousness components
 // Enables sophisticated multi-brain reasoning through natural tool activation

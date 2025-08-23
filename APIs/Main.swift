@@ -2,6 +2,7 @@ import Foundation
 import Network
 import FoundationModels
 import SyntraWrappers
+import Modi
 
 // Minimal JSON value to support Codable parameter schemas and tool arguments
 enum JSONValue: Codable {
@@ -55,7 +56,9 @@ enum JSONValue: Codable {
     }
 }
 
-private let debugEnabled = false
+private let debugEnabled = (ProcessInfo.processInfo.environment["SYNTRA_API_VERBOSE"] == "1")
+private let defaultOpTimeoutMs: Int = Int(ProcessInfo.processInfo.environment["SYNTRA_API_TIMEOUT_MS"] ?? "") ?? 20000
+private let progressTickMs: Int = Int(ProcessInfo.processInfo.environment["SYNTRA_API_PROGRESS_MS"] ?? "") ?? 1000
 
 private func log(_ message: String) {
     if debugEnabled {
@@ -64,7 +67,7 @@ private func log(_ message: String) {
 }
 
 enum HTTPError: Error {
-    case badRequest, payloadTooLarge, internalServerError
+    case badRequest, payloadTooLarge, internalServerError, clientClosed, noData
 }
 
 struct RequestGuard {
@@ -154,9 +157,20 @@ public struct SyntraAPIServer {
     private static let port: NWEndpoint.Port = 8081
 
     public static func main() async throws {
-        log("🧠 SYNTRA API Server starting on port \(port)…")
         log("🏥 Performing consciousness health check…")
-        if await SyntraCLIWrapper.healthCheck() {
+        let ok: Bool
+        do {
+            ok = try await withTimeoutProgress(label: "health", timeoutMs: defaultOpTimeoutMs) { @Sendable in
+                await SyntraCLIWrapper.healthCheck()
+            }
+        } catch is TimeoutError {
+            log("⏰ Health check timed out after \(defaultOpTimeoutMs)ms")
+            ok = false
+        } catch {
+            log("❌ Health check error: \(error)")
+            ok = false
+        }
+        if ok {
             log("✅ Consciousness core is responsive.")
         } else {
             log("⚠️ WARNING: health check failed – API calls may error.")
@@ -195,6 +209,10 @@ public struct SyntraAPIServer {
             if !response.isEmpty {
                 try await send(response, on: connection)
             }
+        } catch HTTPError.clientClosed {
+            log("🔌 Client closed connection (normal).")
+        } catch HTTPError.noData {
+            log("🔎 No data yet (benign wakeup).")
         } catch {
             log("❌ Connection error: \(error)")
         }
@@ -215,6 +233,11 @@ public struct SyntraAPIServer {
         let headerLen = headerString[..<headerRange.upperBound].utf8.count
         let headers = headerString[..<headerRange.upperBound]
         let contentLength = extractContentLength(from: String(headers)) ?? 0
+        // If client sent "Expect: 100-continue", acknowledge before we read the body.
+        let lowerHeaders = String(headers).lowercased()
+        if lowerHeaders.contains("expect: 100-continue") {
+            _ = try? await sendRaw("HTTP/1.1 100 Continue\r\n\r\n".data(using: .utf8) ?? Data(), on: connection)
+        }
         var body = Data(rawData.suffix(from: headerLen))
         while body.count < contentLength {
             let chunk = try await receiveChunk(on: connection)
@@ -236,10 +259,16 @@ public struct SyntraAPIServer {
 
     private static func receiveChunk(on connection: NWConnection) async throws -> Data {
         try await withCheckedThrowingContinuation { cont in
-            connection.receive(minimumIncompleteLength: 1, maximumLength: 65536) { data, _, _, error in
-                if let error { cont.resume(throwing: error) }
-                else if let data { cont.resume(returning: data) }
-                else { cont.resume(throwing: NSError(domain: "net", code: -1)) }
+            connection.receive(minimumIncompleteLength: 1, maximumLength: 65536) { data, _, isComplete, error in
+                if let error {
+                    cont.resume(throwing: error)
+                } else if let data, !data.isEmpty {
+                    cont.resume(returning: data)
+                } else if isComplete {
+                    cont.resume(throwing: HTTPError.clientClosed) // normal EOF
+                } else {
+                    cont.resume(throwing: HTTPError.noData) // spurious wakeup
+                }
             }
         }
     }
@@ -256,22 +285,79 @@ public struct SyntraAPIServer {
             })
         }
     }
+    private struct TimeoutError: Error, Sendable {}
+
+    private static func withTimeoutProgress<T: Sendable>(
+        label: String,
+        timeoutMs: Int,
+        tickMs: Int = progressTickMs,
+        _ op: @escaping @Sendable () async throws -> T
+    ) async throws -> T {
+        let start = DispatchTime.now().uptimeNanoseconds
+
+        // Progress ticker runs independently; cancel when done
+        let ticker = Task { @Sendable in
+            var elapsed = 0
+            while !Task.isCancelled {
+                try? await Task.sleep(nanoseconds: UInt64(tickMs) * 1_000_000)
+                elapsed += tickMs
+                log("⏳ [\(label)] waiting \(elapsed)ms…")
+            }
+        }
+
+        do {
+            let result = try await withThrowingTaskGroup(of: T.self) { group in
+                // The actual operation
+                group.addTask { @Sendable in try await op() }
+
+                // Absolute timeout
+                group.addTask { @Sendable in
+                    try await Task.sleep(nanoseconds: UInt64(timeoutMs) * 1_000_000)
+                    throw TimeoutError()
+                }
+
+                let r = try await group.next()! // first to complete wins
+                group.cancelAll()
+                return r
+            }
+            ticker.cancel()
+            let end = DispatchTime.now().uptimeNanoseconds
+            let durMs = Int(Double(end - start) / 1_000_000.0)
+            log("✅ [\(label)] completed in \(durMs)ms")
+            return result
+        } catch {
+            ticker.cancel()
+            throw error
+        }
+    }
 
     private static func httpResponse(_ code: Int, body: String, contentType: String = "text/plain; charset=utf-8") -> Data {
-        """
-        HTTP/1.1 \(code) \(statusText(code))\r
-        Content-Type: \(contentType)\r
-        Content-Length: \(body.utf8.count)\r
-        Access-Control-Allow-Origin: *\r
-        Access-Control-Allow-Methods: POST, GET, OPTIONS\r
-        Access-Control-Allow-Headers: Content-Type, Authorization\r
-        Connection: close\r
-        \r
-        \(body)
-        """.data(using: .utf8)!
+        let headers =
+            "HTTP/1.1 \(code) \(statusText(code))\r\n" +
+            "Date: \(httpDate())\r\n" +
+            "Content-Type: \(contentType)\r\n" +
+            "Content-Length: \(body.utf8.count)\r\n" +
+            "Access-Control-Allow-Origin: *\r\n" +
+            "Access-Control-Allow-Methods: GET, POST, OPTIONS\r\n" +
+            "Access-Control-Allow-Headers: Content-Type, Authorization, Accept, Origin\r\n" +
+            "Vary: Origin\r\n" +
+            "Connection: close\r\n" +
+            "\r\n"
+        return (headers + body).data(using: .utf8)!
     }
+
+    private static func httpDate(_ date: Date = Date()) -> String {
+        // RFC 1123 format, GMT
+        let fmt = DateFormatter()
+        fmt.locale = Locale(identifier: "en_US_POSIX")
+        fmt.timeZone = TimeZone(secondsFromGMT: 0)
+        fmt.dateFormat = "EEE',' dd MMM yyyy HH':'mm':'ss 'GMT'"
+        return fmt.string(from: date)
+    }
+    
     private static func statusText(_ code: Int) -> String {
         switch code {
+        case 204: return "No Content"
         case 200: return "OK"
         case 400: return "Bad Request"
         case 404: return "Not Found"
@@ -280,14 +366,42 @@ public struct SyntraAPIServer {
         default: return "Unknown"
         }
     }
+    
     private static func httpJSON(_ object: [String: Any]) -> Data {
         guard let data = try? JSONSerialization.data(withJSONObject: object),
               let string = String(data: data, encoding: .utf8)
-        else { return httpError(500, "JSON serialization failed") }
+        else { return httpError(400, "JSON serialization failed") }
         return httpResponse(200, body: string, contentType: "application/json; charset=utf-8")
     }
+    private static func httpJSONError(status: Int, type: String, message: String) -> Data {
+        let obj: [String: Any] = [
+            "error": [
+                "type": type,
+                "message": message,
+                "code": status
+            ]
+        ]
+        guard let data = try? JSONSerialization.data(withJSONObject: obj),
+              let string = String(data: data, encoding: .utf8)
+        else { return httpError(400, "JSON serialization failed") }
+        return httpResponse(status, body: string, contentType: "application/json; charset=utf-8")
+    }
     private static func httpError(_ code: Int, _ message: String) -> Data {
-        httpJSON(["error": message, "status": code])
+        // Emit JSON and set the actual HTTP status code.
+        let obj: [String: Any] = [
+            "error": [
+                "message": message,
+                "code": code
+            ]
+        ]
+        guard let data = try? JSONSerialization.data(withJSONObject: obj),
+              let string = String(data: data, encoding: .utf8)
+        else {
+            return httpResponse(400,
+                                body: #"{"error":{"message":"JSON serialization failed","code":500}}"#,
+                                contentType: "application/json; charset=utf-8")
+        }
+        return httpResponse(code, body: string, contentType: "application/json; charset=utf-8")
     }
     private static func parseRequestLine(_ line: String) -> (String, String)? {
         let parts = line.split(separator: " ")
@@ -312,7 +426,8 @@ public struct SyntraAPIServer {
         log("🔎 FULL REQUEST DATA:\n\(requestStr)")
         log("🧾 Parsed request: method=\(method), path=\(path)")
         if method == "OPTIONS" {
-            return httpResponse(200, body: "", contentType: "application/json; charset=utf-8")
+            // CORS preflight: empty body, standard headers
+            return httpResponse(204, body: "", contentType: "application/json; charset=utf-8")
         }
         let body = extractBody(from: requestStr)
         log("💾 Extracted Body (\(body.count) chars):\n\(body.prefix(500))")
@@ -328,13 +443,23 @@ public struct SyntraAPIServer {
             let reply = try? await SyntraCLIWrapper.processThroughBrains(body)
             log("🧬 consciousness/process reply: \(reply ?? "nil")")
             return httpJSON(["response": reply ?? "Error processing request."])
-        case let ("GET", p) where p.starts(with: "/v1/models"):
+        case let ("GET", p) where p == "/models" || p.starts(with: "/v1/models"):
             log("📦 openAIModelsPayload called")
             return httpJSON(openAIModelsPayload())
-        case ("POST", "/v1/chat/completions"):
+        case ("POST", "/chat/completions"), ("POST", "/v1/chat/completions"):
             return await handleChatCompletions(body: body, connection: connection)
         case ("GET", "/"):
             return httpResponse(200, body: welcomeHTML(), contentType: "text/html; charset=utf-8")
+        case ("GET", "/api/version"):
+            return httpJSON(["version": "SYNTRA-API 0.1"])
+        case ("GET", "/api/tags"):
+            return httpJSON([
+                "models": [
+                    ["name": "syntra/valon:latest"]
+                ]
+            ])
+        case ("GET", "/api/ps"), ("POST", "/api/ps"):
+            return httpJSON(["models": []])
         default:
             log("❓ Unknown endpoint: \(method) \(path)")
             return httpError(404, "Endpoint Not Found")
@@ -393,16 +518,19 @@ public struct SyntraAPIServer {
     }
 
     private static func streamErrorResponse(message: String, connection: NWConnection) async -> Data {
-        let headers = """
-        HTTP/1.1 500 Internal Server Error\r
-        Content-Type: text/event-stream\r
-        Cache-Control: no-cache\r
-        Connection: keep-alive\r
-        Access-Control-Allow-Origin: *\r
-        Access-Control-Allow-Methods: POST, GET, OPTIONS\r
-        Access-Control-Allow-Headers: Content-Type, Authorization\r
-        \r
-        """
+        let headers =
+            "HTTP/1.1 500 Internal Server Error\r\n" +
+            "Date: \(httpDate())\r\n" +
+            "Content-Type: text/event-stream; charset=utf-8\r\n" +
+            "Cache-Control: no-cache\r\n" +
+            "Connection: keep-alive\r\n" +
+            "Access-Control-Allow-Origin: *\r\n" +
+            "Access-Control-Allow-Methods: POST, GET, OPTIONS\r\n" +
+            "Access-Control-Allow-Headers: Content-Type, Authorization, Accept, Origin\r\n" +
+            "Vary: Origin\r\n" +
+            "X-Accel-Buffering: no\r\n" +
+            "\r\n"
+
         _ = try? await sendRaw(headers.data(using: .utf8) ?? Data(), on: connection)
         let errorChunk: [String: Any] = [
             "id": "chatcmpl-error",
@@ -448,16 +576,19 @@ public struct SyntraAPIServer {
     private static func streamResponse(
         reply: String, model: String?, stream: Bool?, connection: NWConnection
     ) async -> Data {
-        let headers = """
-        HTTP/1.1 200 OK\r
-        Content-Type: text/event-stream\r
-        Cache-Control: no-cache\r
-        Connection: keep-alive\r
-        Access-Control-Allow-Origin: *\r
-        Access-Control-Allow-Methods: POST, GET, OPTIONS\r
-        Access-Control-Allow-Headers: Content-Type, Authorization\r
-        \r
-        """
+        let headers =
+            "HTTP/1.1 200 OK\r\n" +
+            "Date: \(httpDate())\r\n" +
+            "Content-Type: text/event-stream; charset=utf-8\r\n" +
+            "Cache-Control: no-cache\r\n" +
+            "Connection: keep-alive\r\n" +
+            "Access-Control-Allow-Origin: *\r\n" +
+            "Access-Control-Allow-Methods: POST, GET, OPTIONS\r\n" +
+            "Access-Control-Allow-Headers: Content-Type, Authorization, Accept, Origin\r\n" +
+            "Vary: Origin\r\n" +
+            "X-Accel-Buffering: no\r\n" +
+            "\r\n"
+        
         _ = try? await sendRaw(headers.data(using: .utf8) ?? Data(), on: connection)
         let words = reply.components(separatedBy: " ")
         let chunks = words.enumerated().map { index, word in index == words.count - 1 ? word : word + " " }
@@ -506,7 +637,7 @@ public struct SyntraAPIServer {
         let parts = content.components(separatedBy: .whitespacesAndNewlines).filter { !$0.isEmpty }
         var prior = 0.5, likelihood = 0.5, evidence = 1.0
         var factors: [String: Double] = [:]
-        var scenario = parts.joined(separator: " ")  // Default to full content
+        let scenario = parts.joined(separator: " ")  // Default to full content
 
         var i = 0
         while i < parts.count {
@@ -534,11 +665,19 @@ public struct SyntraAPIServer {
                 i += 1 
             }
         }
-
         // Call Modi and format readable output
         let modi = Modi()
-        let result = modi.assessRisk(scenario: scenario, prior: prior, likelihood: likelihood, evidence: evidence, factors: factors)
-        return "Bayesian Assessment:\n\(result)"
+        let bayesianResult = modi.calculateEnhancedBayesian(scenario)
+        let analysis = modi.performLogicalAnalysis(scenario)
+        
+        var result = "Bayesian Assessment:\n"
+        result += "Scenario: \(scenario)\n"
+        result += "Prior: \(prior), Likelihood: \(likelihood), Evidence: \(evidence)\n"
+        result += "Domain Probabilities: \(bayesianResult.probabilities)\n"
+        result += "Entropy: \(bayesianResult.entropy)\n"
+        result += "Logical Analysis: \(analysis)\n"
+        
+        return result
     }
 
     private static func handleChatCompletions(body: String, connection: NWConnection) async -> Data {
@@ -590,14 +729,28 @@ public struct SyntraAPIServer {
             } else {
                 do {
                     log("🔧 Calling SyntraCLIWrapper.processThroughBrains with prompt...")
-                    reply = try await SyntraCLIWrapper.processThroughBrains(processedPrompt)
+                    reply = try await withTimeoutProgress(label: "syntra:process", timeoutMs: defaultOpTimeoutMs) { @Sendable in
+                        try await SyntraCLIWrapper.processThroughBrains(processedPrompt)
+                    }
                     log("✅ Got successful reply (first 100 chars):\n\(reply.prefix(100))")
+                } catch is TimeoutError {
+                    log("⏰ Syntra backend timed out after \(defaultOpTimeoutMs)ms")
+                    return await streamErrorResponse(
+                        message: "Gateway timeout: Syntra core did not respond in \(defaultOpTimeoutMs)ms.",
+                        connection: connection
+                    )
                 } catch let error as LanguageModelSession.GenerationError {
                     log("❌ LanguageModelSession.GenerationError: \(error)")
-                    return await streamErrorResponse(message: "Language model generation failed: \(error.localizedDescription)", connection: connection)
+                    return await streamErrorResponse(
+                        message: "Language model generation failed: \(error.localizedDescription)",
+                        connection: connection
+                    )
                 } catch {
                     log("❌ OTHER CLI ERROR (full object): \(error)")
-                    return await streamErrorResponse(message: "Unexpected error: \(error.localizedDescription)", connection: connection)
+                    return await streamErrorResponse(
+                        message: "Unexpected error: \(error.localizedDescription)",
+                        connection: connection
+                    )
                 }
             }
 
@@ -634,9 +787,16 @@ public struct SyntraAPIServer {
             } else {
                 return createNonStreamingToolAwareResponse(reply: reply, model: request.model, stream: request.stream, toolCalls: executedToolCalls)
             }
+        } catch let decErr as DecodingError {
+            log("❌ DecodingError in /v1/chat/completions: \(decErr)")
+            return httpJSONError(status: 400,
+                                 type: "invalid_request_error",
+                                 message: "Invalid JSON for chat.completions: \(decErr.localizedDescription)")
         } catch {
-            log("❌ Unexpected decoding error (full object): \(error)")
-            return httpJSON(["error": ["code": 500, "message": "Internal error: \(error.localizedDescription)"]])
+            log("❌ Unexpected error in /v1/chat/completions: \(error)")
+            return httpJSONError(status: 500,
+                                 type: "internal_error",
+                                 message: "Internal error: \(error.localizedDescription)")
         }
     }
 }

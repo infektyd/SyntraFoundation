@@ -81,7 +81,7 @@ public struct SyntraChatView: View {
         .background(.regularMaterial)
     }
     
-    // AGENTS.md: Three-brain consciousness indicator
+    // Three-brain consciousness indicator
     private var consciousnessIndicator: some View {
         HStack(spacing: 4) {
             Circle()
@@ -117,7 +117,7 @@ public struct MessageBubbleView: View {
                     .foregroundColor(message.role == .user ? .white : .primary)
                     .clipShape(RoundedRectangle(cornerRadius: 16))
                 
-                // AGENTS.md: Consciousness metrics display
+                // Consciousness metrics display
                 if let valon = message.valonInfluence, let modi = message.modiInfluence {
                     HStack(spacing: 8) {
                         Text("V: \(Int(valon * 100))%")

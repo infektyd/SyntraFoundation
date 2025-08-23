@@ -30,6 +30,7 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-numerics.git", from: "1.0.3")
     ],
     targets: [
+        
         // Core Consciousness Modules
         .target(name: "Valon", dependencies: ["ConsciousnessStructures"], path: "Shared/Swift/Valon"),
         .target(name: "Modi", 
@@ -42,12 +43,17 @@ let package = Package(
         .target(name: "Drift", path: "Shared/Swift/Drift"),
         .target(name: "MemoryEngine", 
             dependencies: [
-                "Valon",
+                .target(name: "Valon"),
+                .target(name: "Modi"),
+                .target(name: "Drift"),
+                // add this only if MemoryEngine imports Drift:
+                // .target(name: "drift"),
                 .product(name: "Collections", package: "swift-collections"),
                 .product(name: "AsyncAlgorithms", package: "swift-async-algorithms"),
                 .product(name: "Atomics", package: "swift-atomics")
             ],
             path: "Shared/Swift/MemoryEngine"),
+        
         .target(name: "ConsciousnessStructures", path: "Shared/Swift/ConsciousnessStructures"),
         .target(name: "BrainEngine", dependencies: ["Valon", "Modi", "Drift", "ConsciousnessStructures", "SyntraConfig", "SyntraTools"], path: "Shared/Swift/BrainEngine"),
         .target(name: "SyntraCore", dependencies: ["Valon", "Modi"], path: "Shared/Swift/SyntraCore"),

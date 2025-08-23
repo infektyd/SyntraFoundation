@@ -68,16 +68,8 @@ struct ContentView: View {
             
             // Memory and knowledge vault
             Group {
-                VStack {
-                    Image(systemName: "brain.head.profile")
-                        .font(.system(size: 48))
-                        .foregroundColor(.blue)
-                    Text("Memory Vault")
-                        .font(.title2)
-                    Text("Coming Soon")
-                        .foregroundColor(.secondary)
-                }
-                .onAppear { print("✅ [Tab] Memory tab loaded") }
+                MemoryVaultViewer()
+                    .onAppear { print("✅ [Tab] Memory tab loaded") }
             }
             .tabItem {
                 Image(systemName: "brain.head.profile")

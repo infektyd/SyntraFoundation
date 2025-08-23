@@ -174,7 +174,7 @@ fileprivate func formatArray(_ arr: [Any], indent: Int) -> String {
         return "\(prefix)(empty array)"
     }
     var lines: [String] = []
-    for (i, el) in arr.enumerated() {
+    for (_, el) in arr.enumerated() {
         if isSimpleValue(el) {
             lines.append("\(prefix)- \(fmtInline(el))")
         } else if let d = toDict(el) {
@@ -381,8 +381,9 @@ fileprivate func formatDouble(_ d: Double) -> String {
     // Use Decimal to avoid some floating representation issues
     let decimal = Decimal(d)
     var rounded = decimal
+    var roundedCopy = decimal
     var roundedString: String = ""
-    NSDecimalRound(&rounded, &rounded, 3, .plain)
+    NSDecimalRound(&rounded, &roundedCopy, 3, .plain)
     // Use NumberFormatter for locale-independent formatting (use en_US_POSIX)
     let formatter = NumberFormatter()
     formatter.locale = Locale(identifier: "en_US_POSIX")

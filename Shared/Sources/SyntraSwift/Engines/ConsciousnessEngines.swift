@@ -3,7 +3,7 @@ import Foundation
 import FoundationModels
 #endif
 
-// AGENTS.md: Valon Engine - Moral, creative, emotional reasoning
+// Valon engine - moral, creative, emotional reasoning
 @MainActor
 public final class ValonEngine {
     private let config: SyntraConfig
@@ -13,7 +13,7 @@ public final class ValonEngine {
     }
     
     public func processInput(_ input: String, context: SyntraContext) async -> ValonResponse {
-        // AGENTS.md: Real moral and creative processing - NO STUBS
+        // Real moral and creative processing - no stubs
         #if canImport(FoundationModels)
         if #available(iOS 26.0, macOS 26.0, *) {
             let model = SystemLanguageModel.default
@@ -103,7 +103,7 @@ public final class ValonEngine {
     }
 }
 
-// AGENTS.md: Modi Engine - Logical, technical, analytical processing  
+// Modi engine - logical, technical, analytical processing
 @MainActor
 public final class ModiEngine {
     private let config: SyntraConfig
@@ -113,7 +113,7 @@ public final class ModiEngine {
     }
     
     public func processInput(_ input: String, context: SyntraContext) async -> ModiResponse {
-        // AGENTS.md: Real logical and analytical processing
+        // Real logical and analytical processing
         #if canImport(FoundationModels)
         if #available(iOS 26.0, macOS 26.0, *) {
             let model = SystemLanguageModel.default
@@ -210,7 +210,7 @@ public final class ModiEngine {
     }
 }
 
-// AGENTS.md: Drift Monitor - Cognitive drift assessment
+// Drift monitor - cognitive drift assessment
 @MainActor
 public final class DriftMonitor {
     private let config: SyntraConfig
@@ -224,7 +224,7 @@ public final class DriftMonitor {
         modiResponse: ModiResponse,
         context: SyntraContext
     ) async -> Double {
-        // AGENTS.md: Real drift monitoring - personality shift detection
+        // Real drift monitoring - personality shift detection
         let expectedValonWeight = config.driftRatio["valon"] ?? 0.7
         let expectedModiWeight = config.driftRatio["modi"] ?? 0.3
         
@@ -244,14 +244,14 @@ public final class DriftMonitor {
     }
 }
 
-// AGENTS.md: Content Synthesizer - Three-brain integration
+// Content synthesizer - three-brain integration
 public struct SyntraContentSynthesizer {
     public static func combine(
         valonContent: WeightedContent,
         modiContent: WeightedContent,
         preserveMoralCore: Bool
     ) -> String {
-        // AGENTS.md: Real synthesis respecting personality weights
+        // Real synthesis respecting personality weights
         let totalWeight = valonContent.weight + modiContent.weight
         
         guard totalWeight > 0 else {

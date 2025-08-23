@@ -1,6 +1,6 @@
 import Foundation
 import Valon
-import Modi
+import Modi  
 import Drift
 
 /// Memory engine for SYNTRA consciousness architecture
@@ -30,11 +30,15 @@ public struct MemoryEngine {
     
     /// Process input through Valon, Modi, and Drift consciousness components
     public static func processThroughBrains(_ input: String) -> [String: Any] {
-        let valon = reflect_valon(input)
+        let valonModule = Valon()
+        let modiModule = Modi()
+        let driftModule = Drift()
+        
+        let valon = valonModule.reflect(input)
         Self.logStage(stage: "valon_stage", output: valon, directory: "entropy_logs")
-        let modi = reflect_modi(input)
+        let modi = modiModule.reflect(input)
         Self.logStage(stage: "modi_stage", output: modi, directory: "entropy_logs")
-        let drift = drift_average(valon, modi)
+        let drift = driftModule.average(valon: valon, modi: modi)
         Self.logStage(stage: "drift_stage", output: drift, directory: "drift_logs")
         return ["valon": valon, "modi": modi, "drift": drift]
     }
