@@ -136,3 +136,4 @@ archived_tests/*.rtf
 # Non-source binary/docs (REQUIRED)
 ######################################
 *.pdf
+.aider*
