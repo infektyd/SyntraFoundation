@@ -1,5 +1,15 @@
 # 🍎 SYNTRA Chat iOS - Native Migration
 
+runs well with xcode26beta7 (17A5305k) on macos26beta (25a5351b)
+
+### Building
+ - from terminal within syntraFoundation root "swift run" and itll have the vapor running at     http://127.0.0.1:8081/v1.
+ - i use open web ui to chat with Syntra and test it, i also have Syntra loaded up into xcode beta as an AI assitant, still working on that though.
+
+## Next
+- need to work on a better CLI for syntra, and increase its tooling
+- going to be expanding in hardware (old idea for this project) ive an ALDL converter build within arduino to read signals being sent to a vehicles ECU.
+
 ## Overview
 
 My motivation for this project began with simple curiosity, a pet project meant as a diagnostic tool, and it has since transformed into what you see in this repository. I approached the development with a “why not” mentality, believing that anything is possible in code with persistence and iteration. I have invested significant time and learned across many disciplines to reach this point. This isn’t the end for Syntra; if anything, it’s opened new doors for creativity that I’m eager to explore. 
@@ -63,42 +73,8 @@ This is the **iOS-native migration** of SYNTRA, designed to provide a truly nati
 
 ### Prerequisites
 
-- **Xcode 26+** with iOS 26+ SDK
+- **Xcode 26+** with 26+ SDK
 - **macOS 26+** for development
-- **iOS Device or Simulator** running iOS 26+
-
-### Building
-
-```bash
-# iOS App
-open Apps/iOS/SyntraChatIOS/SyntraChatIOS.xcodeproj
-
-# WebAssembly (optional)
-make wasm
-
-# Containers (optional)
-make container
-```
-
-### Running
-
-1. **Simulator**: Select iOS device in Xcode and run
-2. **Device**: Connect iOS device and run with signing profile
-3. **TestFlight**: Build for distribution (requires Apple Developer account)
-
-### Build System
-
-```bash
-# See all available commands
-make help
-
-# Build specific components
-make ios-build      # iOS app
-make wasm           # WebAssembly modules
-make container      # Container images
-make test           # Run all tests
-```
-
 ---
 
 ## 📚 Documentation
@@ -124,97 +100,6 @@ make test           # Run all tests
 For detailed change history, see **[CHANGELOG.md](Documentation/CHANGELOG.md)**.
 
 ---
-
-## 📱 iOS-Specific Features
-
-### Native UI Components
-
-#### ChatInputBar
-- Multi-line text input with line limits (1-5 lines)
-- Auto-capitalization and smart punctuation
-- "Done" keyboard toolbar for dismissal
-- Send button with loading states and haptic feedback
-
-#### MessageBubble
-- iOS-native message bubble styling
-- Context menu for copy/share
-- Accessibility labels for VoiceOver
-- Different styling for user vs SYNTRA messages
-
-#### SettingsView
-- Native iOS Form with sections and footers
-- Sliders for moral weight and timeout configuration
-- iOS-style toggles for consciousness settings
-- About page with app information
-
-### iOS System Integration
-
-#### Haptic Feedback
-```swift
-// Message sent
-UIImpactFeedbackGenerator(style: .light).impactOccurred()
-
-// SYNTRA response received
-UINotificationFeedbackGenerator().notificationOccurred(.success)
-
-// Error occurred
-UINotificationFeedbackGenerator().notificationOccurred(.error)
-```
-
-#### Keyboard Management
-- Automatic keyboard avoidance
-- Smooth animations for keyboard show/hide
-- Input focus management with `@FocusState`
-
-#### App Lifecycle
-- Background processing pause/resume
-- Device capability checking
-- Memory and CPU requirements validation
-
----
-
-## ⚙️ Configuration
-
-### iOS-Specific Settings
-
-| Setting | Default | Description |
-|---------|---------|-------------|
-| Processing Timeout | 30s | Maximum time for SYNTRA responses |
-| Haptic Feedback | Enabled | Tactile feedback for interactions |
-| Auto-scroll | Enabled | Scroll to new messages automatically |
-| Moral Weight | 70% | Valon influence in consciousness synthesis |
-
-### Device Requirements
-
-- **Minimum**: iOS 26.0
-- **Recommended**: 4+ CPU cores, 4GB+ RAM
-- **Storage**: ~50MB for app and consciousness data
-- **Network**: Not required (on-device processing)
-
----
-
-## 🧠 Consciousness Architecture
-
-### SyntraBrain (iOS)
-
-The iOS-optimized consciousness interface includes:
-
-- **Device Capability Checking**: Validates CPU and memory requirements
-- **Background Processing**: Handles app lifecycle transitions
-- **Timeout Management**: 30-second limits with user feedback
-- **Haptic Integration**: Feedback for consciousness state changes
-- **Error Recovery**: Graceful handling of processing failures
-
-### Message Processing Flow
-
-1. **User Input** → Validation and haptic feedback
-2. **SyntraCore** → Consciousness processing (Valon + Modi + Core)
-3. **Response Generation** → Timeout protection and error handling
-4. **UI Update** → Haptic feedback and auto-scroll
-5. **State Management** → Published properties for SwiftUI
-
----
-
 ## 🔧 Development Guide
 
 ### Project Structure
@@ -265,7 +150,7 @@ SyntraChatIOS/
 
 ## 📄 License
 
-This iOS migration maintains the same license as the main SyntraFoundation project. See LICENSE file in the repository root.
+This Project maintains the same license as the main SyntraFoundation project. See LICENSE file in the repository root.
 
 ---
 
