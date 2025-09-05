@@ -8,7 +8,6 @@ runs well with xcode26beta7 (17A5305k) on macos26beta (25a5351b)
 
 ## Next
 - need to work on a better CLI for syntra, and increase its tooling
-- going to be expanding in hardware (old idea for this project) ive an ALDL converter build within arduino to read signals being sent to a vehicles ECU.
 
 ## Overview
 
